@@ -1,6 +1,5 @@
 const webpack = require('webpack');
 const path = require('path');
-const _ = require('lodash');
 
 const PATH_ESLINT = path.join(__dirname, '.eslintrc.js');
 const PATH_SRC = path.join(__dirname, 'src');
