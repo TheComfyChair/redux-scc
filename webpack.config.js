@@ -3,15 +3,12 @@ const path = require('path');
 const _ = require('lodash');
 
 const PATH_ESLINT = path.join(__dirname, '.eslintrc.js');
-const PATH_SRC = path.join(__dirname, 'src/client/');
-const PATH_ALIASES = _.mapValues({
-    'home-screen': 'src/client/home-screen',
-}, relativePath => path.join(__dirname, relativePath));
+const PATH_SRC = path.join(__dirname, 'src');
 
 module.exports = {
     context: __dirname,
     entry: {
-        'home-screen': './src/client/home-screen'
+        'shell-game': PATH_SRC
     },
     devServer: {
         inline: true,
@@ -49,12 +46,11 @@ module.exports = {
     },
     resolve: {
         extensions: ['', '.js', '.json', '.jsx'],
-        alias: PATH_ALIASES,
+        alias: [
+            { 'shell-game': PATH_SRC }
+        ],
     },
     plugins: [
-        new webpack.ProvidePlugin({
-            _: 'lodash'
-        }),
         function () {
             this.plugin('done', () =>
                 setTimeout(() => console.log('\nFinished at ' + (new Date).toLocaleTimeString() + '\n'), 10)
