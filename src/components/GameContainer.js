@@ -111,7 +111,7 @@ export class GameContainer extends Component {
     _shellClickHandler(shellId: number): void {
         //We only need to check if the shell is a winning shell if it is in progress and has been shuffled
         if (!this.state.inProgress) return this.setState({ output: `Click on 'Play' to begin!`});
-        if (this.state.shuffling) return this.setState({ output: `Have patience, young padawan`});
+        if (this.state.shuffling) return this.setState({ output: `Wait a second, I'm still shuffling!`});
         this.setState({
             output: this.state.ballShellId === shellId ? `You won! Click 'Play' to play again` : `Better luck next time! Click 'Play' to play again`,
             inProgress: false,
