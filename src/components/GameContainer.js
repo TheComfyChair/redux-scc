@@ -7,6 +7,7 @@ import {
     randomizeArrayOrder,
 } from '../utils/gameUtils';
 import { Game } from './Game';
+import { isEqual } from 'lodash';
 
 //=====================
 // Flow types
@@ -34,9 +35,11 @@ type Shell = {
 // Game component
 //======================
 export class GameContainer extends Component {
+    //Flow types
     state: GameContainerState;
     props: GameContainerProps;
     selectRandomShell: ?() => number;
+    shufflingTimeout: ?number;
     _initializeGame: (numberOfShells: number) => void;
     _startGame: () => void;
     _setWinningShell: () => void;
@@ -55,6 +58,7 @@ export class GameContainer extends Component {
             output: `Click on 'Play' to begin!`,
         };
         this.selectRandomShell = null;
+        this.shufflingTimeout = null;
 
         //In general it's a good idea to bind methods which refer to this in the
         //constructor. It means, amongst other things, that the functions can be
@@ -97,6 +101,7 @@ export class GameContainer extends Component {
     }
 
     _setWinningShell(): void {
+        //Randomly determine the winning shell (this is the shell which has the ball at the beginning of a round)
         if (!this.selectRandomShell) throw new Error('selectRandomShell not properly initialized!');
         this.setState({
             ballShellId: this.selectRandomShell(),
@@ -133,9 +138,9 @@ export class GameContainer extends Component {
                     shuffling: shuffleCount < this.props.shuffles,
                 });
                 if (this.state.shuffled) return res(true);
-                return setTimeout(shuffle, 1000);
+                this.shufflingTimeout = setTimeout(shuffle, 1000);
             };
-            setTimeout(shuffle, 1000);
+            this.shufflingTimeout = setTimeout(shuffle, 1000);
         });
 
     }
@@ -145,7 +150,9 @@ export class GameContainer extends Component {
     }
 
     componentWillReceiveProps(newProps: GameContainerProps) {
-        if(newProps.numberOfShells !== this.props.numberOfShells) {
+        if(!isEqual(newProps, this.props)) {
+            //If the input properties change mid shuffle, cancel the shuffling function
+            if (this.shufflingTimeout) clearTimeout(this.shufflingTimeout);
             this._initializeGame(newProps.numberOfShells);
         }
     }

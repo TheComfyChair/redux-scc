@@ -20,6 +20,7 @@ export class ShellGameAppContainer extends Component {
         this._handleInputUpdate = this._handleInputUpdate.bind(this);
     }
 
+    //Simple form handler (takes the name and value of an input and adds it to the state if preset).
     _handleInputUpdate(e: Object): void {
         if (!this.state.hasOwnProperty(e.target.name)) throw new Error('Form input name should be on the GameShellAppContainer state');
         this.setState({

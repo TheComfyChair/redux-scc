@@ -4,5 +4,6 @@ import ReactDOM from 'react-dom';
 import { ShellGameAppContainer } from './components';
 
 ReactDOM.render(
-    <ShellGameAppContainer />
-, document.getElementById('react-shell-game'));
+    <ShellGameAppContainer />,
+    document.getElementById('react-shell-game'
+));

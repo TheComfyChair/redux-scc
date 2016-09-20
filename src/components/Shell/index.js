@@ -11,7 +11,7 @@ type ShellProps = {
 }
 
 export const Shell = (props: ShellProps) =>
-    <Motion style={{x: spring(props.position, { stiffness: 300, damping: 15 })}}>
+    <Motion style={{x: spring(props.position, { stiffness: 276, damping: 26 })}}>
         { ({ x }) => (
             <div>
                 <div
@@ -21,8 +21,8 @@ export const Shell = (props: ShellProps) =>
                     className={ styles.shell }
                     onClick={ props.onClick }
                 >
-                { props.containsBall && props.displayBall &&
-                    <div className={ styles.ball } /> }
+                    { props.containsBall && props.displayBall &&
+                        <div className={ styles.ball } /> }
                 </div>
             </div>
         )}

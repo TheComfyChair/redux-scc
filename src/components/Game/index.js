@@ -17,8 +17,6 @@ type GameProps = {
     shuffled: boolean,
 }
 
-type onClick = (event: Object) => void
-
 export const Game = (props: GameProps) => (
     <div>
         <div className={ styles.board } style={{ width: 10 + (props.shells.length * 110) }}>

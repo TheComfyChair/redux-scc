@@ -1,4 +1,4 @@
 {
   "presets": ["es2015", "react"],
-  "plugins": ["transform-object-rest-spread", "syntax-async-functions", "transform-async-to-generator", "transform-flow-strip-types"]
+  "plugins": ["transform-object-rest-spread", "transform-flow-strip-types"]
 }
