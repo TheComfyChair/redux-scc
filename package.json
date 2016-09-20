@@ -1,63 +1,36 @@
 {
-  "name": "react-custom-home",
-  "version": "0.0.0",
-  "description": "A customisable home screen",
+  "name": "shell-game",
+  "version": "0.0.1",
+  "description": "A simple, React based, game of shells ",
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --progress --content-base dist/",
     "test": "jest"
-  },
-  "jest": {
-    "testPathDirs": [
-      "<rootDir>/src"
-    ],
-    "moduleFileExtensions": [
-      "js",
-      "jsx",
-      "json"
-    ],
-    "moduleDirectories": [
-      "node_modules"
-    ],
-    "modulePaths": [
-      "/src"
-    ],
-    "moduleNameMapper": {
-      "^.+\\.(css|less|scss)$": "<rootDir>/src/__mocks__/styleMock.js",
-      "^.+\\.(gif|ttf|eot|svg)$": "<rootDir>/src/__mocks__/fileMock.js"
-    }
   },
   "author": "Kai Moseley",
   "license": "ISC",
   "devDependencies": {
     "babel-eslint": "^6.1.2",
     "babel-loader": "^6.2.5",
-    "babel-plugin-syntax-async-functions": "^6.13.0",
-    "babel-plugin-transform-async-to-generator": "^6.8.0",
     "babel-plugin-transform-flow-strip-types": "^6.14.0",
     "babel-plugin-transform-object-rest-spread": "^6.8.0",
     "babel-preset-es2015": "^6.14.0",
     "babel-preset-react": "^6.11.1",
-    "body-parser": "^1.15.2",
     "css-loader": "^0.24.0",
-    "enzyme": "^2.4.1",
     "eslint": "^3.2.2",
     "eslint-loader": "^1.5.0",
     "eslint-plugin-babel": "^3.3.0",
     "eslint-plugin-flowtype": "^2.18.1",
     "eslint-plugin-react": "^6.0.0",
-    "express": "^4.14.0",
     "flow-bin": "^0.32.0",
     "jest": "^15.1.1",
-    "lodash": "^4.15.0",
     "node-sass": "^3.8.0",
     "react": "^15.3.1",
-    "react-css-modules": "^3.7.9",
     "react-dom": "^15.3.1",
-    "react-redux": "^4.4.5",
     "sass-loader": "^4.0.0",
     "style-loader": "^0.13.1",
     "webpack": "^1.13.2",
-    "webpack-dev-server": "^1.16.1"
+    "webpack-dev-server": "^1.16.1",
+    "react-motion": "^0.4.4"
   }
 }

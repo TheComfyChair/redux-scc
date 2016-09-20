@@ -1,5 +1,7 @@
 //@flow
-
+type Shell = {
+    id: number,
+};
 //======================
 // Utility functions
 //======================
@@ -7,7 +9,7 @@ export function createRandomNumberFn(minimum: number, maximum: number): () => nu
     return () => minimum + Math.floor(Math.random() * ((maximum-minimum) + 1));
 }
 
-export function randomizeArrayOrder(array: array): array {
+export function randomizeArrayOrder(array: Shell[]): Shell[] {
     let oldArray = [ ...array ];
     let newArr = [];
 
@@ -20,9 +22,8 @@ export function randomizeArrayOrder(array: array): array {
 
 export function createShells(numberOfShells: number): Shell[] {
     /* The shell containing the ball will be tracked independently of shells, but
-     in order to properly animate the shells later, a fixed id is needed. The position
-     will be used to track where the shell should be displayed, with the id
-     remaining fixed. */
+     in order to properly animate the shells later, a fixed id is desirable.
+     */
     let newShellArr = [];
     for (let i=0; i<numberOfShells; i++) {
         newShellArr = [ ...newShellArr, {
