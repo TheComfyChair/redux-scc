@@ -4,7 +4,18 @@ const path = require('path');
 const PATH_ESLINT = path.join(__dirname, '.eslintrc.js');
 const PATH_SRC = path.join(__dirname, 'src');
 
-module.exports = {
+const isProd = process.argv.indexOf('--prod') >= 0;
+const envPlugins = isProd ? [
+    new webpack.optimize.OccurrenceOrderPlugin(true),
+    new webpack.optimize.DedupePlugin(),
+    new webpack.optimize.UglifyJsPlugin({
+        compress: { warnings: false, unused: true, dead_code: true },
+        output: { comments: false }
+    }),
+] : [];
+const envOptions = isProd ? {} : { devtool: 'inline-source-map' };
+
+module.exports = Object.assign(envOptions, {
     context: __dirname,
     entry: {
         'shell-game': PATH_SRC
@@ -16,7 +27,6 @@ module.exports = {
         path: path.join(__dirname, 'dist'),
         filename: '[name].bundle.js',
     },
-    devtool: 'inline-source-map',
     eslint: {
         configFile: PATH_ESLINT,
     },
@@ -50,6 +60,7 @@ module.exports = {
         ],
     },
     plugins: [
+        ...envPlugins,
         function () {
             this.plugin('done', () =>
                 setTimeout(() => console.log('\nFinished at ' + (new Date).toLocaleTimeString() + '\n'), 10)
@@ -57,4 +68,4 @@ module.exports = {
         },
         new webpack.HotModuleReplacementPlugin(),
     ]
-};
+});

@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --progress --content-base dist/",
+    "build": "webpack --progress --prod",
     "test": "jest"
   },
   "author": "Kai Moseley",
