@@ -1,9 +1,21 @@
-//@flow
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { ShellGameAppContainer } from './components';
+import { generateReducer } from './redux-arg/generateReducer';
+import { createStore, compose } from 'redux';
 
-ReactDOM.render(
-    <ShellGameAppContainer />,
-    document.getElementById('react-shell-game'
-));
+const config = {
+    anObject: {
+        lowerLevelStuff: '',
+        moreLowerLevelStuff: '',
+    },
+    anotherObject: {
+        more: '',
+        andAgain: '',
+    },
+};
+
+createStore(
+    generateReducer(config),
+    compose(window.devToolsExtension ? window.devToolsExtension() : f => f)
+);
+
+
+
