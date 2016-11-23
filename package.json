@@ -1,7 +1,7 @@
 {
-  "name": "shell-game",
+  "name": "redux-arg",
   "version": "0.0.1",
-  "description": "A simple, React based, game of shells ",
+  "description": "Redux automatic reducer generator",
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --progress --content-base dist/",
