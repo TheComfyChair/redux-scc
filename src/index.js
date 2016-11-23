@@ -1,30 +1,34 @@
-import { buildReducers, Types } from './redux-arg/generateReducer';
+import { buildReducers } from './redux-arg/generateReducer';
 import { createStore, compose } from 'redux';
+import { Types } from './redux-arg/constants';
 
 const example = {
-    form2: Types.reducer({
+    form2: Types.reducer(Types.shape({
         lowerLevel: Types.number,
         lowerLevel2: Types.string,
-    }),
+    })),
     form3: Types.reducer({
-        example2: Types.reducer({
+        example2: Types.reducer(Types.shape({
             lowerLevel3: Types.string,
-        }),
+        })),
         example3: Types.reducer({
-            example4: Types.reducer({
+            example4: Types.reducer(Types.shape({
                 test: Types.string,
-            }),
+            })),
             example5: Types.reducer({
-                test: Types.reducer({
+                test: Types.reducer(Types.shape({
                     blarg: Types.number,
-                })
+                }))
             })
         })
-    })
+    }),
+    test1: Types.reducer(Types.string),
+    test2: Types.reducer(Types.arrayOf({
+        foo5: Types.number,
+    })),
 };
 
 const test = buildReducers(example);
-console.log(333, test);
 
 createStore(
     test,
