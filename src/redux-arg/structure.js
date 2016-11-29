@@ -3,21 +3,20 @@
 //==============================
 // Flow types
 //==============================
-export type ReducerStructure = {
+export type ShapeStructure = {
     [key: string]: StructureType|PrimitiveType,
 }
 export type StructureType = () => {
     type: string,
-    structure: StructureType|ReducerStructure
+    structure: ShapeStructure|StructureType|PrimitiveType
 };
 export type PrimitiveType = () => {
     type: string,
-    structure: $Keys<typeof PROP_TYPES>,
-    defaultValue: ?any,
+    defaultValue?: any,
+    typeofValue: string,
 };
-
 export type TypesObject = {
-    [key: string]: CreateStructure|CreateStringType|CreateNumberType
+    [key: string]: CreateArrayType|CreateStringType|CreateNumberType|CreateObjectType;
 }
 
 export type TypesObjectDefaults = {
@@ -27,7 +26,8 @@ export type TypesArrayDefaults = Array<mixed>|Array<TypesObjectDefaults>;
 
 type CreateStringType = (defaultValue: string) => PrimitiveType;
 type CreateNumberType = (defaultValue: number) => PrimitiveType;
-type CreateStructure = (structure: ReducerStructure, defaultValue: TypesArrayDefaults|TypesObjectDefaults) => StructureType;
+type CreateArrayType = (structure: StructureType|PrimitiveType, defaultValue: TypesArrayDefaults|TypesObjectDefaults) => StructureType;
+type CreateObjectType = (structure: ShapeStructure, defaultValue: TypesArrayDefaults|TypesObjectDefaults) => StructureType;
 
 //==============================
 // Structure
@@ -41,9 +41,26 @@ export const PROP_TYPES = {
 };
 
 export const Types: TypesObject = {
-    string: (defaultValue: string = '') => () => ({ type: PROP_TYPES._string, structure: PROP_TYPES._string, defaultValue }),
-    number: (defaultValue: number = 0) => () => ({ type: PROP_TYPES._number, structure: PROP_TYPES._number, defaultValue }),
-    arrayOf: (structure: ReducerStructure) => () => ({ type: PROP_TYPES._array, structure }),
-    reducer: (structure: ReducerStructure) => () => ({ type: PROP_TYPES._reducer, structure }),
-    shape: (structure: ReducerStructure) => () => ({ type: PROP_TYPES._shape, structure}),
+    string: (defaultValue: string = '') => () => ({
+        type: PROP_TYPES._string,
+        defaultValue,
+        typeofValue: 'string'
+    }),
+    number: (defaultValue: number = 0) => () => ({
+        type: PROP_TYPES._number,
+        defaultValue,
+        typeofValue: 'number'
+    }),
+    arrayOf: (structure: StructureType|PrimitiveType) => () => ({
+        type: PROP_TYPES._array,
+        structure,
+    }),
+    reducer: (structure: ShapeStructure) => () => ({
+        type: PROP_TYPES._reducer,
+        structure,
+    }),
+    shape: (structure: ShapeStructure) => () => ({
+        type: PROP_TYPES._shape,
+        structure,
+    }),
 };

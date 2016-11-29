@@ -1,5 +1,5 @@
 //@flow
-import type { ReducerStructure } from '../structure';
+import type { ShapeStructure } from '../structure';
 
 export type PrimitiveReducerAction = {
     type: string,
@@ -8,7 +8,7 @@ export type PrimitiveReducerAction = {
 export type PrimitiveReducerFactory = (structure: Object) => PrimitiveReducer;
 export type PrimitiveReducer = (state: any, action: PrimitiveReducerAction) => any;
 
-export function primitiveReducer<ArrayReducerFactory>(reducerStructureDescriptor: ReducerStructure) {
+export function primitiveReducer<ArrayReducerFactory>(reducerStructureDescriptor: ShapeStructure) {
     return(state: any = '', { type, payload }: PrimitiveReducerAction = {}) => {
         switch(type) {
             case 'BLARG3':

@@ -1,12 +1,12 @@
 //@flow
-import type { ReducerStructure } from './structure';
+import type { ShapeStructure } from './structure';
 
 import { combineReducers } from 'redux';
 import { reduce, find } from 'lodash';
 import { createReducer } from './reducers';
-import { PROP_TYPES } from './constants';
+import { PROP_TYPES } from './structure';
 
-export function buildReducers(structure: ReducerStructure) {
+export function buildReducers(structure: ShapeStructure) {
 
     const tmp = combineReducers(reduce(structure, (memo, propValue, propName) => {
         const { structure } = propValue();
