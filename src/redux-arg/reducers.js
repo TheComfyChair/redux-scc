@@ -3,12 +3,11 @@ import {
     PROP_TYPES,
     TYPE_DEFAULTS,
 } from './constants';
-import {
-    reduce
-} from 'lodash';
-import {
-    compose
-} from 'ramda';
+import { reduce } from 'lodash';
+import { compose } from 'ramda';
+import { primitiveReducer } from './reducers/primitiveReducer';
+import { objectReducer } from './reducers/objectReducer';
+import { arrayReducer } from './reducers/arrayReducer';
 
 const DEFAULTS_FUNCTIONS = new Map([
     [PROP_TYPES._shape, objectDefaults],
@@ -36,9 +35,9 @@ function determineReducerType(reducerDescriptor) {
     const { structure } = reducerDescriptor();
     const { type } = structure();
 
-    let reducerFn = REDUCER_FUNCTIONS.primitiveReducer;
-    if (type === PROP_TYPES._shape) reducerFn = REDUCER_FUNCTIONS.objectReducer;
-    if (type === PROP_TYPES._array) reducerFn = REDUCER_FUNCTIONS.arrayReducer;
+    let reducerFn = primitiveReducer;
+    if (type === PROP_TYPES._shape) reducerFn = objectReducer;
+    if (type === PROP_TYPES._array) reducerFn = arrayReducer;
     return {
         reducerFn,
         reducerStructureDescriptor: structure,

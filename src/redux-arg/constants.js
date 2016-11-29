@@ -6,11 +6,6 @@ export const PROP_TYPES = {
     _array: '_array',
 };
 
-export const TYPE_DEFAULTS = new Map([
-    [PROP_TYPES._string, ''],
-    [PROP_TYPES._number, 0],
-]);
-
 export const Types = {
     string: () => ({ type: PROP_TYPES._string, structure: PROP_TYPES._string }),
     number: () => ({ type: PROP_TYPES._number, structure: PROP_TYPES._number }),

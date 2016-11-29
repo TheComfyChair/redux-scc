@@ -4,13 +4,30 @@
 // Flow types
 //==============================
 export type ReducerStructure = {
-    [key: string]: StructureType
+    [key: string]: StructureType|PrimitiveType,
+}
+export type StructureType = () => {
+    type: string,
+    structure: StructureType|ReducerStructure
+};
+export type PrimitiveType = () => {
+    type: string,
+    structure: $Keys<typeof PROP_TYPES>,
+    defaultValue: ?any,
+};
+
+export type TypesObject = {
+    [key: string]: CreateStructure|CreateStringType|CreateNumberType
 }
 
-export type StructureType = (structure: ?ReducerStructure) => {
-    type: string,
-    structure: [StructureType | ReducerStructure]
-};
+export type TypesObjectDefaults = {
+    [key: string]: mixed|TypesArrayDefaults,
+}
+export type TypesArrayDefaults = Array<mixed>|Array<TypesObjectDefaults>;
+
+type CreateStringType = (defaultValue: string) => PrimitiveType;
+type CreateNumberType = (defaultValue: number) => PrimitiveType;
+type CreateStructure = (structure: ReducerStructure, defaultValue: TypesArrayDefaults|TypesObjectDefaults) => StructureType;
 
 //==============================
 // Structure
@@ -23,14 +40,9 @@ export const PROP_TYPES = {
     _array: '_array',
 };
 
-export const TYPE_DEFAULTS = new Map([
-    [PROP_TYPES._string, ''],
-    [PROP_TYPES._number, 0],
-]);
-
-export const Types = {
-    string: () => ({ type: PROP_TYPES._string, structure: PROP_TYPES._string }),
-    number: () => ({ type: PROP_TYPES._number, structure: PROP_TYPES._number }),
+export const Types: TypesObject = {
+    string: (defaultValue: string = '') => () => ({ type: PROP_TYPES._string, structure: PROP_TYPES._string, defaultValue }),
+    number: (defaultValue: number = 0) => () => ({ type: PROP_TYPES._number, structure: PROP_TYPES._number, defaultValue }),
     arrayOf: (structure: ReducerStructure) => () => ({ type: PROP_TYPES._array, structure }),
     reducer: (structure: ReducerStructure) => () => ({ type: PROP_TYPES._reducer, structure }),
     shape: (structure: ReducerStructure) => () => ({ type: PROP_TYPES._shape, structure}),

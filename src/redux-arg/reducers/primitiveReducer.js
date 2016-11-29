@@ -1,17 +1,18 @@
 //@flow
-type Primitive = string | number;
-type PrimitiveReducerAction = {
-    type: string,
-    payload?: string | number,
-};
-type PrimitiveReducer = (Primitive) => (Primitive, PrimitiveReducerAction) => Primitive;
+import type { ReducerStructure } from '../structure';
 
-export function primitiveReducer(reducerStructureDescriptor): PrimitiveReducer {
-    const { structure } = reducerStructureDescriptor();
-    return (state = determineDefaults(reducerStructureDescriptor)(structure), { type, payload } = {}) => {
+export type ObjectReducerAction = {
+    type: string,
+    payload?: Object,
+};
+export type ObjectReducerFactory = (structure: Object) => ObjectReducer;
+export type ObjectReducer = (state: Object, action: ObjectReducerAction) => Object;
+
+export function arrayReducer<ArrayReducerFactory>(reducerStructureDescriptor: ReducerStructure) {
+    return(state: Object = calculateDefaults(reducerSructure), { type, payload = {}}: ObjectReducerAction = {}): Object => {
         switch(type) {
-            case 'BLARG2':
-                return { state, ...structure, ...payload };
+            case 'BLARG3':
+                return [ state, ...payload ];
             default:
                 return state;
         }
