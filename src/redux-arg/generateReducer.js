@@ -6,8 +6,6 @@ import { PROP_TYPES } from './constants';
 
 export function buildReducers(structure) {
 
-    //TODO - allow for building single primitive reducers
-
     const tmp = combineReducers(reduce(structure, (memo, propValue, propName) => {
         const { structure } = propValue();
 

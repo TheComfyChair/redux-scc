@@ -10,61 +10,6 @@ import {
     compose
 } from 'ramda';
 
-type ObjectReducerAction = {
-    type: string,
-    payload?: Object,
-};
-type ObjectReducer = (Object) => (Object, ObjectReducerAction) => Object;
-
-type Primitive = string | number;
-type PrimitiveReducerAction = {
-    type: string,
-    payload?: string | number,
-};
-type PrimitiveReducer = (Primitive) => (Primitive, PrimitiveReducerAction) => Primitive;
-
-type ArrayReducerAction = {
-    type: string,
-    payload?: Array,
-    index?: number,
-};
-type ArrayReducer = (Array) => (Array, ArrayReducerAction) => Array;
-
-const REDUCER_FUNCTIONS = {
-    objectReducer(reducerStructureDescriptor): ObjectReducer {
-        const { structure } = reducerStructureDescriptor();
-        return (state = determineDefaults(reducerStructureDescriptor)(structure), { type, payload } = {}) => {
-            switch (type) {
-                case 'BLARG!':
-                    return { state, ...reducerStructureDescriptor, ...payload };
-                default:
-                    return state;
-            }
-        }
-    },
-    primitiveReducer(reducerStructureDescriptor): PrimitiveReducer {
-        const { structure } = reducerStructureDescriptor();
-        return (state = determineDefaults(reducerStructureDescriptor)(structure), { type, payload } = {}) => {
-            switch(type) {
-                case 'BLARG2':
-                    return { state, ...structure, ...payload };
-                default:
-                    return state;
-            }
-        }
-    },
-    arrayReducer(reducerStructureDescriptor): ArrayReducer {
-        return (state = [], { type, payload } = {}) => {
-            switch(type) {
-                case 'BLARG3':
-                    return { state, ...reducerStructureDescriptor, ...payload };
-                default:
-                    return state;
-            }
-        }
-    }
-};
-
 const DEFAULTS_FUNCTIONS = new Map([
     [PROP_TYPES._shape, objectDefaults],
     [PROP_TYPES._array, arrayDefaults],
