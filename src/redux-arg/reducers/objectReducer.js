@@ -1,16 +1,17 @@
 //@flow
-type ObjectReducerAction = {
+export type ObjectReducerAction = {
     type: string,
-    payload?: Object,
+    payload?: any,
 };
-type ObjectReducer = (Object) => (Object, ObjectReducerAction) => Object;
+export type ObjectReducerFactory = (structure: Object) => ObjectReducer;
+export type ObjectReducer = (state: Object, action: ObjectReducerAction) => Object;
 
-export function objectReducer(reducerStructureDescriptor: Object): ObjectReducer {
-    const { structure } = reducerStructureDescriptor();
-    return (state = determineDefaults(reducerStructureDescriptor)(structure), { type, payload } = {}) => {
+
+export function objectReducer(): ObjectReducer {
+    return (state = {}, { type, payload } = {}) => {
         switch (type) {
             case 'BLARG!':
-                return { state, ...reducerStructureDescriptor, ...payload };
+                return { state, ...payload };
             default:
                 return state;
         }
