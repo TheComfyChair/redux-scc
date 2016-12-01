@@ -38,3 +38,5 @@ store.dispatch(test.actionsObject.example.form2.reset());
 store.dispatch(test.actionsObject.example.form2.replace({ toast: 'nommyNom' }));
 store.dispatch(test.actionsObject.example.form2.reset());
 
+console.log(111, test.selectorsObject.example.form2(store.getState()));
+

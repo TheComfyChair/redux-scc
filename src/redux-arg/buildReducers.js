@@ -44,16 +44,14 @@ export function buildReducers(name: string, structure: ShapeStructure, {
         //child reducers, we will either recursively call buildReducers, or we will call the
         //createReducer function, which will create the correct reducer for the given structure
         //(which can be either object, array, or primitive).
-        let childReducer = containsReducers ? buildReducers(propName, propStructure, {
-            locationString: locationString ? `${locationString}.${propName}` : propName,
-            baseSelector: state => {
-                const stuff = baseSelector(state);
-                console.log(224, 'Am I getting the way?', stuff, propName);
-                return stuff[propName];
-            }
-        }) : createReducer(propValue, {
-            locationString,
-        });
+        let childReducer = containsReducers
+            ?   buildReducers(propName, propStructure, {
+                    locationString: locationString ? `${locationString}.${propName}` : propName,
+                    baseSelector: state => baseSelector(state)[propName],
+                })
+            :   createReducer(propValue, {
+                    locationString,
+                });
 
         //As the object is built up, we want to assign the reducers/actions created
         //by the child to a location on the reducers/actions object which will match up
@@ -70,12 +68,7 @@ export function buildReducers(name: string, structure: ShapeStructure, {
             },
             selectorsObject: {
                 ...memo.selectorsObject,
-                [propName]: containsReducers ? childReducer.selectorsObject : state => {
-                    console.log(222, 'About to call!', propName)
-                    const parentStuff = baseSelector(state);
-                    console.log(223, parentStuff);
-                    return parentStuff[propName];
-                }
+                [propName]: containsReducers ? childReducer.selectorsObject : state => baseSelector(state)[propName],
             },
         };
     }
