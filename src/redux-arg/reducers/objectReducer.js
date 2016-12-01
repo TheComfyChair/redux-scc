@@ -36,8 +36,7 @@ export type ObjectSelector = (state: Object) => Object;
 //==============================
 // JS imports
 //==============================
-import { reduce } from 'lodash/reduce';
-import { validateObject } from '../validatePayload';
+import { reduce } from 'lodash';
 
 const DEFAULT_OBJECT_BEHAVIORS: ObjectReducerBehaviorsConfig = {
     update: {
@@ -52,20 +51,18 @@ const DEFAULT_OBJECT_BEHAVIORS: ObjectReducerBehaviorsConfig = {
         }
     },
     replace: {
-        reducer(state, payload, initialState) {
+        reducer(state, payload) {
             return payload;
         }
     }
 };
 
 export function createObjectReducer(reducerShape: StructureType, {
-    behaviorsConfig = {},
     locationString
-}: ObjectReducerOptions) {
-    const completeBehaviorsConfig = { ...DEFAULT_OBJECT_BEHAVIORS, ...behaviorsConfig };
+}: ObjectReducerOptions = {}) {
     return {
-        reducers: createReducer(reducerShape, createReducerBehaviors(completeBehaviorsConfig, locationString)),
-        actionsObject: createActions(completeBehaviorsConfig, locationString),
+        reducers: createReducer(reducerShape, createReducerBehaviors(DEFAULT_OBJECT_BEHAVIORS, locationString)),
+        actionsObject: createActions(DEFAULT_OBJECT_BEHAVIORS, locationString),
     };
 }
 
@@ -83,7 +80,8 @@ function createReducer(objectStructure: StructureType, behaviors: ObjectReducerB
         if (!behaviors[type]) return state;
         //Sanitize the payload using the reducer shape, then
         //apply the sanitized payload to the state using the behavior linked to this action type.
-        return behaviors[type](state, validateObject(payload), initialState);
+        //TODO: Add validation to payload
+        return behaviors[type](state, payload, initialState);
     }
 }
 
@@ -91,7 +89,7 @@ function createActions(behaviorsConfig: ObjectReducerBehaviorsConfig, locationSt
     //Take a reducer behavior config object, and create actions using the location string
     return reduce(behaviorsConfig, (memo, behavior, name) => ({
         ...memo,
-        [`${locationString}.${name}`]: (value: Object) =>
+        [name]: (value: Object) =>
             ({ type: `${locationString}.${name}`, payload: behavior.action(value) || {} })
     }), {});
 }
@@ -100,7 +98,7 @@ function createReducerBehaviors(behaviorsConfig: ObjectReducerBehaviorsConfig, l
     //Take a reducer behavior config object, and create the reducer behaviors using the location string
     return reduce(behaviorsConfig, (memo, behavior, name) => ({
         ...memo,
-        [`${locationString}.${name}`]: behavior,
+        [`${locationString}.${name}`]: behavior.reducer,
     }), {});
 }
 

@@ -4,13 +4,12 @@
 //==============================
 import type { PrimitiveType, StructureType, ShapeStructure } from './structure';
 
-type validationFunction = (structure: StructureType|PrimitiveType|ShapeStructure, value: any) => any;
+type validationFunction = (structure: StructureType | PrimitiveType | ShapeStructure, value: any) => any;
 
 //==============================
 // JS imports
 //==============================
-import { reduce } from 'lodash/reduce';
-import { isObject } from 'lodash/isObject';
+import { reduce, isObject } from 'lodash';
 import { PROP_TYPES } from './structure';
 
 export function validateObject(objectStructure: any, value: mixed): Object {
@@ -45,7 +44,7 @@ export function validateArray(arrayStructure: any, value: Array<mixed>): Array<m
     //based on the provided reducer structure.
     const elementStructure = arrayStructure().structure;
     const elementType = arrayStructure().type;
-    return value.map(v => getTypeValidation(elementType)(elementStructure, value))
+    return value.map(v => getTypeValidation(elementType)(elementStructure, v))
 }
 
 function getTypeValidation(type): validationFunction {

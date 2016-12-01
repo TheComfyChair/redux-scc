@@ -10,25 +10,13 @@ import { reduce, find } from 'lodash';
 import { createReducer } from './reducers';
 import { PROP_TYPES } from './structure';
 
-
-type ProcessStructure = (
-    memo: PartialReducer,
-    propValue: StructureType|PrimitiveType,
-    propName: string,
-) => PartialReducer;
-
-type BuildReducers = (name: string, structure: ShapeStructure, options: {
-    baseSelector: Selectors,
-    locationString: string,
-}) => PartialReducer;
-
 export function buildReducers(name: string, structure: ShapeStructure, {
-    baseSelector = state => state[name],
-    locationString = name,
+    baseSelector = state => state,
+    locationString = '',
 }: {
     baseSelector: Selectors,
     locationString: string,
-}){
+} = {}): PartialReducer {
 
     //Build up the reducers, actions, and selectors for this level. Due to recursion,
     //these objects will be assigned to a property in the parent object, or simply
@@ -44,7 +32,7 @@ export function buildReducers(name: string, structure: ShapeStructure, {
     //reducers assigned to those properties.
     return { ...temp, reducers: combineReducers(temp.reducers) };
 
-    function processStructure<ProcessStructure>(memo, propValue, propName) {
+    function processStructure(memo: PartialReducer, propValue: StructureType | PrimitiveType, propName: string) {
         //Get the structure from the propValue. In the case of 'StructureType' properties, this
         //will be some form of shape (or primitives in the case of arrays). At this point we
         //are only interested in whether or not the structure contains reducers, as that
@@ -56,10 +44,16 @@ export function buildReducers(name: string, structure: ShapeStructure, {
         //child reducers, we will either recursively call buildReducers, or we will call the
         //createReducer function, which will create the correct reducer for the given structure
         //(which can be either object, array, or primitive).
-        let childReducer = containsReducers ? buildReducers(propName, structure, {
-            locationString: `${locationString}.${propName}`,
-            baseSelector: state => baseSelector(state)[propName],
-        }) : createReducer(propValue);
+        let childReducer = containsReducers ? buildReducers(propName, propStructure, {
+            locationString: locationString ? `${locationString}.${propName}` : propName,
+            baseSelector: state => {
+                const stuff = baseSelector(state);
+                console.log(224, 'Am I getting the way?', stuff, propName);
+                return stuff[propName];
+            }
+        }) : createReducer(propValue, {
+            locationString,
+        });
 
         //As the object is built up, we want to assign the reducers/actions created
         //by the child to a location on the reducers/actions object which will match up
@@ -76,7 +70,12 @@ export function buildReducers(name: string, structure: ShapeStructure, {
             },
             selectorsObject: {
                 ...memo.selectorsObject,
-                [propName]: state => baseSelector(state)[propName],
+                [propName]: containsReducers ? childReducer.selectorsObject : state => {
+                    console.log(222, 'About to call!', propName)
+                    const parentStuff = baseSelector(state);
+                    console.log(223, parentStuff);
+                    return parentStuff[propName];
+                }
             },
         };
     }

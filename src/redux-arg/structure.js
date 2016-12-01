@@ -4,11 +4,11 @@
 // Flow types
 //==============================
 export type ShapeStructure = {
-    [key: string]: StructureType|PrimitiveType,
+    [key: string]: StructureType | PrimitiveType,
 }
 export type StructureType = () => {
     type: string,
-    structure: ShapeStructure|StructureType|PrimitiveType
+    structure: ShapeStructure | StructureType | PrimitiveType
 };
 export type PrimitiveType = () => {
     type: string,
@@ -16,18 +16,18 @@ export type PrimitiveType = () => {
     typeofValue: string,
 };
 export type TypesObject = {
-    [key: string]: CreateArrayType|CreateStringType|CreateNumberType|CreateObjectType;
+    [key: string]: CreateArrayType | CreateStringType | CreateNumberType | CreateObjectType;
 }
 
 export type TypesObjectDefaults = {
-    [key: string]: mixed|TypesArrayDefaults,
+    [key: string]: mixed | TypesArrayDefaults,
 }
-export type TypesArrayDefaults = Array<mixed>|Array<TypesObjectDefaults>;
+export type TypesArrayDefaults = Array<mixed> | Array<TypesObjectDefaults>;
 
 type CreateStringType = (defaultValue: string) => PrimitiveType;
 type CreateNumberType = (defaultValue: number) => PrimitiveType;
-type CreateArrayType = (structure: StructureType|PrimitiveType, defaultValue: TypesArrayDefaults|TypesObjectDefaults) => StructureType;
-type CreateObjectType = (structure: ShapeStructure, defaultValue: TypesArrayDefaults|TypesObjectDefaults) => StructureType;
+type CreateArrayType = (structure: StructureType | PrimitiveType, defaultValue: TypesArrayDefaults | TypesObjectDefaults) => StructureType;
+type CreateObjectType = (structure: ShapeStructure, defaultValue: TypesArrayDefaults | TypesObjectDefaults) => StructureType;
 
 //==============================
 // Structure
@@ -51,7 +51,7 @@ export const Types: TypesObject = {
         defaultValue,
         typeofValue: 'number'
     }),
-    arrayOf: (structure: StructureType|PrimitiveType) => () => ({
+    arrayOf: (structure: StructureType | PrimitiveType) => () => ({
         type: PROP_TYPES._array,
         structure,
     }),

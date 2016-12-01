@@ -7,11 +7,8 @@ import type { ObjectReducer, ObjectAction, ObjectSelector } from './reducers/obj
 import {
     PROP_TYPES,
 } from './structure';
-import { reduce } from 'lodash';
 import { compose } from 'ramda';
-import { primitiveReducer } from './reducers/primitiveReducer';
 import { createObjectReducer } from './reducers/objectReducer';
-import { arrayReducer } from './reducers/arrayReducer';
 
 export type Selectors = ObjectSelector;
 export type Actions = ObjectAction;
@@ -22,21 +19,25 @@ export type PartialReducer = {
     selectorsObject?: { [key: string]: Selectors },
 };
 
-function determineReducerType(reducerDescriptor) {
+function determineReducerType(reducerDescriptor, {
+    locationString,
+}) {
     const { structure } = reducerDescriptor();
     const { type } = structure();
 
-    let reducerFn = primitiveReducer;
+    let reducerFn = null;
     if (type === PROP_TYPES._shape) reducerFn = createObjectReducer;
-    if (type === PROP_TYPES._array) reducerFn = arrayReducer;
     return {
         reducerFn,
         reducerStructureDescriptor: structure,
+        locationString,
     };
 }
 
-function callReducer({ reducerFn, reducerStructureDescriptor } = {}) {
-    return reducerFn(reducerStructureDescriptor);
+function callReducer({ reducerFn, reducerStructureDescriptor, locationString } = {}) {
+    return reducerFn(reducerStructureDescriptor, {
+        locationString,
+    });
 }
 
 export const createReducer = compose(callReducer, determineReducerType);
