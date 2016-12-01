@@ -22,10 +22,6 @@ const example = {
             })
         })
     }),
-    test1: Types.reducer(Types.string),
-    test2: Types.reducer(Types.arrayOf({
-        foo5: Types.number,
-    })),
 };
 
 const test = buildReducers(example);

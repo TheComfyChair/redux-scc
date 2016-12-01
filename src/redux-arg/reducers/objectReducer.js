@@ -31,6 +31,7 @@ export type ObjectReducerOptions = {
     behaviorsConfig: ObjectReducerBehaviorsConfig,
     locationString: string,
 };
+export type ObjectSelector = (state: Object) => Object;
 
 //==============================
 // JS imports
@@ -61,9 +62,10 @@ export function createObjectReducer(reducerShape: StructureType, {
     behaviorsConfig = {},
     locationString
 }: ObjectReducerOptions) {
+    const completeBehaviorsConfig = { ...DEFAULT_OBJECT_BEHAVIORS, ...behaviorsConfig };
     return {
-        reducer: createReducer(reducerShape, createReducerBehaviors(behaviorsConfig, locationString)),
-        actions: createActions(behaviorsConfig, locationString),
+        reducers: createReducer(reducerShape, createReducerBehaviors(completeBehaviorsConfig, locationString)),
+        actionsObject: createActions(completeBehaviorsConfig, locationString),
     };
 }
 
