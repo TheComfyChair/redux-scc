@@ -37,6 +37,7 @@ export type ObjectSelector = (state: Object) => Object;
 // JS imports
 //==============================
 import { reduce } from 'lodash';
+import { validateObject } from '../validatePayload';
 
 const DEFAULT_OBJECT_BEHAVIORS: ObjectReducerBehaviorsConfig = {
     update: {
@@ -51,6 +52,7 @@ const DEFAULT_OBJECT_BEHAVIORS: ObjectReducerBehaviorsConfig = {
         }
     },
     replace: {
+        action(value) { return value },
         reducer(state, payload) {
             return payload;
         }
@@ -81,7 +83,7 @@ function createReducer(objectStructure: StructureType, behaviors: ObjectReducerB
         //Sanitize the payload using the reducer shape, then
         //apply the sanitized payload to the state using the behavior linked to this action type.
         //TODO: Add validation to payload
-        return behaviors[type](state, payload, initialState);
+        return behaviors[type](state, validateObject(objectStructure, payload), initialState);
     }
 }
 
@@ -89,8 +91,10 @@ function createActions(behaviorsConfig: ObjectReducerBehaviorsConfig, locationSt
     //Take a reducer behavior config object, and create actions using the location string
     return reduce(behaviorsConfig, (memo, behavior, name) => ({
         ...memo,
-        [name]: (value: Object) =>
-            ({ type: `${locationString}.${name}`, payload: behavior.action(value) || {} })
+        [name]: (value: Object) => ({
+            type: `${locationString}.${name}`,
+            payload: (behavior.action || (() => {}))(value) || {}
+        })
     }), {});
 }
 

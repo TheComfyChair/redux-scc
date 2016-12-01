@@ -35,6 +35,7 @@ type CreateObjectType = (structure: ShapeStructure, defaultValue: TypesArrayDefa
 export const PROP_TYPES = {
     _string: '_string',
     _number: '_number',
+    _boolean: '_boolean',
     _reducer: '_reducer',
     _shape: '_shape',
     _array: '_array',
@@ -51,6 +52,11 @@ export const Types: TypesObject = {
         defaultValue,
         typeofValue: 'number'
     }),
+    boolean: (defaultValue: boolean = false) => () => ({
+        type: PROP_TYPES._boolean,
+        defaultValue,
+        typeofValue: 'boolean',
+    }),
     arrayOf: (structure: StructureType | PrimitiveType) => () => ({
         type: PROP_TYPES._array,
         structure,
@@ -62,5 +68,5 @@ export const Types: TypesObject = {
     shape: (structure: ShapeStructure) => () => ({
         type: PROP_TYPES._shape,
         structure,
-    }),
+    })
 };

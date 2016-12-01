@@ -10,9 +10,26 @@
   },
   "author": "Kai Moseley",
   "license": "ISC",
+  "jest": {
+    "testPathDirs": [
+      "<rootDir>/src"
+    ],
+    "moduleFileExtensions": [
+      "js",
+      "jsx",
+      "json"
+    ],
+    "moduleDirectories": [
+      "node_modules"
+    ],
+    "modulePaths": [
+      "/src"
+    ]
+  },
   "devDependencies": {
     "babel-core": "^6.18.2",
     "babel-eslint": "^6.1.2",
+    "babel-jest": "^17.0.2",
     "babel-loader": "^6.2.5",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.18.0",
     "babel-plugin-transform-flow-strip-types": "^6.14.0",
