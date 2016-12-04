@@ -38,6 +38,7 @@ export type ObjectSelector = (state: Object) => Object;
 //==============================
 import { reduce } from 'lodash';
 import { validateObject } from '../validatePayload';
+import { createReducerBehaviors } from '../reducers';
 
 const DEFAULT_OBJECT_BEHAVIORS: ObjectReducerBehaviorsConfig = {
     update: {
@@ -98,15 +99,6 @@ function createActions(behaviorsConfig: ObjectReducerBehaviorsConfig, locationSt
             type: `${locationString}.${name}`,
             payload: (behavior.action || (() => defaultPayload))(value) || {}
         })
-    }), {});
-}
-
-
-function createReducerBehaviors(behaviorsConfig: ObjectReducerBehaviorsConfig, locationString: string): ObjectReducerBehaviors {
-    //Take a reducer behavior config object, and create the reducer behaviors using the location string
-    return reduce(behaviorsConfig, (memo, behavior, name) => ({
-        ...memo,
-        [`${locationString}.${name}`]: behavior.reducer,
     }), {});
 }
 

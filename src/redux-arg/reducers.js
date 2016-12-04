@@ -2,14 +2,17 @@
 //==============================
 // Flow imports
 //==============================
-import type { ObjectReducer, ObjectAction, ObjectSelector } from './reducers/objectReducer';
+import type {
+    ObjectReducer,
+    ObjectAction,
+    ObjectSelector,
+    ObjectReducerBehaviorsConfig,
+    ObjectReducerBehaviors,
+} from './reducers/objectReducer';
 
-import {
-    PROP_TYPES,
-} from './structure';
-import { compose } from 'ramda';
-import { createObjectReducer } from './reducers/objectReducer';
-
+//==============================
+// Flow types
+//==============================
 export type Selectors = ObjectSelector;
 export type Actions = ObjectAction;
 export type Reducers = ObjectReducer;
@@ -18,6 +21,16 @@ export type PartialReducer = {
     actionsObject: { [key: string]: Actions },
     selectorsObject?: { [key: string]: Selectors },
 };
+type ReducerBehaviorsConfig = ObjectReducerBehaviorsConfig;
+type ReducerBehaviors = ObjectReducerBehaviors;
+
+import {
+    PROP_TYPES,
+} from './structure';
+import { compose } from 'ramda';
+import { reduce } from 'lodash';
+import { createObjectReducer } from './reducers/objectReducer';
+
 
 function determineReducerType(reducerDescriptor, {
     locationString,
@@ -41,3 +54,11 @@ function callReducer({ reducerFn, reducerStructureDescriptor, locationString } =
 }
 
 export const createReducer = compose(callReducer, determineReducerType);
+
+export function createReducerBehaviors(behaviorsConfig: ReducerBehaviorsConfig, locationString: string): ReducerBehaviors {
+    //Take a reducer behavior config object, and create the reducer behaviors using the location string
+    return reduce(behaviorsConfig, (memo, behavior, name) => ({
+        ...memo,
+        [`${locationString}.${name}`]: behavior.reducer,
+    }), {});
+}
