@@ -9,6 +9,10 @@ import type {
     ObjectReducerBehaviorsConfig,
     ObjectReducerBehaviors,
 } from './reducers/objectReducer';
+import type {
+    StructureType,
+    PrimitiveType,
+} from './structure';
 
 //==============================
 // Flow types
@@ -60,5 +64,14 @@ export function createReducerBehaviors(behaviorsConfig: ReducerBehaviorsConfig, 
     return reduce(behaviorsConfig, (memo, behavior, name) => ({
         ...memo,
         [`${locationString}.${name}`]: behavior.reducer,
+    }), {});
+}
+
+export function calculateDefaults(typeDescription: StructureType | PrimitiveType) {
+    const { type, structure = {}} = typeDescription;
+    if ([PROP_TYPES.array, PROP_TYPES.shape].find(type))
+        return reduce(reducerStructure, (memo, propValue, propName) => ({
+        ...memo,
+        [propName]: propValue().defaultValue,
     }), {});
 }

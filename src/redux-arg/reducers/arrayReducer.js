@@ -47,7 +47,7 @@ function checkIndex(state: Object, payload: any, behaviorName: string): boolean 
     return true;
 }
 
-const DEFAULT_OBJECT_BEHAVIORS: ArrayReducerBehaviorsConfig = {
+const DEFAULT_ARRAY_BEHAVIORS: ArrayReducerBehaviorsConfig = {
     updateAtIndex: {
         action(value) { return value },
         reducer(state, payload, initialState, index) {
@@ -95,29 +95,24 @@ export function createArrayReducer(reducerShape: StructureType, {
     locationString
 }: ArrayReducerOptions = {}) {
     return {
-        reducers: createReducer(reducerShape, createReducerBehaviors(DEFAULT_OBJECT_BEHAVIORS, locationString)),
-        actionsObject: createActions(DEFAULT_OBJECT_BEHAVIORS, locationString, {}),
+        reducers: createReducer(reducerShape, createReducerBehaviors(DEFAULT_ARRAY_BEHAVIORS, locationString)),
+        actionsObject: createActions(DEFAULT_ARRAY_BEHAVIORS, locationString, {}),
     };
 }
 
 
-function calculateDefaults(reducerStructure) {
-    return reduce(reducerStructure, (memo, propValue, propName) => ({
-        ...memo,
-        [propName]: propValue().defaultValue,
-    }), {});
-}
 
 
-function createReducer(arrayStructure: StructureType, behaviors: ArrayReducerBehaviors): ArrayReducer {
-    const initialState = calculateDefaults(arrayStructure().structure);
+
+function createReducer(arrayTypeDescription: StructureType, behaviors: ArrayReducerBehaviors): ArrayReducer {
+    const initialState = calculateDefaults(arrayTypeDescription);
     return (state = initialState, { type, payload }: ArrayReducerAction) => {
         //If the action type does not match any of the specified behaviors, just return the current state.
         if (!behaviors[type]) return state;
 
         //Sanitize the payload using the reducer shape, then apply the sanitized
         //payload to the state using the behavior linked to this action type.
-        return behaviors[type](state, validateArray(arrayStructure, payload), initialState);
+        return behaviors[type](state, validateArray(arrayTypeDescription, payload), initialState);
     }
 }
 
