@@ -52,6 +52,7 @@ export function validatePrimitive(primitive: any, value: mixed): mixed {
 export function validateArray(arrayStructure: any, value: Array<mixed>): Array<mixed> {
     //Validate arrays by performing either of the other validation types to each element of the array,
     //based on the provided reducer structure.
+    if (!Array.isArray(value)) return [];
     const elementStructure = arrayStructure().structure;
     const elementType = elementStructure().type;
     return value.map(element => getTypeValidation(elementType)(elementStructure, element));

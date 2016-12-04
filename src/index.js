@@ -7,6 +7,7 @@ const exampleReducer = {
         form2: Types.reducer(Types.shape({
             lowerLevel: Types.number(5),
             lowerLevel2: Types.string('Blargle'),
+            lowerLevelArray: Types.arrayOf(Types.string()),
         })),
         form3: Types.reducer({
             example2: Types.reducer(Types.shape({
@@ -23,6 +24,9 @@ const exampleReducer = {
                 })
             })
         }),
+        arrayTest: Types.reducer(Types.arrayOf(
+            Types.number()
+        ))
     })
 };
 
@@ -39,4 +43,8 @@ store.dispatch(test.actionsObject.example.form2.replace({ toast: 'nommyNom' }));
 store.dispatch(test.actionsObject.example.form2.reset());
 
 console.log(111, test.selectorsObject.example.form2(store.getState()));
+console.log(222, test.actionsObject);
+
+store.dispatch(test.actionsObject.example.arrayTest.replace([1,2,3]));
+store.dispatch(test.actionsObject.example.arrayTest.updateAtIndex(5, 0));
 

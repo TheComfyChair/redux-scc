@@ -2,7 +2,7 @@
 //==============================
 // Flow imports
 //==============================
-import type { ShapeStructure, StructureType } from '../structure';
+import type { StructureType } from '../structure';
 
 //==============================
 // Flow types
@@ -10,6 +10,7 @@ import type { ShapeStructure, StructureType } from '../structure';
 export type ArrayReducerAction = {
     type: string,
     payload: any,
+    index: number,
 };
 export type ArrayReducer = (state: Array<any>, action: ArrayReducerAction) => Array<any>;
 export type ArrayReducerBehavior = (state: Array<any>, payload: any, initialState: Array<any>, index: number | void) => Array<any>;
@@ -35,13 +36,13 @@ export type ArraySelector = (state: Object) => Array<any>;
 //==============================
 // JS imports
 //==============================
-import { reduce, isArray, isObject, isNull } from 'lodash';
-import { validateArray } from '../validatePayload';
+import { reduce, isArray, isNumber, isObject } from 'lodash';
+//import { validateArray } from '../validatePayload';
 import { createReducerBehaviors } from '../reducers';
 import { updateAtIndex, removeAtIndex } from '../utils/arrayUtils';
 
-function checkIndex(state: Object, payload: any, behaviorName: string): boolean {
-    if (!isNumber(index)) {
+function checkIndex(index: ?number, payload: any, behaviorName: string): boolean {
+    if (!isNumber(index) || index === -1) {
         throw new Error(`Index not passed to ${behaviorName} for payload ${payload}.`);
     }
     return true;
@@ -49,34 +50,34 @@ function checkIndex(state: Object, payload: any, behaviorName: string): boolean 
 
 const DEFAULT_ARRAY_BEHAVIORS: ArrayReducerBehaviorsConfig = {
     updateAtIndex: {
-        action(value) { return value },
-        reducer(state, payload, initialState, index) {
-            checkIndex(index, payload, 'updateOne');
+        reducer(state, payload, initialState, index = -1) {
+            checkIndex(index, payload, 'updateAtIndex');
             if (isArray(payload) || isObject(payload)) return updateAtIndex(state, { ...state[index], ...payload }, index);
             return updateAtIndex(state, payload, index);
         }
     },
     resetAtIndex: {
         reducer(state, payload, initialState, index) {
-            checkIndex(index, payload, 'updateOne');
+            checkIndex(index, payload, 'resetAtIndex');
             return updateAtIndex(state, initialState, index);
         }
     },
     removeAtIndex: {
         reducer(state, payload, initialState, index) {
-            checkIndex(index, payload, 'updateOne');
+            checkIndex(index, payload, 'removeAtIndex');
             return removeAtIndex(state, index);
         }
     },
     replaceAtIndex: {
         reducer(state, payload, initialState, index) {
-            checkIndex(index, payload, 'updateOne');
+            checkIndex(index, payload, 'replaceAtIndex');
             return updateAtIndex(state, payload, index);
         }
     },
     replace: {
         action(value) {
             if(!isArray(value)) throw new Error('An array must be provided when replacing an array');
+            return value;
         },
         reducer(state, payload) {
             return payload;
@@ -89,8 +90,6 @@ const DEFAULT_ARRAY_BEHAVIORS: ArrayReducerBehaviorsConfig = {
     },
 };
 
-//TODO: All the array functionality!
-
 export function createArrayReducer(reducerShape: StructureType, {
     locationString
 }: ArrayReducerOptions = {}) {
@@ -100,30 +99,25 @@ export function createArrayReducer(reducerShape: StructureType, {
     };
 }
 
-
-
-
-
 function createReducer(arrayTypeDescription: StructureType, behaviors: ArrayReducerBehaviors): ArrayReducer {
-    const initialState = calculateDefaults(arrayTypeDescription);
-    return (state = initialState, { type, payload }: ArrayReducerAction) => {
+    return (state: Array<any> = [], { type, payload, index }: ArrayReducerAction) => {
         //If the action type does not match any of the specified behaviors, just return the current state.
         if (!behaviors[type]) return state;
-
         //Sanitize the payload using the reducer shape, then apply the sanitized
         //payload to the state using the behavior linked to this action type.
-        return behaviors[type](state, validateArray(arrayTypeDescription, payload), initialState);
+        return behaviors[type](state, payload, [], index);
     }
 }
 
 
-function createActions(behaviorsConfig: ArrayReducerBehaviorsConfig, locationString: string, defaultPayload: any): ArrayActions {
+function createActions(behaviorsConfig: ArrayReducerBehaviorsConfig, locationString: string): ArrayActions {
     //Take a reducer behavior config object, and create actions using the location string
     return reduce(behaviorsConfig, (memo, behavior, name) => ({
         ...memo,
-        [name]: (value: Object) => ({
+        [name]: (value: Array<any>, index: ?number) => ({
             type: `${locationString}.${name}`,
-            payload: (behavior.action || (() => defaultPayload))(value) || {}
+            payload: (behavior.action || (() => value))(value) || [],
+            index,
         })
     }), {});
 }

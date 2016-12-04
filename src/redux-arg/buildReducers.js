@@ -3,7 +3,7 @@
 // Flow imports
 //==============================
 import type { StructureType, PrimitiveType } from './structure';
-import type { PartialReducer, Selectors } from './reducers';
+import type { PartialReducer } from './reducers';
 
 import { combineReducers } from 'redux';
 import { reduce, find } from 'lodash';
@@ -14,7 +14,7 @@ export function buildReducers(name: string, structure: any, {
     baseSelector = state => state,
     locationString = '',
 }: {
-    baseSelector: Selectors,
+    baseSelector: any,
     locationString: string,
 } = {}): PartialReducer {
 
@@ -48,10 +48,10 @@ export function buildReducers(name: string, structure: any, {
         let childReducer = containsReducers
             ?   buildReducers(propName, propStructure, {
                     locationString: locationString ? `${locationString}.${propName}` : propName,
-                    baseSelector: state => baseSelector(state)[propName],
+                    baseSelector: (state: any) => baseSelector(state)[propName],
                 })
             :   createReducer(propValue, {
-                    locationString,
+                    locationString: `${locationString}.${propName}`,
                 });
 
         //As the object is built up, we want to assign the reducers/actions created

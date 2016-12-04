@@ -25,7 +25,6 @@ module.exports = {
         'react/prop-types': ['off'],
         'react/display-name': ['off'],
         'no-console': ['off'],
-        //'arrow-parens': ['warn', 'as-needed'],
     },
     env: {
         browser: true,
@@ -33,12 +32,6 @@ module.exports = {
         es6: true,
     },
     globals: {
-        _: true,
-        _fmt: true,
-        _misc: true,
-        _arr: true,
-        _cfg: true,
         Promise: true,
-        RE_CHILD_INDEX_JS: true,
     }
 };

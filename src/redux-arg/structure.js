@@ -8,7 +8,8 @@ export type ShapeStructure = {
 }
 export type StructureType = () => {
     type: string,
-    structure: ShapeStructure | StructureType | PrimitiveType
+    structure: ShapeStructure | StructureType | PrimitiveType,
+    defaultValue?: any,
 };
 export type PrimitiveType = () => {
     type: $Keys<typeof PROP_TYPES>,
