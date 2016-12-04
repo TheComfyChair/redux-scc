@@ -13,7 +13,7 @@ export type ObjectReducerAction = {
 };
 export type ObjectReducerFactory = (reducerStructure: ShapeStructure) => ObjectReducer;
 export type ObjectReducer = (state: Object, action: ObjectReducerAction) => Object;
-export type ObjectReducerBehavior = (state: Object, payload: Object, initialState: Object) => Object;
+export type ObjectReducerBehavior = (state: Object, payload: Object | void, initialState: Object) => Object;
 export type ObjectReducerBehaviorsConfig = {
     [key: string]: {
         action?: (value: Object) => Object,
@@ -42,7 +42,7 @@ import { validateObject } from '../validatePayload';
 const DEFAULT_OBJECT_BEHAVIORS: ObjectReducerBehaviorsConfig = {
     update: {
         action(value) { return value },
-        reducer(state, payload) {
+        reducer(state, payload = {}) {
             return { ...state, ...payload };
         }
     },
@@ -53,7 +53,7 @@ const DEFAULT_OBJECT_BEHAVIORS: ObjectReducerBehaviorsConfig = {
     },
     replace: {
         action(value) { return value },
-        reducer(state, payload) {
+        reducer(state, payload = {}) {
             return payload;
         }
     }

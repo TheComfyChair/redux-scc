@@ -20,9 +20,9 @@ describe('Testing validation functionality', () => {
         expect(validateArray(testArrayStructure, ['a','b','c','d']))
             .toEqual(['a','b','c','d']);
     });
-    it('Arrays should strip out primitives which fail the test (i.e. return undefined)', () => {
+    it('Arrays should return undefined for primitives which fail the test', () => {
         expect(validateArray(testArrayStructure, ['a','b',3,'d']))
-            .toEqual(['a','b','d']);
+            .toEqual(['a','b',undefined,'d']);
     });
 
     const testArrayStructure2 = Types.arrayOf(Types.shape({
@@ -65,4 +65,16 @@ describe('Testing validation functionality', () => {
         expect(validateObject(testObjectStructure2, { test1: { test1: 'toast', test2: 3 } }))
             .toEqual({ test1: { test1: 'toast', test2: 3 } });
     });
+    const testObjectStructure3 = Types.shape({
+        test1: Types.shape({
+            test2: Types.string(),
+        }),
+        test2: Types.string(),
+    });
+    it('Objects containing objects should properly check if an object is provided', () => {
+        expect(validateObject(testObjectStructure3, { test1: 'foo', test2: 'bar' })).toEqual({
+            test1: undefined,
+            test2: 'bar',
+        });
+    })
 });

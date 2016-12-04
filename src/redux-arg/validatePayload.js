@@ -12,9 +12,12 @@ type validationFunction = (structure: StructureType | PrimitiveType | ShapeStruc
 import { reduce, isObject } from 'lodash';
 import { PROP_TYPES } from './structure';
 
-export function validateObject(objectStructure: any, value: mixed): Object {
-    if (!isObject(value) && !!value) console.error(`The value passed to validateObject() was not an object. Value: `, value);
-    if (!isObject(value) || !value ) return {};
+export function validateObject(objectStructure: any, value: mixed): Object | void {
+    if (!isObject(value) && !!value) {
+        console.error(`The value passed to validateObject() was not an object. Value: `, value);
+        return undefined;
+    }
+    if (!isObject(value) || !value ) return undefined;
 
     return reduce(value, (memo, value, name) => {
         const valueType = objectStructure().structure[name];
@@ -51,8 +54,7 @@ export function validateArray(arrayStructure: any, value: Array<mixed>): Array<m
     //based on the provided reducer structure.
     const elementStructure = arrayStructure().structure;
     const elementType = elementStructure().type;
-    return value.map(element => getTypeValidation(elementType)(elementStructure, element))
-        .filter(v => v !== undefined);
+    return value.map(element => getTypeValidation(elementType)(elementStructure, element));
 }
 
 function getTypeValidation(type): validationFunction {
