@@ -5,8 +5,8 @@ import { Types } from './redux-arg/structure';
 const exampleReducer = {
     example: Types.reducer({
         form2: Types.reducer(Types.shape({
-            lowerLevel: Types.number(),
-            lowerLevel2: Types.string(),
+            lowerLevel: Types.number(5),
+            lowerLevel2: Types.string('Blargle'),
         })),
         form3: Types.reducer({
             example2: Types.reducer(Types.shape({
@@ -33,7 +33,7 @@ const store = createStore(
     compose(window.devToolsExtension ? window.devToolsExtension() : f => f)
 );
 
-store.dispatch(test.actionsObject.example.form2.update({ lowerLevel: 'nom' }));
+store.dispatch(test.actionsObject.example.form2.update({ lowerLevel: 2, lowerLevel2: 'Rawrg' }));
 store.dispatch(test.actionsObject.example.form2.reset());
 store.dispatch(test.actionsObject.example.form2.replace({ toast: 'nommyNom' }));
 store.dispatch(test.actionsObject.example.form2.reset());

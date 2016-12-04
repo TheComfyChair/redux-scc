@@ -21,14 +21,14 @@ export function validateObject(objectStructure: any, value: mixed): Object {
         //If the value type does not exist in the reducer structure, we don't want to include it in the payload.
         //Display a console error for the developer, and skip the inclusion of this property in the payload.
         if (!valueType) {
-            console.error(`The property, ${name}, was not specified in the structure` +
+            console.warn(`The property, ${name}, was not specified in the structure` +
                 ' and was stripped out of the payload. Structure: ',  objectStructure().structure);
             return memo;
         }
 
         const validatedValue = getTypeValidation(valueType().type)(valueType, value);
         if (validatedValue === undefined) {
-            console.error(`The property, ${name}, was populated with a type ${ typeof value } which does not` +
+            console.warn(`The property, ${name}, was populated with a type ${ typeof value } which does not` +
                 ' match that specified in the reducer configuration. It has been stripped from' +
                 ' the payload');
             return memo;

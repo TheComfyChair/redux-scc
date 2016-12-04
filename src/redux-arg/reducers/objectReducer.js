@@ -64,9 +64,10 @@ export function createObjectReducer(reducerShape: StructureType, {
 }: ObjectReducerOptions = {}) {
     return {
         reducers: createReducer(reducerShape, createReducerBehaviors(DEFAULT_OBJECT_BEHAVIORS, locationString)),
-        actionsObject: createActions(DEFAULT_OBJECT_BEHAVIORS, locationString),
+        actionsObject: createActions(DEFAULT_OBJECT_BEHAVIORS, locationString, {}),
     };
 }
+
 
 function calculateDefaults(reducerStructure) {
     return reduce(reducerStructure, (memo, propValue, propName) => ({
@@ -75,28 +76,31 @@ function calculateDefaults(reducerStructure) {
     }), {});
 }
 
+
 function createReducer(objectStructure: StructureType, behaviors: ObjectReducerBehaviors): ObjectReducer {
     const initialState = calculateDefaults(objectStructure().structure);
     return (state = initialState, { type, payload }: ObjectReducerAction) => {
         //If the action type does not match any of the specified behaviors, just return the current state.
         if (!behaviors[type]) return state;
-        //Sanitize the payload using the reducer shape, then
-        //apply the sanitized payload to the state using the behavior linked to this action type.
-        //TODO: Add validation to payload
+
+        //Sanitize the payload using the reducer shape, then apply the sanitized
+        //payload to the state using the behavior linked to this action type.
         return behaviors[type](state, validateObject(objectStructure, payload), initialState);
     }
 }
 
-function createActions(behaviorsConfig: ObjectReducerBehaviorsConfig, locationString: string): ObjectActions {
+
+function createActions(behaviorsConfig: ObjectReducerBehaviorsConfig, locationString: string, defaultPayload: any): ObjectActions {
     //Take a reducer behavior config object, and create actions using the location string
     return reduce(behaviorsConfig, (memo, behavior, name) => ({
         ...memo,
         [name]: (value: Object) => ({
             type: `${locationString}.${name}`,
-            payload: (behavior.action || (() => {}))(value) || {}
+            payload: (behavior.action || (() => defaultPayload))(value) || {}
         })
     }), {});
 }
+
 
 function createReducerBehaviors(behaviorsConfig: ObjectReducerBehaviorsConfig, locationString: string): ObjectReducerBehaviors {
     //Take a reducer behavior config object, and create the reducer behaviors using the location string

@@ -2,7 +2,7 @@
 //==============================
 // Flow imports
 //==============================
-import type { StructureType, PrimitiveType, ShapeStructure } from './structure';
+import type { StructureType, PrimitiveType } from './structure';
 import type { PartialReducer, Selectors } from './reducers';
 
 import { combineReducers } from 'redux';
@@ -10,7 +10,7 @@ import { reduce, find } from 'lodash';
 import { createReducer } from './reducers';
 import { PROP_TYPES } from './structure';
 
-export function buildReducers(name: string, structure: ShapeStructure, {
+export function buildReducers(name: string, structure: any, {
     baseSelector = state => state,
     locationString = '',
 }: {
@@ -18,6 +18,7 @@ export function buildReducers(name: string, structure: ShapeStructure, {
     locationString: string,
 } = {}): PartialReducer {
 
+    if (structure === undefined) throw new Error(`The structure must be defined for a reducer! LocationString: ${ locationString }`);
     //Build up the reducers, actions, and selectors for this level. Due to recursion,
     //these objects will be assigned to a property in the parent object, or simply
     //returned to the call site for use in the rest of the application.
@@ -37,7 +38,7 @@ export function buildReducers(name: string, structure: ShapeStructure, {
         //will be some form of shape (or primitives in the case of arrays). At this point we
         //are only interested in whether or not the structure contains reducers, as that
         //has an impact on how we proceed with regards to calls.
-        const { structure: propStructure} = propValue();
+        const { structure: propStructure } = propValue();
         const containsReducers = !!find(propStructure, v => v().type === PROP_TYPES._reducer);
 
         //Create the child reducer. Depending on whether or not the current structure level contains
