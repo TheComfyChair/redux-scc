@@ -1,4 +1,4 @@
-import { buildReducers } from './redux-arg/buildReducers';
+import { buildReducer } from './redux-arg/buildReducers';
 import { createStore, compose, combineReducers } from 'redux';
 import { Types } from './redux-arg/structure';
 
@@ -60,8 +60,8 @@ const exampleReducer2 = {
     })),
 };
 
-const test = buildReducers('example', exampleReducer);
-const test2 = buildReducers('invoices', exampleReducer2);
+const test = buildReducer('example', exampleReducer);
+const test2 = buildReducer('invoices', exampleReducer2);
 
 const store = createStore(
     combineReducers({

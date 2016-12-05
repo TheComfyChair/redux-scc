@@ -11,7 +11,7 @@ import { createReducer } from './reducers';
 import { PROP_TYPES } from './structure';
 
 
-export function buildReducers(name: string, structure: any, {
+export function buildReducer(name: string, structure: any, {
     baseSelector = state => state[name],
     locationString = '',
 }: {
