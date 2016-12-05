@@ -10,8 +10,9 @@ import { reduce, find } from 'lodash';
 import { createReducer } from './reducers';
 import { PROP_TYPES } from './structure';
 
+
 export function buildReducers(name: string, structure: any, {
-    baseSelector = state => state,
+    baseSelector = state => state[name],
     locationString = '',
 }: {
     baseSelector: any,
@@ -24,8 +25,8 @@ export function buildReducers(name: string, structure: any, {
     //returned to the call site for use in the rest of the application.
     const temp = reduce(structure, processStructure, {
         reducers: {},
-        actionsObject: {},
-        selectorsObject: {},
+        actions: {},
+        selectors: {},
     });
 
     //The Redux 'combineReducers' helper function is used here to save a little bit of boilerplate.
@@ -63,13 +64,13 @@ export function buildReducers(name: string, structure: any, {
                 ...memo.reducers,
                 [propName]: childReducer.reducers,
             },
-            actionsObject: {
-                ...memo.actionsObject,
-                [propName]: childReducer.actionsObject,
+            actions: {
+                ...memo.actions,
+                [propName]: childReducer.actions,
             },
-            selectorsObject: {
-                ...memo.selectorsObject,
-                [propName]: containsReducers ? childReducer.selectorsObject : state => baseSelector(state)[propName],
+            selectors: {
+                ...memo.selectors,
+                [propName]: containsReducers ? childReducer.selectors : state => baseSelector(state)[propName],
             },
         };
     }

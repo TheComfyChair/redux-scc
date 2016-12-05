@@ -4,7 +4,7 @@
 // Flow types
 //==============================
 export type ShapeStructure = {
-    [key: string]: StructureType | PrimitiveType,
+    [key: string]: StructureType | PrimitiveType | ArrayStructureType,
 }
 export type StructureType = () => {
     type: string,

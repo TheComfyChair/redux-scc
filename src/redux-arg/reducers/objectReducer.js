@@ -2,7 +2,7 @@
 //==============================
 // Flow imports
 //==============================
-import type { ShapeStructure, StructureType } from '../structure';
+import type { StructureType } from '../structure';
 
 //==============================
 // Flow types
@@ -11,7 +11,6 @@ export type ObjectReducerAction = {
     type: string,
     payload: Object,
 };
-export type ObjectReducerFactory = (reducerStructure: ShapeStructure) => ObjectReducer;
 export type ObjectReducer = (state: Object, action: ObjectReducerAction) => Object;
 export type ObjectReducerBehavior = (state: Object, payload: Object | void, initialState: Object) => Object;
 export type ObjectReducerBehaviorsConfig = {
@@ -31,7 +30,6 @@ export type ObjectReducerOptions = {
     behaviorsConfig: ObjectReducerBehaviorsConfig,
     locationString: string,
 };
-export type ObjectSelector = (state: Object) => Object;
 
 //==============================
 // JS imports
@@ -66,7 +64,7 @@ export function createObjectReducer(reducerShape: StructureType, {
 }: ObjectReducerOptions = {}) {
     return {
         reducers: createReducer(reducerShape, createReducerBehaviors(DEFAULT_OBJECT_BEHAVIORS, locationString)),
-        actionsObject: createActions(DEFAULT_OBJECT_BEHAVIORS, locationString, {}),
+        actions: createActions(DEFAULT_OBJECT_BEHAVIORS, locationString, {}),
     };
 }
 
@@ -100,7 +98,7 @@ function createActions(behaviorsConfig: ObjectReducerBehaviorsConfig, locationSt
         ...memo,
         [name]: (value: Object) => ({
             type: `${locationString}.${name}`,
-            payload: (behavior.action || (() => defaultPayload))(value) || {}
+            payload: (behavior.action || (() => defaultPayload))(value),
         })
     }), {});
 }

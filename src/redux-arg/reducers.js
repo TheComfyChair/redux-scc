@@ -12,9 +12,11 @@ import type {
 //==============================
 export type PartialReducer = {
     reducers: { [key: string]: any },
-    actionsObject: { [key: string]: any },
-    selectorsObject?: { [key: string]: any },
+    actions: { [key: string]: any },
+    selectors: { [key: string]: any },
 };
+
+export type Selector = (state: Object) => any;
 
 import {
     PROP_TYPES,
@@ -23,6 +25,7 @@ import { compose } from 'ramda';
 import { reduce } from 'lodash';
 import { createObjectReducer } from './reducers/objectReducer';
 import { createArrayReducer } from './reducers/arrayReducer';
+import { createPrimitiveReducer } from './reducers/primitiveReducer';
 
 
 function determineReducerType(reducerDescriptor, {
@@ -31,9 +34,9 @@ function determineReducerType(reducerDescriptor, {
     const REDUCERS = {
         [PROP_TYPES._shape]: createObjectReducer,
         [PROP_TYPES._array]: createArrayReducer,
-        [PROP_TYPES._boolean]: () => {},
-        [PROP_TYPES._string]: () => {},
-        [PROP_TYPES._number]: () => {},
+        [PROP_TYPES._boolean]: createPrimitiveReducer,
+        [PROP_TYPES._string]: createPrimitiveReducer,
+        [PROP_TYPES._number]: createPrimitiveReducer,
     };
     const { structure } = reducerDescriptor();
     const { type } = structure();

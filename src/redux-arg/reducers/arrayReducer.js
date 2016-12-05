@@ -2,7 +2,7 @@
 //==============================
 // Flow imports
 //==============================
-import type { StructureType, ArrayStructureType } from '../structure';
+import type { ArrayStructureType } from '../structure';
 
 //==============================
 // Flow types
@@ -100,7 +100,7 @@ export function createArrayReducer(arrayTypeDescription: ArrayStructureType, {
 }: ArrayReducerOptions = {}) {
     return {
         reducers: createReducer(arrayTypeDescription, createReducerBehaviors(DEFAULT_ARRAY_BEHAVIORS, locationString)),
-        actionsObject: createActions(DEFAULT_ARRAY_BEHAVIORS, locationString, {}),
+        actions: createActions(DEFAULT_ARRAY_BEHAVIORS, locationString, {}),
     };
 }
 
@@ -146,7 +146,7 @@ function createActions(behaviorsConfig: ArrayReducerBehaviorsConfig, locationStr
         ...memo,
         [name]: (value: Array<any>, index: ?number) => ({
             type: `${locationString}.${name}`,
-            payload: (behavior.action || (() => value))(value) || [],
+            payload: (behavior.action || (() => value))(value),
             index,
         })
     }), {});
