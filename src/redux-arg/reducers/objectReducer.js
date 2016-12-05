@@ -82,7 +82,7 @@ function calculateDefaults(reducerStructure) {
 
 
 function createReducer(objectStructure: StructureType, behaviors: ObjectReducerBehaviors): ObjectReducer {
-    const initialState = validateObject(objectStructure, calculateDefaults(objectStructure().structure)); 
+    const initialState: Object = validateObject(objectStructure, calculateDefaults(objectStructure().structure));
     return (state = initialState, { type, payload }: ObjectReducerAction) => {
         //If the action type does not match any of the specified behaviors, just return the current state.
         if (!behaviors[type]) return state;

@@ -2,7 +2,7 @@
 //==============================
 // Flow imports
 //==============================
-import type { StructureType } from '../structure';
+import type { StructureType, ArrayStructureType } from '../structure';
 
 //==============================
 // Flow types
@@ -95,17 +95,17 @@ const DEFAULT_ARRAY_BEHAVIORS: ArrayReducerBehaviorsConfig = {
 };
 
 
-export function createArrayReducer(reducerShape: StructureType, {
+export function createArrayReducer(arrayTypeDescription: ArrayStructureType, {
     locationString
 }: ArrayReducerOptions = {}) {
     return {
-        reducers: createReducer(reducerShape, createReducerBehaviors(DEFAULT_ARRAY_BEHAVIORS, locationString)),
+        reducers: createReducer(arrayTypeDescription, createReducerBehaviors(DEFAULT_ARRAY_BEHAVIORS, locationString)),
         actionsObject: createActions(DEFAULT_ARRAY_BEHAVIORS, locationString, {}),
     };
 }
 
 
-function createReducer(arrayTypeDescription: StructureType, behaviors: ArrayReducerBehaviors): ArrayReducer {
+function createReducer(arrayTypeDescription: ArrayStructureType, behaviors: ArrayReducerBehaviors): ArrayReducer {
     //Take the initial value specified as the default for the array, then apply it, using the validation
     //when doing so. The initial value must be an array.
     const initialValue = validateArray(arrayTypeDescription, arrayTypeDescription().defaultValue);
@@ -122,7 +122,7 @@ function createReducer(arrayTypeDescription: StructureType, behaviors: ArrayRedu
 }
 
 
-function applyValidation(arrayTypeDescription: StructureType, payload: any) {
+function applyValidation(arrayTypeDescription: ArrayStructureType, payload: any) {
     // Array validation is more tricky than object/primitive, as it is possible that the current
     // action may involve updating the contents of a specific array element, rather than the
     // whole array. As a result, some extra functionality is required to determine which

@@ -11,6 +11,11 @@ export type StructureType = () => {
     structure: ShapeStructure | StructureType | PrimitiveType,
     defaultValue?: any,
 };
+export type ArrayStructureType = () => {
+    type: string,
+    structure: StructureType | PrimitiveType,
+    defaultValue: any,
+}
 export type PrimitiveType = () => {
     type: $Keys<typeof PROP_TYPES>,
     defaultValue?: any,
