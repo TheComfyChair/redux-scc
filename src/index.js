@@ -65,8 +65,8 @@ const test2 = buildReducers('invoices', exampleReducer2);
 
 const store = createStore(
     combineReducers({
-        example: test.reducers,
-        invoices: test2.reducers,
+        ...test.reducers,
+        ...test2.reducers,
     }),
     compose(window.devToolsExtension ? window.devToolsExtension() : f => f)
 );

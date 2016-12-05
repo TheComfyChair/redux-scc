@@ -18,6 +18,25 @@ export function buildReducers(name: string, structure: any, {
     baseSelector: any,
     locationString: string,
 } = {}): PartialReducer {
+    const temp = reducerBuilder(name, structure, {
+        baseSelector,
+        locationString
+    });
+    return {
+        ...temp,
+        reducers: {
+            [name]: temp.reducers,
+        }
+    }
+}
+
+function reducerBuilder(name: string, structure: any, {
+    baseSelector = state => state[name],
+    locationString = '',
+}: {
+    baseSelector: any,
+    locationString: string,
+} = {}): PartialReducer {
 
     if (structure === undefined) throw new Error(`The structure must be defined for a reducer! LocationString: ${ locationString }`);
     //Build up the reducers, actions, and selectors for this level. Due to recursion,
@@ -43,11 +62,11 @@ export function buildReducers(name: string, structure: any, {
         const containsReducers = !!find(propStructure, v => v().type === PROP_TYPES._reducer);
 
         //Create the child reducer. Depending on whether or not the current structure level contains
-        //child reducers, we will either recursively call buildReducers, or we will call the
+        //child reducers, we will either recursively call reducerBuilder, or we will call the
         //createReducer function, which will create the correct reducer for the given structure
         //(which can be either object, array, or primitive).
         let childReducer = containsReducers
-            ?   buildReducers(propName, propStructure, {
+            ?   reducerBuilder(propName, propStructure, {
                     locationString: locationString ? `${locationString}.${propName}` : propName,
                     baseSelector: (state: any) => baseSelector(state)[propName],
                 })
