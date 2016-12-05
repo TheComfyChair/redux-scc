@@ -46,7 +46,8 @@ export function validateObject(objectStructure: any, value: mixed): Object | voi
 
 export function validatePrimitive(primitive: any, value: mixed): mixed {
     //Validate primitives using the typeofValue property of the primitive type definitions.
-    return typeof value === primitive().typeofValue ? value : undefined;
+    if (typeof value === primitive().typeofValue ) return value;
+    return console.warn(`The value, ${value}, did not match the type specified (${primitive().type}).`);
 }
 
 export function validateArray(arrayStructure: any, value: Array<mixed>): Array<mixed> {
@@ -55,7 +56,7 @@ export function validateArray(arrayStructure: any, value: Array<mixed>): Array<m
     if (!Array.isArray(value)) return [];
     const elementStructure = arrayStructure().structure;
     const elementType = elementStructure().type;
-    return value.map(element => getTypeValidation(elementType)(elementStructure, element));
+    return value.map(element => getTypeValidation(elementType)(elementStructure, element)).filter(e => e);
 }
 
 function getTypeValidation(type): validationFunction {

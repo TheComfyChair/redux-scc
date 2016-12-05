@@ -60,9 +60,10 @@ export const Types: TypesObject = {
         defaultValue,
         typeofValue: 'boolean',
     }),
-    arrayOf: (structure: StructureType | PrimitiveType) => () => ({
+    arrayOf: (structure: StructureType | PrimitiveType, defaultValue = []) => () => ({
         type: PROP_TYPES._array,
         structure,
+        defaultValue,
     }),
     reducer: (structure: ShapeStructure) => () => ({
         type: PROP_TYPES._reducer,

@@ -20,9 +20,9 @@ describe('Testing validation functionality', () => {
         expect(validateArray(testArrayStructure, ['a','b','c','d']))
             .toEqual(['a','b','c','d']);
     });
-    it('Arrays should return undefined for primitives which fail the test', () => {
+    it('Arrays should strip values for primitives which fail the test', () => {
         expect(validateArray(testArrayStructure, ['a','b',3,'d']))
-            .toEqual(['a','b',undefined,'d']);
+            .toEqual(['a','b','d']);
     });
 
     const testArrayStructure2 = Types.arrayOf(Types.shape({

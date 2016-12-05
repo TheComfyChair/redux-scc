@@ -39,6 +39,7 @@ export type ObjectSelector = (state: Object) => Object;
 import { reduce } from 'lodash';
 import { validateObject } from '../validatePayload';
 import { createReducerBehaviors } from '../reducers';
+import { PROP_TYPES } from '../structure';
 
 const DEFAULT_OBJECT_BEHAVIORS: ObjectReducerBehaviorsConfig = {
     update: {
@@ -73,7 +74,9 @@ export function createObjectReducer(reducerShape: StructureType, {
 function calculateDefaults(reducerStructure) {
     return reduce(reducerStructure, (memo, propValue, propName) => ({
         ...memo,
-        [propName]: propValue().defaultValue,
+        [propName]: propValue().type === PROP_TYPES._shape
+            ? calculateDefaults(propValue().structure)
+            : propValue().defaultValue,
     }), {});
 }
 
