@@ -29,6 +29,7 @@ export type ObjectActions = {
 export type ObjectReducerOptions = {
     behaviorsConfig: ObjectReducerBehaviorsConfig,
     locationString: string,
+    name: string,
 };
 
 //==============================
@@ -60,10 +61,13 @@ const DEFAULT_OBJECT_BEHAVIORS: ObjectReducerBehaviorsConfig = {
 };
 
 export function createObjectReducer(reducerShape: StructureType, {
-    locationString
+    locationString,
+    name,
 }: ObjectReducerOptions = {}) {
     return {
-        reducers: createReducer(reducerShape, createReducerBehaviors(DEFAULT_OBJECT_BEHAVIORS, locationString)),
+        reducers: {
+            [name]: createReducer(reducerShape, createReducerBehaviors(DEFAULT_OBJECT_BEHAVIORS, locationString)),
+        },
         actions: createActions(DEFAULT_OBJECT_BEHAVIORS, locationString, {}),
     };
 }

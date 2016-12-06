@@ -29,6 +29,7 @@ import { createPrimitiveReducer } from './reducers/primitiveReducer';
 
 
 function determineReducerType(reducerDescriptor, {
+    name,
     locationString,
 }) {
     const REDUCERS = {
@@ -42,15 +43,17 @@ function determineReducerType(reducerDescriptor, {
     const { type } = structure();
 
     return {
+        name,
         reducerFn: REDUCERS[type],
         reducerStructureDescriptor: structure,
         locationString,
     };
 }
 
-function callReducer({ reducerFn, reducerStructureDescriptor, locationString } = {}) {
+function callReducer({ name, reducerFn, reducerStructureDescriptor, locationString } = {}) {
     return reducerFn(reducerStructureDescriptor, {
         locationString,
+        name,
     });
 }
 

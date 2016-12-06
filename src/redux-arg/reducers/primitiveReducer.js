@@ -29,6 +29,7 @@ export type PrimitiveActions = {
 export type PrimitiveReducerOptions = {
     behaviorsConfig: PrimitiveReducerBehaviorsConfig,
     locationString: string,
+    name: string,
 };
 
 //==============================
@@ -55,10 +56,13 @@ const DEFAULT_PRIMITIVE_BEHAVIORS: PrimitiveReducerBehaviorsConfig = {
 
 
 export function createPrimitiveReducer(primitiveType: PrimitiveType, {
-    locationString
+    locationString,
+    name,
 }: PrimitiveReducerOptions = {}) {
     return {
-        reducers: createReducer(primitiveType, createReducerBehaviors(DEFAULT_PRIMITIVE_BEHAVIORS, locationString)),
+        reducers: {
+            [name]: createReducer(primitiveType, createReducerBehaviors(DEFAULT_PRIMITIVE_BEHAVIORS, locationString)),
+        },
         actions: createActions(DEFAULT_PRIMITIVE_BEHAVIORS, locationString, {}),
     };
 }

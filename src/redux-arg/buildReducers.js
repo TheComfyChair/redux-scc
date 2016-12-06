@@ -18,32 +18,15 @@ export function buildReducer(name: string, structure: any, {
     baseSelector: any,
     locationString: string,
 } = {}): PartialReducer {
-    const temp = reducerBuilder(name, structure, {
-        baseSelector,
-        locationString
-    });
-    return {
-        ...temp,
-        reducers: {
-            [name]: temp.reducers,
-        }
-    }
-}
-
-function reducerBuilder(name: string, structure: any, {
-    baseSelector = state => state[name],
-    locationString = '',
-}: {
-    baseSelector: any,
-    locationString: string,
-} = {}): PartialReducer {
 
     if (structure === undefined) throw new Error(`The structure must be defined for a reducer! LocationString: ${ locationString }`);
     //Build up the reducers, actions, and selectors for this level. Due to recursion,
     //these objects will be assigned to a property in the parent object, or simply
     //returned to the call site for use in the rest of the application.
     const temp = reduce(structure, processStructure, {
-        reducers: {},
+        reducers: {
+            [name]: {},
+        },
         actions: {},
         selectors: {},
     });
@@ -51,7 +34,9 @@ function reducerBuilder(name: string, structure: any, {
     //The Redux 'combineReducers' helper function is used here to save a little bit of boilerplate.
     //This helper, if you're not aware, ensures that the correct store properties are passed to the
     //reducers assigned to those properties.
-    return { ...temp, reducers: combineReducers(temp.reducers) };
+    return { ...temp, reducers: {
+        [name]: combineReducers(temp.reducers)
+    }};
 
     function processStructure(memo: PartialReducer, propValue: StructureType | PrimitiveType, propName: string) {
         //Get the structure from the propValue. In the case of 'StructureType' properties, this
@@ -66,22 +51,24 @@ function reducerBuilder(name: string, structure: any, {
         //createReducer function, which will create the correct reducer for the given structure
         //(which can be either object, array, or primitive).
         let childReducer = containsReducers
-            ?   reducerBuilder(propName, propStructure, {
+            ?   buildReducer(propName, propStructure, {
                     locationString: locationString ? `${locationString}.${propName}` : propName,
                     baseSelector: (state: any) => baseSelector(state)[propName],
                 })
             :   createReducer(propValue, {
                     locationString: `${locationString}.${propName}`,
+                    name: propName,
                 });
 
         //As the object is built up, we want to assign the reducers/actions created
         //by the child to a location on the reducers/actions object which will match up
         //to their location. Selectors are created at this level, as the child does not
         //need to know where it is located within the grand scheme of things.
+
         return {
             reducers: {
                 ...memo.reducers,
-                [propName]: childReducer.reducers,
+                ...childReducer.reducers
             },
             actions: {
                 ...memo.actions,

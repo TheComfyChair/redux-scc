@@ -30,6 +30,7 @@ export type ArrayActions = {
 export type ArrayReducerOptions = {
     behaviorsConfig: ArrayReducerBehaviorsConfig,
     locationString: string,
+    name: string,
 };
 export type ArraySelector = (state: Object) => Array<any>;
 
@@ -96,10 +97,13 @@ const DEFAULT_ARRAY_BEHAVIORS: ArrayReducerBehaviorsConfig = {
 
 
 export function createArrayReducer(arrayTypeDescription: ArrayStructureType, {
-    locationString
+    locationString,
+    name,
 }: ArrayReducerOptions = {}) {
     return {
-        reducers: createReducer(arrayTypeDescription, createReducerBehaviors(DEFAULT_ARRAY_BEHAVIORS, locationString)),
+        reducers: {
+            [name]: createReducer(arrayTypeDescription, createReducerBehaviors(DEFAULT_ARRAY_BEHAVIORS, locationString))
+        },
         actions: createActions(DEFAULT_ARRAY_BEHAVIORS, locationString, {}),
     };
 }
