@@ -10,8 +10,12 @@ import { reduce, find } from 'lodash';
 import { createReducer } from './reducers';
 import { PROP_TYPES } from './structure';
 
+// Build a chunk of the eventual store. The selectors and actions
+// generated will specifically operate on the store chunk generated. Selectors will be
+// relative to the baseSelector provided or, if not specified, the root of the store, using
+// the name of the chunk as the base property.
 
-export function buildReducer(name: string, structure: any, {
+export function buildStoreChunk(name: string, structure: any, {
     baseSelector = state => state[name],
     locationString = '',
 }: {
@@ -51,7 +55,7 @@ export function buildReducer(name: string, structure: any, {
         //createReducer function, which will create the correct reducer for the given structure
         //(which can be either object, array, or primitive).
         let childReducer = containsReducers
-            ?   buildReducer(propName, propStructure, {
+            ?   buildStoreChunk(propName, propStructure, {
                     locationString: locationString ? `${locationString}.${propName}` : propName,
                     baseSelector: (state: any) => baseSelector(state)[propName],
                 })

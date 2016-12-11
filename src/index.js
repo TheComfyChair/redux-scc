@@ -1,4 +1,4 @@
-import { buildReducer } from './redux-arg/buildReducers';
+import { buildStoreChunk } from './redux-arg/buildReducers';
 import { createStore, compose, combineReducers } from 'redux';
 import { Types } from './redux-arg/structure';
 
@@ -35,7 +35,7 @@ const exampleReducer = {
     })
 };
 
-const test = buildReducer('example', exampleReducer);
+const test = buildStoreChunk('example', exampleReducer);
 
 const store = createStore(
     combineReducers({
