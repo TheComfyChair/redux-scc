@@ -1,0 +1,97 @@
+import {
+    DEFAULT_ARRAY_BEHAVIORS,
+    applyValidation,
+    createReducer,
+} from '../arrayReducer';
+import {
+    createReducerBehaviors,
+} from '../../reducers';
+import {
+    Types
+} from '../../structure';
+
+describe('arrayReducer', () => {
+
+    describe('behaviors', () => {
+
+        describe('replaceAtIndex', () => {
+            const { replaceAtIndex } = DEFAULT_ARRAY_BEHAVIORS;
+            it('should update at index correctly', () => {
+                expect(replaceAtIndex.reducer([1,2,3], 4, [], 0)).toEqual([4,2,3]);
+            });
+            it('should return state if index not passed', () => {
+                expect(replaceAtIndex.reducer([1,2,3], 4, [])).toEqual([1,2,3]);
+            });
+            it('should return state if no payload passed', () => {
+                expect(replaceAtIndex.reducer([1,2,3], undefined, [], 0)).toEqual([1,2,3]);
+            });
+        });
+
+        describe('resetAtIndex', () => {
+            const { resetAtIndex } = DEFAULT_ARRAY_BEHAVIORS;
+            it('should reset at index correctly', () => {
+                expect(resetAtIndex.reducer([1,2,3], undefined, 0, 0)).toEqual([0,2,3]);
+            });
+            it('should return state if no index provided', () => {
+                expect(resetAtIndex.reducer([1,2,3], undefined, 0)).toEqual([1,2,3]);
+            });
+        });
+
+        describe('removeAtIndex', () => {
+            const { removeAtIndex } = DEFAULT_ARRAY_BEHAVIORS;
+            it('should remove at index correctly', () => {
+                expect(removeAtIndex.reducer([1,2,3], undefined, undefined, 0)).toEqual([2,3]);
+            });
+            it('should return state if no index provided', () => {
+                expect(removeAtIndex.reducer([1,2,3])).toEqual([1,2,3]);
+            });
+        });
+
+        describe('replace', () => {
+            const { replace } = DEFAULT_ARRAY_BEHAVIORS;
+            it('should return state if payload is not an array', () => {
+                expect(replace.reducer([1,2,3], '')).toEqual([1,2,3]);
+            });
+            it('should return the new array', () => {
+                expect(replace.reducer([1,2,3], [4,5,6])).toEqual([4,5,6]);
+            });
+        });
+
+        describe('reset', () => {
+            const { reset } = DEFAULT_ARRAY_BEHAVIORS;
+            it('should reset the state', () => {
+                expect(reset.reducer([1,2,3], undefined, [4,5,6])).toEqual([4,5,6]);
+            });
+        });
+
+    });
+
+    describe('applyValidation', () => {
+        const arrayStructure = Types.arrayOf(Types.number());
+        const arrayStructure2 = Types.arrayOf(Types.shape({ foo: Types.string() }));
+        it('should validate arrays correctly', () => {
+            expect(applyValidation(arrayStructure, [1,2,3])).toEqual([1,2,3]);
+            expect(applyValidation(arrayStructure, [1, 'foo', 3])).toEqual([1, 3]);
+        });
+        it('should validate non array primitive payloads correctly', () => {
+            expect(applyValidation(arrayStructure, 1)).toEqual(1);
+        });
+        it('should validate none array object payloads correctly', () => {
+            expect(applyValidation(arrayStructure2, { foo: 'toast' })).toEqual({ foo: 'toast' });
+        });
+    });
+
+    describe('createReducer', () => {
+        const arrayStructure = Types.arrayOf(Types.number());
+        const reducer = createReducer(arrayStructure, createReducerBehaviors(DEFAULT_ARRAY_BEHAVIORS, 'string'));
+
+        it('should call the correct behavior', () => {
+            expect(reducer([1,2,3], {
+                type: 'string.replaceAtIndex',
+                payload: 4,
+                index: 0,
+            })).toEqual([4,2,3]);
+        });
+    });
+
+});

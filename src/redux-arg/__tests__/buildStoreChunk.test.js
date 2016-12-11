@@ -28,8 +28,11 @@ describe('buildStoreChunk', () => {
         describe('Resulting chunk', () => {
             const chunk = buildStoreChunk('example', {
                 nested1: Types.reducer(Types.string('foo')),
-                nested2: Types.reducer(Types.shape()),
-                nested3: Types.reducer(Types.arrayOf(Types.number())),
+                nested2: Types.reducer(Types.shape({
+                    foo: Types.number(),
+                    bar: Types.string(),
+                })),
+                nested3: Types.reducer(Types.arrayOf(Types.number(), [1, 2, 3])),
                 nested4: Types.reducer({
                     innerNested1: Types.reducer(Types.string('bar')),
                     innerNested2: Types.reducer({

@@ -10,10 +10,10 @@ import type { ArrayStructureType } from '../structure';
 export type ArrayReducerAction = {
     type: string,
     payload: any,
-    index: number,
+    index?: number,
 };
 export type ArrayReducer = (state: Array<any>, action: ArrayReducerAction) => Array<any>;
-export type ArrayReducerBehavior = (state: Array<any>, payload: any, initialState: Array<any>, index: number | void) => Array<any>;
+export type ArrayReducerBehavior = (state: Array<any>, payload: any, initialState: Array<any>, index: number) => Array<any>;
 export type ArrayReducerBehaviorsConfig = {
     [key: string]: {
         action?: (value: any) => any,
@@ -62,42 +62,31 @@ function checkIndex(index: ?number, payload: any, behaviorName: string): boolean
 // make the end user replace the correct index themselves. However, it made sense
 // to create a few helper behaviors to aid with the most common array operations.
 //==============================
-const DEFAULT_ARRAY_BEHAVIORS: ArrayReducerBehaviorsConfig = {
+export const DEFAULT_ARRAY_BEHAVIORS: ArrayReducerBehaviorsConfig = {
     //Index specific behaviors.
-    updateAtIndex: {
-        reducer(state, payload, initialState, index = -1) {
+    replaceAtIndex: {
+        reducer(state, payload, initialState, index) {
             if (!checkIndex(index, payload, 'updateAtIndex')) return state;
             if (payload === undefined) return console.warn('Undefined was passed when updating index. Update not performed') || state;
-            if (isArray(payload) || isObject(payload)) return updateAtIndex(state, { ...state[index], ...payload }, index);
             return updateAtIndex(state, payload, index);
         }
     },
     resetAtIndex: {
         reducer(state, payload, initialState, index) {
-            checkIndex(index, payload, 'resetAtIndex');
+            if (!checkIndex(index, payload, 'resetAtIndex')) return state;
             return updateAtIndex(state, initialState, index);
         }
     },
     removeAtIndex: {
         reducer(state, payload, initialState, index) {
-            checkIndex(index, payload, 'removeAtIndex');
+            if (!checkIndex(index, payload, 'removeAtIndex')) return state;
             return removeAtIndex(state, index);
-        }
-    },
-    replaceAtIndex: {
-        reducer(state, payload, initialState, index) {
-            checkIndex(index, payload, 'replaceAtIndex');
-            if (payload === undefined) console.warn('Undefined was passed when updating index. Update not performed');
-            return updateAtIndex(state, payload, index);
         }
     },
     //Whole array behaviors.
     replace: {
-        action(value) {
-            if(!isArray(value)) throw new Error('An array must be provided when replacing an array');
-            return value;
-        },
         reducer(state, payload) {
+            if(!isArray(payload)) return console.warn('An array must be provided when replacing an array') || state;
             return payload;
         }
     },
@@ -112,7 +101,7 @@ const DEFAULT_ARRAY_BEHAVIORS: ArrayReducerBehaviorsConfig = {
 export function createArrayReducer(arrayTypeDescription: ArrayStructureType, {
     locationString,
     name,
-}: ArrayReducerOptions = {}) {
+}: ArrayReducerOptions) {
     return {
         reducers: {
             [name]: createReducer(arrayTypeDescription, createReducerBehaviors(DEFAULT_ARRAY_BEHAVIORS, locationString))
@@ -122,7 +111,7 @@ export function createArrayReducer(arrayTypeDescription: ArrayStructureType, {
 }
 
 
-function createReducer(arrayTypeDescription: ArrayStructureType, behaviors: ArrayReducerBehaviors): ArrayReducer {
+export function createReducer(arrayTypeDescription: ArrayStructureType, behaviors: ArrayReducerBehaviors): ArrayReducer {
     //Take the initial value specified as the default for the array, then apply it, using the validation
     //when doing so. The initial value must be an array.
     const initialValue = validateArray(arrayTypeDescription, arrayTypeDescription().defaultValue);
@@ -139,7 +128,7 @@ function createReducer(arrayTypeDescription: ArrayStructureType, behaviors: Arra
 }
 
 
-function applyValidation(arrayTypeDescription: ArrayStructureType, payload: any) {
+export function applyValidation(arrayTypeDescription: ArrayStructureType, payload: any) {
     // Array validation is more tricky than object/primitive, as it is possible that the current
     // action may involve updating the contents of a specific array element, rather than the
     // whole array. As a result, some extra functionality is required to determine which
@@ -161,9 +150,9 @@ function createActions(behaviorsConfig: ArrayReducerBehaviorsConfig, locationStr
     //Take a reducer behavior config object, and create actions using the location string
     return reduce(behaviorsConfig, (memo, behavior, name) => ({
         ...memo,
-        [name]: (value: Array<any>, index: ?number) => ({
+        [name]: (payload: Array<any>, index: ?number) => ({
             type: `${locationString}.${name}`,
-            payload: (behavior.action || (() => value))(value),
+            payload: (behavior.action || (payload => payload))(payload),
             index,
         })
     }), {});

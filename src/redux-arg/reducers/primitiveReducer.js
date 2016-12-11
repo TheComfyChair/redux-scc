@@ -47,9 +47,8 @@ import { createReducerBehaviors } from '../reducers';
 // reset behaviors by default.
 //==============================
 
-const DEFAULT_PRIMITIVE_BEHAVIORS: PrimitiveReducerBehaviorsConfig = {
+export const DEFAULT_PRIMITIVE_BEHAVIORS: PrimitiveReducerBehaviorsConfig = {
     replace: {
-        action(value) { return value },
         reducer(state, payload) {
             if (payload === undefined) return state;
             return payload;
@@ -66,12 +65,12 @@ const DEFAULT_PRIMITIVE_BEHAVIORS: PrimitiveReducerBehaviorsConfig = {
 export function createPrimitiveReducer(primitiveType: PrimitiveType, {
     locationString,
     name,
-}: PrimitiveReducerOptions = {}) {
+}: PrimitiveReducerOptions) {
     return {
         reducers: {
             [name]: createReducer(primitiveType, createReducerBehaviors(DEFAULT_PRIMITIVE_BEHAVIORS, locationString)),
         },
-        actions: createActions(DEFAULT_PRIMITIVE_BEHAVIORS, locationString, {}),
+        actions: createActions(DEFAULT_PRIMITIVE_BEHAVIORS, locationString),
     };
 }
 
@@ -89,13 +88,13 @@ function createReducer(primitiveType: PrimitiveType, behaviors: PrimitiveReducer
 }
 
 
-function createActions(behaviorsConfig: PrimitiveReducerBehaviorsConfig, locationString: string, defaultPayload: any): PrimitiveActions {
+function createActions(behaviorsConfig: PrimitiveReducerBehaviorsConfig, locationString: string): PrimitiveActions {
     //Take a reducer behavior config object, and create actions using the location string
     return reduce(behaviorsConfig, (memo, behavior, name) => ({
         ...memo,
-        [name]: (value: mixed) => ({
+        [name]: (payload: mixed) => ({
             type: `${locationString}.${name}`,
-            payload: (behavior.action || (() => defaultPayload))(value),
+            payload: (behavior.action || (payload => payload))(payload),
         })
     }), {});
 }

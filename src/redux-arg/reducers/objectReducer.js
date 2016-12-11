@@ -2,7 +2,7 @@
 //==============================
 // Flow imports
 //==============================
-import type { StructureType } from '../structure';
+import type { StructureType, ShapeStructure } from '../structure';
 
 
 //==============================
@@ -37,7 +37,7 @@ export type ShapeReducerOptions = {
 //==============================
 // JS imports
 //==============================
-import { reduce } from 'lodash';
+import { reduce, isObject } from 'lodash';
 import { validateShape } from '../validatePayload';
 import { createReducerBehaviors } from '../reducers';
 import { PROP_TYPES } from '../structure';
@@ -50,10 +50,10 @@ import { PROP_TYPES } from '../structure';
 // payload and the previous state in a shallow way. This supplements the replace
 // behavior, which still replaces the previous state with the payload.
 //==============================
-const DEFAULT_SHAPE_BEHAVIORS: ShapeReducerBehaviorsConfig = {
+export const DEFAULT_SHAPE_BEHAVIORS: ShapeReducerBehaviorsConfig = {
     update: {
-        action(value) { return value },
-        reducer(state, payload = {}) {
+        reducer(state, payload) {
+            if (!isObject(payload)) return state;
             return { ...state, ...payload };
         }
     },
@@ -63,8 +63,8 @@ const DEFAULT_SHAPE_BEHAVIORS: ShapeReducerBehaviorsConfig = {
         }
     },
     replace: {
-        action(value) { return value },
-        reducer(state, payload = {}) {
+        reducer(state, payload) {
+            if (!payload) return state;
             return payload;
         }
     }
@@ -74,17 +74,17 @@ const DEFAULT_SHAPE_BEHAVIORS: ShapeReducerBehaviorsConfig = {
 export function createShapeReducer(reducerShape: StructureType, {
     locationString,
     name,
-}: ShapeReducerOptions = {}) {
+}: ShapeReducerOptions) {
     return {
         reducers: {
             [name]: createReducer(reducerShape, createReducerBehaviors(DEFAULT_SHAPE_BEHAVIORS, locationString)),
         },
-        actions: createActions(DEFAULT_SHAPE_BEHAVIORS, locationString, {}),
+        actions: createActions(DEFAULT_SHAPE_BEHAVIORS, locationString),
     };
 }
 
 
-function calculateDefaults(reducerStructure) {
+export function calculateDefaults(reducerStructure: any) {
     return reduce(reducerStructure, (memo, propValue, propName) => ({
         ...memo,
         [propName]: propValue().type === PROP_TYPES._shape
@@ -94,7 +94,7 @@ function calculateDefaults(reducerStructure) {
 }
 
 
-function createReducer(objectStructure: StructureType, behaviors: ShapeReducerBehaviors): ShapeReducer {
+export function createReducer(objectStructure: StructureType, behaviors: ShapeReducerBehaviors): ShapeReducer {
     const initialState: Object = validateShape(objectStructure, calculateDefaults(objectStructure().structure));
     return (state = initialState, { type, payload }: ShapeReducerAction) => {
         //If the action type does not match any of the specified behaviors, just return the current state.
@@ -107,13 +107,13 @@ function createReducer(objectStructure: StructureType, behaviors: ShapeReducerBe
 }
 
 
-function createActions(behaviorsConfig: ShapeReducerBehaviorsConfig, locationString: string, defaultPayload: any): ShapeActions {
+function createActions(behaviorsConfig: ShapeReducerBehaviorsConfig, locationString: string): ShapeActions {
     //Take a reducer behavior config object, and create actions using the location string
     return reduce(behaviorsConfig, (memo, behavior, name) => ({
         ...memo,
-        [name]: (value: Object) => ({
+        [name]: (payload: Object) => ({
             type: `${locationString}.${name}`,
-            payload: (behavior.action || (() => defaultPayload))(value),
+            payload: (behavior.action || (payload => payload))(payload),
         })
     }), {});
 }
