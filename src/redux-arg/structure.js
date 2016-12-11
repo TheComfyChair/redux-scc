@@ -3,27 +3,33 @@
 //==============================
 // Flow types
 //==============================
+export type PropTypeKeys = $Keys<typeof PROP_TYPES>;
+
 export type ShapeStructure = {
     [key: string]: StructureType | PrimitiveType | ArrayStructureType,
 }
 export type StructureType = () => {
-    type: string,
+    type: PropTypeKeys,
     structure: ShapeStructure | StructureType | PrimitiveType,
     defaultValue?: any,
 };
+export type ReducerType = () => {
+    type: PropTypeKeys,
+    structure: StructureType | PrimitiveType,
+};
 export type ArrayStructureType = () => {
-    type: string,
+    type: PropTypeKeys,
     structure: StructureType | PrimitiveType,
     defaultValue: any,
 }
 export type PrimitiveType = () => {
-    type: $Keys<typeof PROP_TYPES>,
+    type: PropTypeKeys,
     defaultValue?: any,
     typeofValue: string,
     structure?: PrimitiveType,
 };
 export type TypesObject = {
-    [key: string]: CreateArrayType | CreateStringType | CreateNumberType | CreateObjectType | CreateBooleanType;
+    [key: string]: CreateArrayType | CreateStringType | CreateNumberType | CreateShapeType | CreateBooleanType;
 }
 
 export type TypesObjectDefaults = {
@@ -35,7 +41,7 @@ type CreateStringType = (defaultValue: string) => PrimitiveType;
 type CreateNumberType = (defaultValue: number) => PrimitiveType;
 type CreateBooleanType = (defaultValue: boolean) => PrimitiveType;
 type CreateArrayType = (structure: StructureType | PrimitiveType, defaultValue: TypesArrayDefaults | TypesObjectDefaults) => StructureType;
-type CreateObjectType = (structure: ShapeStructure, defaultValue: TypesArrayDefaults | TypesObjectDefaults) => StructureType;
+type CreateShapeType = (structure: ShapeStructure, defaultValue: TypesArrayDefaults | TypesObjectDefaults) => StructureType;
 
 //==============================
 // Structure
@@ -49,6 +55,8 @@ export const PROP_TYPES = {
     _array: '_array',
 };
 
+//The types objects are used in order to build up the structure of a store chunk, and provide/accept
+//default values whilst doing so.
 export const Types: TypesObject = {
     string: (defaultValue: string = '') => () => ({
         type: PROP_TYPES._string,
@@ -77,5 +85,5 @@ export const Types: TypesObject = {
     shape: (structure: ShapeStructure) => () => ({
         type: PROP_TYPES._shape,
         structure,
-    })
+    }),
 };

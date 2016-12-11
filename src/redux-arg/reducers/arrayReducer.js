@@ -38,10 +38,11 @@ export type ArraySelector = (state: Object) => Array<any>;
 // JS imports
 //==============================
 import { reduce, isArray, isNumber, isObject } from 'lodash';
-import { validateArray, validateObject, validatePrimitive } from '../validatePayload';
+import { validateArray, validateShape, validatePrimitive } from '../validatePayload';
 import { createReducerBehaviors } from '../reducers';
 import { updateAtIndex, removeAtIndex } from '../utils/arrayUtils';
 import { PROP_TYPES } from '../structure';
+
 
 function checkIndex(index: ?number, payload: any, behaviorName: string): boolean {
     if (!isNumber(index) || index === -1) {
@@ -51,7 +52,18 @@ function checkIndex(index: ?number, payload: any, behaviorName: string): boolean
     return true;
 }
 
+
+//==============================
+// Array behaviors
+// ----------------
+// Arrays are more complicated than shape or primitive reducers, due to
+// the complexities in amending specific elements. Of course, the behaviours
+// could still follow and the same pattern as the other reducers and simply
+// make the end user replace the correct index themselves. However, it made sense
+// to create a few helper behaviors to aid with the most common array operations.
+//==============================
 const DEFAULT_ARRAY_BEHAVIORS: ArrayReducerBehaviorsConfig = {
+    //Index specific behaviors.
     updateAtIndex: {
         reducer(state, payload, initialState, index = -1) {
             if (!checkIndex(index, payload, 'updateAtIndex')) return state;
@@ -79,6 +91,7 @@ const DEFAULT_ARRAY_BEHAVIORS: ArrayReducerBehaviorsConfig = {
             return updateAtIndex(state, payload, index);
         }
     },
+    //Whole array behaviors.
     replace: {
         action(value) {
             if(!isArray(value)) throw new Error('An array must be provided when replacing an array');
@@ -135,11 +148,11 @@ function applyValidation(arrayTypeDescription: ArrayStructureType, payload: any)
     // First case is simple - if the action payload is an array, then we simply validate it against
     // the structure of this reducer.
     if (isArray(payload)) return validateArray(arrayTypeDescription, payload);
-    
+
     // If a non-array payload has been passed in, then we need to check which form of validation
     // to use, by checking the structure of the array.
     const { structure } = arrayTypeDescription();
-    if (structure().type === PROP_TYPES._shape) return validateObject(structure, payload);
+    if (structure().type === PROP_TYPES._shape) return validateShape(structure, payload);
     return validatePrimitive(structure, payload);
 }
 

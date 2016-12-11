@@ -4,43 +4,53 @@
 //==============================
 import type { StructureType } from '../structure';
 
+
 //==============================
 // Flow types
 //==============================
-export type ObjectReducerAction = {
+export type ShapeReducerAction = {
     type: string,
     payload: Object,
 };
-export type ObjectReducer = (state: Object, action: ObjectReducerAction) => Object;
-export type ObjectReducerBehavior = (state: Object, payload: Object | void, initialState: Object) => Object;
-export type ObjectReducerBehaviorsConfig = {
+export type ShapeReducer = (state: Object, action: ShapeReducerAction) => Object;
+export type ShapeReducerBehavior = (state: {}, payload: Object | void, initialState: {}) => Object;
+export type ShapeReducerBehaviorsConfig = {
     [key: string]: {
         action?: (value: Object) => Object,
-        reducer: ObjectReducerBehavior,
+        reducer: ShapeReducerBehavior,
     }
 };
-export type ObjectReducerBehaviors = {
-    [key: string]: ObjectReducerBehavior,
+export type ShapeReducerBehaviors = {
+    [key: string]: ShapeReducerBehavior,
 };
-export type ObjectAction = (value: Object) => { type: string, payload: Object };
-export type ObjectActions = {
-    [key: string]: ObjectAction
+export type ShapeAction = (value: Object) => { type: string, payload: Object };
+export type ShapeActions = {
+    [key: string]: ShapeAction
 };
-export type ObjectReducerOptions = {
-    behaviorsConfig: ObjectReducerBehaviorsConfig,
+export type ShapeReducerOptions = {
+    behaviorsConfig: ShapeReducerBehaviorsConfig,
     locationString: string,
     name: string,
 };
+
 
 //==============================
 // JS imports
 //==============================
 import { reduce } from 'lodash';
-import { validateObject } from '../validatePayload';
+import { validateShape } from '../validatePayload';
 import { createReducerBehaviors } from '../reducers';
 import { PROP_TYPES } from '../structure';
 
-const DEFAULT_OBJECT_BEHAVIORS: ObjectReducerBehaviorsConfig = {
+
+//==============================
+// Shape behaviors
+// ----------------
+// Shapes differ from primitive reducers by allowing an update behavior, merging the
+// payload and the previous state in a shallow way. This supplements the replace
+// behavior, which still replaces the previous state with the payload.
+//==============================
+const DEFAULT_SHAPE_BEHAVIORS: ShapeReducerBehaviorsConfig = {
     update: {
         action(value) { return value },
         reducer(state, payload = {}) {
@@ -60,15 +70,16 @@ const DEFAULT_OBJECT_BEHAVIORS: ObjectReducerBehaviorsConfig = {
     }
 };
 
-export function createObjectReducer(reducerShape: StructureType, {
+
+export function createShapeReducer(reducerShape: StructureType, {
     locationString,
     name,
-}: ObjectReducerOptions = {}) {
+}: ShapeReducerOptions = {}) {
     return {
         reducers: {
-            [name]: createReducer(reducerShape, createReducerBehaviors(DEFAULT_OBJECT_BEHAVIORS, locationString)),
+            [name]: createReducer(reducerShape, createReducerBehaviors(DEFAULT_SHAPE_BEHAVIORS, locationString)),
         },
-        actions: createActions(DEFAULT_OBJECT_BEHAVIORS, locationString, {}),
+        actions: createActions(DEFAULT_SHAPE_BEHAVIORS, locationString, {}),
     };
 }
 
@@ -83,20 +94,20 @@ function calculateDefaults(reducerStructure) {
 }
 
 
-function createReducer(objectStructure: StructureType, behaviors: ObjectReducerBehaviors): ObjectReducer {
-    const initialState: Object = validateObject(objectStructure, calculateDefaults(objectStructure().structure));
-    return (state = initialState, { type, payload }: ObjectReducerAction) => {
+function createReducer(objectStructure: StructureType, behaviors: ShapeReducerBehaviors): ShapeReducer {
+    const initialState: Object = validateShape(objectStructure, calculateDefaults(objectStructure().structure));
+    return (state = initialState, { type, payload }: ShapeReducerAction) => {
         //If the action type does not match any of the specified behaviors, just return the current state.
         if (!behaviors[type]) return state;
 
         //Sanitize the payload using the reducer shape, then apply the sanitized
         //payload to the state using the behavior linked to this action type.
-        return behaviors[type](state, validateObject(objectStructure, payload), initialState);
+        return behaviors[type](state, validateShape(objectStructure, payload), initialState);
     }
 }
 
 
-function createActions(behaviorsConfig: ObjectReducerBehaviorsConfig, locationString: string, defaultPayload: any): ObjectActions {
+function createActions(behaviorsConfig: ShapeReducerBehaviorsConfig, locationString: string, defaultPayload: any): ShapeActions {
     //Take a reducer behavior config object, and create actions using the location string
     return reduce(behaviorsConfig, (memo, behavior, name) => ({
         ...memo,

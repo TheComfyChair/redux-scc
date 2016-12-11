@@ -1,4 +1,4 @@
-import { buildStoreChunk } from './redux-arg/buildReducers';
+import { buildStoreChunk } from './redux-arg/buildStoreChunk';
 import { createStore, compose, combineReducers } from 'redux';
 import { Types } from './redux-arg/structure';
 
@@ -44,7 +44,7 @@ const store = createStore(
     compose(window.devToolsExtension ? window.devToolsExtension() : f => f)
 );
 
-store.dispatch(test.actions.example.form2.update({ lowerLevel: 2, lowerLevel2: 'Rawrg', lowerLevelArray: [3, 'foo'] }));
+store.dispatch(test.actions.example.form2.replace({ lowerLevel: 2, lowerLevel2: 'Rawrg', lowerLevelArray: [3, 'foo'] }));
 store.dispatch(test.actions.example.form2.reset());
 store.dispatch(test.actions.example.form2.replace({ toast: 'nommyNom' }));
 store.dispatch(test.actions.example.form2.reset());
@@ -58,5 +58,5 @@ store.dispatch(test.actions.example.arrayTest.replace([1,2,3]));
 store.dispatch(test.actions.example.arrayTest.updateAtIndex(5, 0));
 store.dispatch(test.actions.example.arrayTest.updateAtIndex('foo', 0));
 
-store.dispatch(test.actions.example.primitiveTest.update(5));
+store.dispatch(test.actions.example.primitiveTest.replace(5));
 store.dispatch(test.actions.example.primitiveTest.reset());

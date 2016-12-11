@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for redux-arg/reducers/objectReducer.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="..\..\prettify.css" />
+    <link rel="stylesheet" href="..\..\base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(..\..\sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="..\..\index.html">All files</a> / <a href="index.html">redux-arg/reducers</a> objectReducer.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">61.11% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>11/18</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">30% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>3/10</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">77.78% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>7/9</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">60% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>9/15</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line medium'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">15x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">//@flow
+//==============================
+// Flow imports
+//==============================
+import type { StructureType } from '../structure';
+&nbsp;
+&nbsp;
+//==============================
+// Flow types
+//==============================
+export type ShapeReducerAction = {
+    type: string,
+    payload: Object,
+};
+export type ShapeReducer = (state: Object, action: ShapeReducerAction) =&gt; Object;
+export type ShapeReducerBehavior = (state: {}, payload: Object | void, initialState: {}) =&gt; Object;
+export type ShapeReducerBehaviorsConfig = {
+    [key: string]: {
+        action?: (value: Object) =&gt; Object,
+        reducer: ShapeReducerBehavior,
+    }
+};
+export type ShapeReducerBehaviors = {
+    [key: string]: ShapeReducerBehavior,
+};
+export type ShapeAction = (value: Object) =&gt; { type: string, payload: Object };
+export type ShapeActions = {
+    [key: string]: ShapeAction
+};
+export type ShapeReducerOptions = {
+    behaviorsConfig: ShapeReducerBehaviorsConfig,
+    locationString: string,
+    name: string,
+};
+&nbsp;
+&nbsp;
+//==============================
+// JS imports
+//==============================
+import { reduce } from 'lodash';
+import { validateShape } from '../validatePayload';
+import { createReducerBehaviors } from '../reducers';
+import { PROP_TYPES } from '../structure';
+&nbsp;
+&nbsp;
+//==============================
+// Shape behaviors
+// ----------------
+// Shapes differ from primitive reducers by allowing an update behavior, merging the
+// payload and the previous state in a shallow way. This supplements the replace
+// behavior, which still replaces the previous state with the payload.
+//==============================
+const DEFAULT_SHAPE_BEHAVIORS: ShapeReducerBehaviorsConfig = {
+    update: {
+        action(value) { <span class="cstat-no" title="statement not covered" >return value </span>},
+        reducer(state, payload = <span class="branch-0 cbranch-no" title="branch not covered" >{})</span> {
+<span class="cstat-no" title="statement not covered" >            return { ...state, ...payload };</span>
+        }
+    },
+    reset: {
+        reducer(state, payload, initialState) {
+<span class="cstat-no" title="statement not covered" >            return initialState;</span>
+        }
+    },
+    replace: {
+        action(value) { return value },
+        reducer(state, payload = <span class="branch-0 cbranch-no" title="branch not covered" >{})</span> {
+<span class="cstat-no" title="statement not covered" >            return payload;</span>
+        }
+    }
+};
+&nbsp;
+&nbsp;
+export function createShapeReducer(reducerShape: StructureType, {
+    locationString,
+    name,
+}: ShapeReducerOptions = <span class="branch-0 cbranch-no" title="branch not covered" >{})</span> {
+    return {
+        reducers: {
+            [name]: createReducer(reducerShape, createReducerBehaviors(DEFAULT_SHAPE_BEHAVIORS, locationString)),
+        },
+        actions: createActions(DEFAULT_SHAPE_BEHAVIORS, locationString, {}),
+    };
+}
+&nbsp;
+&nbsp;
+function calculateDefaults(reducerStructure) {
+    return reduce(reducerStructure, <span class="fstat-no" title="function not covered" >(m</span>emo, propValue, propName) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
+        ...memo,
+        [propName]: propValue().type === PROP_TYPES._shape
+            ? calculateDefaults(propValue().structure)
+            : propValue().defaultValue,
+    }), {});
+}
+&nbsp;
+&nbsp;
+function createReducer(objectStructure: StructureType, behaviors: ShapeReducerBehaviors): ShapeReducer {
+    const initialState: Object = validateShape(objectStructure, calculateDefaults(objectStructure().structure));
+    return (state = initialState, { type, payload }: ShapeReducerAction) =&gt; {
+        //If the action type does not match any of the specified behaviors, just return the current state.
+        <span class="missing-if-branch" title="else path not taken" >E</span>if (!behaviors[type]) return state;
+&nbsp;
+        //Sanitize the payload using the reducer shape, then apply the sanitized
+        //payload to the state using the behavior linked to this action type.
+<span class="cstat-no" title="statement not covered" >        return behaviors[type](state, validateShape(objectStructure, payload), initialState);</span>
+    }
+}
+&nbsp;
+&nbsp;
+function createActions(behaviorsConfig: ShapeReducerBehaviorsConfig, locationString: string, defaultPayload: any): ShapeActions {
+    //Take a reducer behavior config object, and create actions using the location string
+    return reduce(behaviorsConfig, (memo, behavior, name) =&gt; ({
+        ...memo,
+        [name]: (value: Object) =&gt; ({
+            type: `${locationString}.${name}`,
+            payload: (behavior.action || (<span class="fstat-no" title="function not covered" ><span class="branch-1 cbranch-no" title="branch not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >defaultPayload)</span></span>)(value),
+        })
+    }), {});
+}
+&nbsp;
+&nbsp;
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun Dec 11 2016 15:39:29 GMT+0000 (GMT Standard Time)
+</div>
+</div>
+<script src="..\..\prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="..\..\sorter.js"></script>
+</body>
+</html>

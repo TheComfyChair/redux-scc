@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1481470770158" clover="3.2.0">
+  <project timestamp="1481470770158" name="All files">
+    <metrics statements="124" coveredstatements="95" conditionals="95" coveredconditionals="61" methods="59" coveredmethods="54" elements="278" coveredelements="210" complexity="0" loc="124" ncloc="124" packages="3" files="8" classes="8">
+      <package name="redux-arg">
+        <metrics statements="58" coveredstatements="58" conditionals="36" coveredconditionals="36" methods="32" coveredmethods="32"/>
+        <file name="buildStoreChunk.js" path="F:\GitRepos\redux-arg\src\redux-arg\buildStoreChunk.js">
+          <metrics statements="12" coveredstatements="12" conditionals="13" coveredconditionals="13" methods="7" coveredmethods="7"/>
+          <line num="23" count="6" type="stmt"/>
+          <line num="29" count="7" type="stmt"/>
+          <line num="30" count="6" type="stmt"/>
+          <line num="45" count="6" type="stmt"/>
+          <line num="46" count="4" type="stmt"/>
+          <line num="53" count="6" type="stmt"/>
+          <line num="63" count="10" type="stmt"/>
+          <line num="64" count="10" type="stmt"/>
+          <line num="70" count="10" type="stmt"/>
+          <line num="73" count="1" type="stmt"/>
+          <line num="85" count="10" type="stmt"/>
+          <line num="97" count="6" type="stmt"/>
+        </file>
+        <file name="reducers.js" path="F:\GitRepos\redux-arg\src\redux-arg\reducers.js">
+          <metrics statements="12" coveredstatements="12" conditionals="7" coveredconditionals="7" methods="6" coveredmethods="6"/>
+          <line num="45" count="2" type="stmt"/>
+          <line num="63" count="14" type="stmt"/>
+          <line num="64" count="14" type="stmt"/>
+          <line num="66" count="14" type="stmt"/>
+          <line num="68" count="13" type="stmt"/>
+          <line num="82" count="9" type="stmt"/>
+          <line num="94" count="22" type="stmt"/>
+          <line num="106" count="12" type="stmt"/>
+          <line num="107" count="12" type="stmt"/>
+          <line num="109" count="12" type="stmt"/>
+          <line num="111" count="6" type="stmt"/>
+          <line num="117" count="2" type="stmt"/>
+        </file>
+        <file name="structure.js" path="F:\GitRepos\redux-arg\src\redux-arg\structure.js">
+          <metrics statements="8" coveredstatements="8" conditionals="4" coveredconditionals="4" methods="12" coveredmethods="12"/>
+          <line num="49" count="4" type="stmt"/>
+          <line num="60" count="4" type="stmt"/>
+          <line num="61" count="59" type="stmt"/>
+          <line num="66" count="28" type="stmt"/>
+          <line num="71" count="7" type="stmt"/>
+          <line num="76" count="15" type="stmt"/>
+          <line num="81" count="28" type="stmt"/>
+          <line num="85" count="29" type="stmt"/>
+        </file>
+        <file name="validatePayload.js" path="F:\GitRepos\redux-arg\src\redux-arg\validatePayload.js">
+          <metrics statements="26" coveredstatements="26" conditionals="12" coveredconditionals="12" methods="7" coveredmethods="7"/>
+          <line num="16" count="11" type="stmt"/>
+          <line num="17" count="1" type="stmt"/>
+          <line num="18" count="1" type="stmt"/>
+          <line num="21" count="10" type="stmt"/>
+          <line num="22" count="15" type="stmt"/>
+          <line num="25" count="15" type="stmt"/>
+          <line num="26" count="1" type="stmt"/>
+          <line num="28" count="1" type="stmt"/>
+          <line num="31" count="14" type="stmt"/>
+          <line num="32" count="14" type="stmt"/>
+          <line num="33" count="1" type="stmt"/>
+          <line num="36" count="1" type="stmt"/>
+          <line num="39" count="13" type="stmt"/>
+          <line num="48" count="35" type="stmt"/>
+          <line num="49" count="4" type="stmt"/>
+          <line num="55" count="7" type="stmt"/>
+          <line num="56" count="1" type="stmt"/>
+          <line num="57" count="1" type="stmt"/>
+          <line num="59" count="6" type="stmt"/>
+          <line num="60" count="6" type="stmt"/>
+          <line num="61" count="14" type="stmt"/>
+          <line num="65" count="29" type="stmt"/>
+          <line num="72" count="29" type="stmt"/>
+          <line num="73" count="29" type="stmt"/>
+          <line num="74" count="1" type="stmt"/>
+          <line num="77" count="28" type="stmt"/>
+        </file>
+      </package>
+      <package name="redux-arg.reducers">
+        <metrics statements="60" coveredstatements="31" conditionals="47" coveredconditionals="13" methods="25" coveredmethods="20"/>
+        <file name="arrayReducer.js" path="F:\GitRepos\redux-arg\src\redux-arg\reducers\arrayReducer.js">
+          <metrics statements="32" coveredstatements="9" conditionals="29" coveredconditionals="4" methods="9" coveredmethods="6"/>
+          <line num="48" count="0" type="stmt"/>
+          <line num="49" count="0" type="stmt"/>
+          <line num="50" count="0" type="stmt"/>
+          <line num="52" count="0" type="stmt"/>
+          <line num="65" count="2" type="stmt"/>
+          <line num="69" count="0" type="stmt"/>
+          <line num="70" count="0" type="stmt"/>
+          <line num="71" count="0" type="stmt"/>
+          <line num="72" count="0" type="stmt"/>
+          <line num="77" count="0" type="stmt"/>
+          <line num="78" count="0" type="stmt"/>
+          <line num="83" count="0" type="stmt"/>
+          <line num="84" count="0" type="stmt"/>
+          <line num="89" count="0" type="stmt"/>
+          <line num="90" count="0" type="stmt"/>
+          <line num="91" count="0" type="stmt"/>
+          <line num="97" count="1" type="stmt"/>
+          <line num="98" count="1" type="stmt"/>
+          <line num="101" count="0" type="stmt"/>
+          <line num="106" count="0" type="stmt"/>
+          <line num="116" count="1" type="stmt"/>
+          <line num="128" count="1" type="stmt"/>
+          <line num="131" count="1" type="stmt"/>
+          <line num="133" count="15" type="stmt"/>
+          <line num="137" count="0" type="stmt"/>
+          <line num="150" count="0" type="stmt"/>
+          <line num="154" count="0" type="stmt"/>
+          <line num="155" count="0" type="stmt"/>
+          <line num="156" count="0" type="stmt"/>
+          <line num="162" count="6" type="stmt"/>
+          <line num="164" count="1" type="stmt"/>
+          <line num="166" count="0" type="stmt"/>
+        </file>
+        <file name="objectReducer.js" path="F:\GitRepos\redux-arg\src\redux-arg\reducers\objectReducer.js">
+          <metrics statements="15" coveredstatements="9" conditionals="10" coveredconditionals="3" methods="9" coveredmethods="7"/>
+          <line num="53" count="2" type="stmt"/>
+          <line num="55" count="0" type="stmt"/>
+          <line num="57" count="0" type="stmt"/>
+          <line num="62" count="0" type="stmt"/>
+          <line num="66" count="1" type="stmt"/>
+          <line num="68" count="0" type="stmt"/>
+          <line num="78" count="1" type="stmt"/>
+          <line num="88" count="1" type="stmt"/>
+          <line num="98" count="1" type="stmt"/>
+          <line num="99" count="1" type="stmt"/>
+          <line num="101" count="15" type="stmt"/>
+          <line num="105" count="0" type="stmt"/>
+          <line num="112" count="3" type="stmt"/>
+          <line num="114" count="1" type="stmt"/>
+          <line num="116" count="0" type="stmt"/>
+        </file>
+        <file name="primitiveReducer.js" path="F:\GitRepos\redux-arg\src\redux-arg\reducers\primitiveReducer.js">
+          <metrics statements="13" coveredstatements="13" conditionals="8" coveredconditionals="6" methods="7" coveredmethods="7"/>
+          <line num="50" count="2" type="stmt"/>
+          <line num="52" count="3" type="stmt"/>
+          <line num="54" count="2" type="stmt"/>
+          <line num="55" count="2" type="stmt"/>
+          <line num="60" count="2" type="stmt"/>
+          <line num="70" count="6" type="stmt"/>
+          <line num="80" count="6" type="stmt"/>
+          <line num="81" count="6" type="stmt"/>
+          <line num="83" count="67" type="stmt"/>
+          <line num="87" count="4" type="stmt"/>
+          <line num="94" count="12" type="stmt"/>
+          <line num="96" count="5" type="stmt"/>
+          <line num="98" count="2" type="stmt"/>
+        </file>
+      </package>
+      <package name="redux-arg.utils">
+        <metrics statements="6" coveredstatements="6" conditionals="12" coveredconditionals="12" methods="2" coveredmethods="2"/>
+        <file name="arrayUtils.js" path="F:\GitRepos\redux-arg\src\redux-arg\utils\arrayUtils.js">
+          <metrics statements="6" coveredstatements="6" conditionals="12" coveredconditionals="12" methods="2" coveredmethods="2"/>
+          <line num="3" count="6" type="stmt"/>
+          <line num="4" count="4" type="stmt"/>
+          <line num="5" count="3" type="stmt"/>
+          <line num="13" count="6" type="stmt"/>
+          <line num="14" count="4" type="stmt"/>
+          <line num="15" count="3" type="stmt"/>
+        </file>
+      </package>
+    </metrics>
+  </project>
+</coverage>

@@ -5,18 +5,30 @@
 import type {
     StructureType,
     PrimitiveType,
+    ReducerType,
+    PropTypeKeys,
 } from './structure';
 
 //==============================
 // Flow types
 //==============================
-export type PartialReducer = {
+export type PartialStoreChunk = {
     reducers: { [key: string]: any },
     actions: { [key: string]: any },
     selectors: { [key: string]: any },
+    locationString: string,
+    baseSelector: () => {},
+    name: string,
 };
 
 export type Selector = (state: Object) => any;
+
+type CallReducerInterface = {
+    name: string,
+    reducerFn: () => {},
+    reducerStructureDescriptor: StructureType | PrimitiveType,
+    locationString: string,
+};
 
 //==============================
 // JS imports
@@ -25,41 +37,55 @@ import {
     PROP_TYPES,
 } from './structure';
 import { compose } from 'ramda';
-import { reduce } from 'lodash';
-import { createObjectReducer } from './reducers/objectReducer';
+import { reduce, find } from 'lodash';
+import { createShapeReducer } from './reducers/objectReducer';
 import { createArrayReducer } from './reducers/arrayReducer';
 import { createPrimitiveReducer } from './reducers/primitiveReducer';
 
-function determineReducerType(reducerDescriptor, {
+export const REDUCER_CREATOR_MAPPING: { [key: PropTypeKeys]: any } = {
+    [PROP_TYPES._shape]: createShapeReducer,
+    [PROP_TYPES._array]: createArrayReducer,
+    [PROP_TYPES._boolean]: createPrimitiveReducer,
+    [PROP_TYPES._string]: createPrimitiveReducer,
+    [PROP_TYPES._number]: createPrimitiveReducer,
+};
+
+export function determineReducerType(reducerDescriptor: ReducerType, {
     name,
     locationString,
-}) {
-    const REDUCERS = {
-        [PROP_TYPES._shape]: createObjectReducer,
-        [PROP_TYPES._array]: createArrayReducer,
-        [PROP_TYPES._boolean]: createPrimitiveReducer,
-        [PROP_TYPES._string]: createPrimitiveReducer,
-        [PROP_TYPES._number]: createPrimitiveReducer,
-    };
+    reducerCreatorMapping = REDUCER_CREATOR_MAPPING,
+}: {
+    name: string,
+    locationString: string,
+    reducerCreatorMapping: { [key: PropTypeKeys]: any },
+}): CallReducerInterface {
+
     const { structure } = reducerDescriptor();
     const { type } = structure();
 
+    if (!reducerCreatorMapping[type]) throw new Error(`Reducer type ${type} does not have a corresponding createReducer function`);
+
     return {
         name,
-        reducerFn: REDUCERS[type],
+        reducerFn: reducerCreatorMapping[type],
         reducerStructureDescriptor: structure,
         locationString,
     };
 }
 
-function callReducer({ name, reducerFn, reducerStructureDescriptor, locationString } = {}) {
+export function callReducer({
+    name,
+    reducerFn,
+    reducerStructureDescriptor,
+    locationString
+}: CallReducerInterface) {
     return reducerFn(reducerStructureDescriptor, {
         locationString,
         name,
     });
 }
 
-export function createReducerBehaviors(behaviorsConfig: any, locationString: string): any {
+export function createReducerBehaviors(behaviorsConfig: { [key: string]: { reducer: () => {} } }, locationString: string): any {
     //Take a reducer behavior config object, and create the reducer behaviors using the location string.
     //This is necessary since all action types are effectively global when Redux processes an action
     //(i.e. every reducer will be ran using the action object). Therefore we need to ensure that all

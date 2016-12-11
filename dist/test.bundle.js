@@ -10,7 +10,7 @@
 /******/ 		var script = document.createElement("script");
 /******/ 		script.type = "text/javascript";
 /******/ 		script.charset = "utf-8";
-/******/ 		script.src = __webpack_require__.p + "" + chunkId + "." + hotCurrentHash + ".hot-update.js";
+/******/ 		script.src = __webpack_require__.p + "" + chunkId + "." + hotCurrentHash + ".hot-replace.js";
 /******/ 		head.appendChild(script);
 /******/ 	}
 
@@ -19,7 +19,7 @@
 /******/ 			return callback(new Error("No browser support"));
 /******/ 		try {
 /******/ 			var request = new XMLHttpRequest();
-/******/ 			var requestPath = __webpack_require__.p + "" + hotCurrentHash + ".hot-update.json";
+/******/ 			var requestPath = __webpack_require__.p + "" + hotCurrentHash + ".hot-replace.json";
 /******/ 			request.open("GET", requestPath, true);
 /******/ 			request.timeout = 10000;
 /******/ 			request.send(null);
@@ -32,7 +32,7 @@
 /******/ 				// timeout
 /******/ 				callback(new Error("Manifest request to " + requestPath + " timed out."));
 /******/ 			} else if(request.status === 404) {
-/******/ 				// no update available
+/******/ 				// no replace available
 /******/ 				callback();
 /******/ 			} else if(request.status !== 200 && request.status !== 304) {
 /******/ 				// other failure
@@ -220,7 +220,7 @@
 /******/ 	var hotAvailibleFilesMap = {};
 /******/ 	var hotCallback;
 
-/******/ 	// The update info
+/******/ 	// The replace info
 /******/ 	var hotUpdate, hotUpdateNewHash;
 
 /******/ 	function toModuleId(id) {

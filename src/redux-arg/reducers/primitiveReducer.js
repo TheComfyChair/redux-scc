@@ -39,8 +39,16 @@ import { reduce } from 'lodash';
 import { validatePrimitive } from '../validatePayload';
 import { createReducerBehaviors } from '../reducers';
 
+
+//==============================
+// Primitive behaviors
+// ----------------
+// Primitives are the most simple case, as they only have the replace and
+// reset behaviors by default.
+//==============================
+
 const DEFAULT_PRIMITIVE_BEHAVIORS: PrimitiveReducerBehaviorsConfig = {
-    update: {
+    replace: {
         action(value) { return value },
         reducer(state, payload) {
             if (payload === undefined) return state;

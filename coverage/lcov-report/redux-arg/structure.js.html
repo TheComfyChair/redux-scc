@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for redux-arg/structure.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="..\prettify.css" />
+    <link rel="stylesheet" href="..\base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(..\sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="..\index.html">All files</a> / <a href="index.html">redux-arg</a> structure.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>14/14</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>4/4</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>12/12</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>8/8</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line high'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">59x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">28x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">15x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">28x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">29x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">//@flow
+&nbsp;
+//==============================
+// Flow types
+//==============================
+export type PropTypeKeys = $Keys&lt;typeof PROP_TYPES&gt;;
+&nbsp;
+export type ShapeStructure = {
+    [key: string]: StructureType | PrimitiveType | ArrayStructureType,
+}
+export type StructureType = () =&gt; {
+    type: PropTypeKeys,
+    structure: ShapeStructure | StructureType | PrimitiveType,
+    defaultValue?: any,
+};
+export type ReducerType = () =&gt; {
+    type: PropTypeKeys,
+    structure: StructureType | PrimitiveType,
+};
+export type ArrayStructureType = () =&gt; {
+    type: PropTypeKeys,
+    structure: StructureType | PrimitiveType,
+    defaultValue: any,
+}
+export type PrimitiveType = () =&gt; {
+    type: PropTypeKeys,
+    defaultValue?: any,
+    typeofValue: string,
+    structure?: PrimitiveType,
+};
+export type TypesObject = {
+    [key: string]: CreateArrayType | CreateStringType | CreateNumberType | CreateShapeType | CreateBooleanType;
+}
+&nbsp;
+export type TypesObjectDefaults = {
+    [key: string]: mixed | TypesArrayDefaults,
+}
+export type TypesArrayDefaults = Array&lt;mixed&gt; | Array&lt;TypesObjectDefaults&gt;;
+&nbsp;
+type CreateStringType = (defaultValue: string) =&gt; PrimitiveType;
+type CreateNumberType = (defaultValue: number) =&gt; PrimitiveType;
+type CreateBooleanType = (defaultValue: boolean) =&gt; PrimitiveType;
+type CreateArrayType = (structure: StructureType | PrimitiveType, defaultValue: TypesArrayDefaults | TypesObjectDefaults) =&gt; StructureType;
+type CreateShapeType = (structure: ShapeStructure, defaultValue: TypesArrayDefaults | TypesObjectDefaults) =&gt; StructureType;
+&nbsp;
+//==============================
+// Structure
+//==============================
+export const PROP_TYPES = {
+    _string: '_string',
+    _number: '_number',
+    _boolean: '_boolean',
+    _reducer: '_reducer',
+    _shape: '_shape',
+    _array: '_array',
+};
+&nbsp;
+//The types objects are used in order to build up the structure of a store chunk, and provide/accept
+//default values whilst doing so.
+export const Types: TypesObject = {
+    string: (defaultValue: string = '') =&gt; () =&gt; ({
+        type: PROP_TYPES._string,
+        defaultValue,
+        typeofValue: 'string',
+    }),
+    number: (defaultValue: number = 0) =&gt; () =&gt; ({
+        type: PROP_TYPES._number,
+        defaultValue,
+        typeofValue: 'number',
+    }),
+    boolean: (defaultValue: boolean = false) =&gt; () =&gt; ({
+        type: PROP_TYPES._boolean,
+        defaultValue,
+        typeofValue: 'boolean',
+    }),
+    arrayOf: (structure: StructureType | PrimitiveType, defaultValue = []) =&gt; () =&gt; ({
+        type: PROP_TYPES._array,
+        structure,
+        defaultValue,
+    }),
+    reducer: (structure: ShapeStructure) =&gt; () =&gt; ({
+        type: PROP_TYPES._reducer,
+        structure,
+    }),
+    shape: (structure: ShapeStructure) =&gt; () =&gt; ({
+        type: PROP_TYPES._shape,
+        structure,
+    }),
+};
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun Dec 11 2016 15:39:29 GMT+0000 (GMT Standard Time)
+</div>
+</div>
+<script src="..\prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="..\sorter.js"></script>
+</body>
+</html>

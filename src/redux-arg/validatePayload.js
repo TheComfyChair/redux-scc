@@ -12,12 +12,11 @@ type validationFunction = (structure: StructureType | PrimitiveType | ShapeStruc
 import { reduce, isObject } from 'lodash';
 import { PROP_TYPES } from './structure';
 
-export function validateObject(objectStructure: any, value: mixed): Object {
-    if (!isObject(value) && !!value) {
+export function validateShape(objectStructure: any, value: mixed): Object {
+    if (!isObject(value)) {
         console.error(`The value passed to validateObject() was not an object. Value: `, value);
         return {};
     }
-    if (!isObject(value) || !value ) return {};
 
     return reduce(value, (memo, value, name) => {
         const valueType = objectStructure().structure[name];
@@ -50,22 +49,25 @@ export function validatePrimitive(primitive: any, value: any): mixed {
     return console.warn(`The value, ${value}, did not match the type specified (${primitive().type}).`);
 }
 
-export function validateArray(arrayStructure: any, value: Array<any> | void): Array<mixed> {
+export function validateArray(arrayStructure: any, value: Array<any>): Array<mixed> {
     //Validate arrays by performing either of the other validation types to each element of the array,
     //based on the provided reducer structure.
-    if (!Array.isArray(value)) return [];
+    if (!Array.isArray(value)) {
+        console.error(`The value passed to validateArray() was not an array. Value: `, value);
+        return [];
+    }
     const elementStructure = arrayStructure().structure;
     const elementType = elementStructure().type;
     return value.map(element => getTypeValidation(elementType)(elementStructure, element)).filter(e => e);
 }
 
-function getTypeValidation(type): validationFunction {
+export function getTypeValidation(type: string): validationFunction {
     const TYPE_VALIDATIONS = {
         [PROP_TYPES._string]: validatePrimitive,
         [PROP_TYPES._number]: validatePrimitive,
         [PROP_TYPES._boolean]: validatePrimitive,
         [PROP_TYPES._array]: validateArray,
-        [PROP_TYPES._shape]: validateObject,
+        [PROP_TYPES._shape]: validateShape,
     };
     const typeValidation = TYPE_VALIDATIONS[type];
     if (!typeValidation) {
