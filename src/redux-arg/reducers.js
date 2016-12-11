@@ -50,6 +50,7 @@ export const REDUCER_CREATOR_MAPPING: { [key: PropTypeKeys]: any } = {
     [PROP_TYPES._number]: createPrimitiveReducer,
 };
 
+
 export function determineReducerType(reducerDescriptor: ReducerType, {
     name,
     locationString,
@@ -73,6 +74,7 @@ export function determineReducerType(reducerDescriptor: ReducerType, {
     };
 }
 
+
 export function callReducer({
     name,
     reducerFn,
@@ -85,6 +87,7 @@ export function callReducer({
     });
 }
 
+
 export function createReducerBehaviors(behaviorsConfig: { [key: string]: { reducer: () => {} } }, locationString: string): any {
     //Take a reducer behavior config object, and create the reducer behaviors using the location string.
     //This is necessary since all action types are effectively global when Redux processes an action
@@ -96,6 +99,7 @@ export function createReducerBehaviors(behaviorsConfig: { [key: string]: { reduc
         [`${locationString}.${name}`]: behavior.reducer,
     }), {});
 }
+
 
 export function calculateDefaults(typeDescription: StructureType | PrimitiveType) {
     //Using the structure of a type, calculate the default for that type.
@@ -113,5 +117,6 @@ export function calculateDefaults(typeDescription: StructureType | PrimitiveType
         [propName]: calculateDefaults(propValue),
     }), {});
 }
+
 
 export const createReducer = compose(callReducer, determineReducerType);

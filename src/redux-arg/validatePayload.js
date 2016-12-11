@@ -43,11 +43,13 @@ export function validateShape(objectStructure: any, value: mixed): Object {
     }, {});
 }
 
+
 export function validatePrimitive(primitive: any, value: any): mixed {
     //Validate primitives using the typeofValue property of the primitive type definitions.
     if (typeof value === primitive().typeofValue ) return value;
     return console.warn(`The value, ${value}, did not match the type specified (${primitive().type}).`);
 }
+
 
 export function validateArray(arrayStructure: any, value: Array<any>): Array<mixed> {
     //Validate arrays by performing either of the other validation types to each element of the array,
@@ -60,6 +62,7 @@ export function validateArray(arrayStructure: any, value: Array<any>): Array<mix
     const elementType = elementStructure().type;
     return value.map(element => getTypeValidation(elementType)(elementStructure, element)).filter(e => e);
 }
+
 
 export function getTypeValidation(type: string): validationFunction {
     const TYPE_VALIDATIONS = {

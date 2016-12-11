@@ -18,7 +18,6 @@ import { PROP_TYPES } from './structure';
 // generated will specifically operate on the store chunk generated. Selectors will be
 // relative to the baseSelector provided or, if not specified, the root of the store, using
 // the name of the chunk as the base property.
-
 export function buildStoreChunk(name: string, structure: any, {
     baseSelector = state => state[name],
     locationString = '',
@@ -46,6 +45,7 @@ export function buildStoreChunk(name: string, structure: any, {
     return combineStoreChunkReducers(reduce(structure, processStructure, initialMemo));
 }
 
+
 export function combineStoreChunkReducers(processedStoreChunk: PartialStoreChunk) {
     //The Redux 'combineReducers' helper function is used here to save a little bit of boilerplate.
     //This helper, if you're not aware, ensures that the correct store properties are passed to the
@@ -54,6 +54,7 @@ export function combineStoreChunkReducers(processedStoreChunk: PartialStoreChunk
         [processedStoreChunk.name]: combineReducers(processedStoreChunk.reducers)
     }};
 }
+
 
 export function processStructure(memo: PartialStoreChunk, propValue: StructureType | PrimitiveType, propName: string) {
     //Get the structure from the propValue. In the case of 'StructureType' properties, this
