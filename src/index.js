@@ -6,7 +6,7 @@ import { createStore, combineReducers } from 'redux';
 
 function createExampleComponent(initialValue) {
 
-    const name = 'toast-' + Math.random().toFixed(5);
+    const name = 'toast-' + Math.floor((Math.random().toFixed(5) * 1e5));
 
     const storeChunk = buildStoreChunk(
         name,
@@ -52,10 +52,12 @@ function createExampleComponent(initialValue) {
 
 const moduleTest1 = createExampleComponent('toastyFunTimes');
 const moduleTest2 = createExampleComponent('moreToastyFunTimes');
+const moduleTest3 = createExampleComponent('andAgain');
 
 const store = createStore(combineReducers({
     ...moduleTest1.reducers,
     ...moduleTest2.reducers,
+    ...moduleTest3.reducers,
 }), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
 ReactDOM.render(
@@ -65,6 +67,7 @@ ReactDOM.render(
                 <p>Testing</p>
                 <moduleTest1.exampleComponentContainer/>
                 <moduleTest2.exampleComponentContainer/>
+                <moduleTest3.exampleComponentContainer/>
             </div>
         </Provider>
     </div>,
