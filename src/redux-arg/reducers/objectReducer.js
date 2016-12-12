@@ -2,7 +2,7 @@
 //==============================
 // Flow imports
 //==============================
-import type { StructureType, ShapeStructure } from '../structure';
+import type { StructureType } from '../structure';
 
 
 //==============================

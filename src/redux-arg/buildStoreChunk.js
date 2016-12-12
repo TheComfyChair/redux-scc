@@ -10,7 +10,6 @@ import type { PartialStoreChunk } from './reducers';
 //==============================
 import { combineReducers } from 'redux';
 import { reduce, find, omit, isFunction } from 'lodash';
-import { compose } from 'ramda';
 import { createReducer } from './reducers';
 import { PROP_TYPES } from './structure';
 
@@ -18,9 +17,10 @@ import { PROP_TYPES } from './structure';
 // generated will specifically operate on the store chunk generated. Selectors will be
 // relative to the baseSelector provided or, if not specified, the root of the store, using
 // the name of the chunk as the base property.
+
 export function buildStoreChunk(name: string, structure: any, {
     baseSelector = state => state[name],
-    locationString = '',
+    locationString = name,
 }: {
     baseSelector: any,
     locationString: string,
@@ -70,7 +70,7 @@ export function processStructure(memo: PartialStoreChunk, propValue: StructureTy
     //(which can be either object, array, or primitive).
     let childReducer = containsReducers
         ?   buildStoreChunk(propName, propStructure, {
-                locationString: memo.locationString ? `${memo.locationString}.${propName}` : propName,
+                locationString: `${memo.locationString}.${propName}`,
                 baseSelector: (state: any) => memo.baseSelector(state)[propName],
             })
         :   createReducer(propValue, {
