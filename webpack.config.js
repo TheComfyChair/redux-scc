@@ -7,14 +7,14 @@ const PATH_SRC = path.join(__dirname, 'src');
 module.exports = {
     context: __dirname,
     entry: {
-        'test': PATH_SRC
+        'redux-scc': PATH_SRC
     },
     devServer: {
         inline: true,
     },
     output: {
         path: path.join(__dirname, 'dist'),
-        filename: '[name].bundle.js',
+        filename: 'index.js',
     },
     eslint: {
         configFile: PATH_ESLINT,
