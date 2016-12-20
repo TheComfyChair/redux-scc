@@ -2,7 +2,7 @@
   "name": "redux-scc",
   "version": "0.1.2",
   "description": "Redux store chunk creator",
-  "main": "dist/index.js",
+  "main": "./dist/index.js",
   "scripts": {
     "build": "webpack --progress",
     "test": "jest",

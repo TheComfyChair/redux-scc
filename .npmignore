@@ -1,8 +1,8 @@
-src
 node_modules
 .babelrc
-.eslintrc
+.eslintrc.js
 .flowconfig
 .gitignore
 .webpack.config.js
+npm-debug.log
 yarn.lock
