@@ -40,11 +40,11 @@
     "eslint-loader": "^1.5.0",
     "eslint-plugin-babel": "^3.3.0",
     "eslint-plugin-flowtype": "^2.18.1",
-    "eslint-plugin-react": "^6.0.0",
-    "webpack": "^1.13.3"
+    "eslint-plugin-react": "^6.0.0"
   },
   "dependencies": {
     "lodash": "^4.17.2",
-    "ramda": "^0.22.1"
+    "ramda": "^0.22.1",
+    "redux": "^3.6.0"
   }
 }
