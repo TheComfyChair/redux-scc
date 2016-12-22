@@ -26,6 +26,11 @@
       "/src"
     ]
   },
+  "repository" :
+  {
+    "type" : "git",
+    "url" : "https://github.com/npm/npm.git"
+  },
   "devDependencies": {
     "babel-cli": "^6.18.0",
     "babel-core": "^6.18.2",

@@ -29,19 +29,8 @@ export type PrimitiveType = () => {
     structure?: PrimitiveType,
 };
 export type TypesObject = {
-    [key: string]: CreateArrayType | CreateStringType | CreateNumberType | CreateShapeType | CreateBooleanType;
-}
-
-export type TypesObjectDefaults = {
-    [key: string]: mixed | TypesArrayDefaults,
-}
-export type TypesArrayDefaults = Array<mixed> | Array<TypesObjectDefaults>;
-
-type CreateStringType = (defaultValue: string) => PrimitiveType;
-type CreateNumberType = (defaultValue: number) => PrimitiveType;
-type CreateBooleanType = (defaultValue: boolean) => PrimitiveType;
-type CreateArrayType = (structure: StructureType | PrimitiveType, defaultValue: TypesArrayDefaults | TypesObjectDefaults) => StructureType;
-type CreateShapeType = (structure: ShapeStructure, defaultValue: TypesArrayDefaults | TypesObjectDefaults) => StructureType;
+    [key: string]: any,
+};
 
 //==============================
 // Structure
@@ -53,6 +42,7 @@ export const PROP_TYPES = {
     _reducer: '_reducer',
     _shape: '_shape',
     _array: '_array',
+    _any: '_any',
 };
 
 //The types objects are used in order to build up the structure of a store chunk, and provide/accept
@@ -72,6 +62,11 @@ export const Types: TypesObject = {
         type: PROP_TYPES._boolean,
         defaultValue,
         typeofValue: 'boolean',
+    }),
+    any: (defaultValue: any = null) => () => ({
+        type: PROP_TYPES._any,
+        defaultValue,
+        typeofValue: 'any',
     }),
     arrayOf: (structure: StructureType | PrimitiveType, defaultValue = []) => () => ({
         type: PROP_TYPES._array,

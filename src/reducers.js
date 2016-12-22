@@ -48,6 +48,7 @@ export const REDUCER_CREATOR_MAPPING: { [key: PropTypeKeys]: any } = {
     [PROP_TYPES._boolean]: createPrimitiveReducer,
     [PROP_TYPES._string]: createPrimitiveReducer,
     [PROP_TYPES._number]: createPrimitiveReducer,
+    [PROP_TYPES._any]: createPrimitiveReducer,
 };
 
 

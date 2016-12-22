@@ -46,7 +46,7 @@ export function validateShape(objectStructure: any, value: mixed): Object {
 
 export function validatePrimitive(primitive: any, value: any): mixed {
     //Validate primitives using the typeofValue property of the primitive type definitions.
-    if (typeof value === primitive().typeofValue ) return value;
+    if (typeof value === primitive().typeofValue || primitive().typeofValue === 'any') return value;
     return console.warn(`The value, ${value}, did not match the type specified (${primitive().type}).`);
 }
 
@@ -71,6 +71,7 @@ export function getTypeValidation(type: string): validationFunction {
         [PROP_TYPES._boolean]: validatePrimitive,
         [PROP_TYPES._array]: validateArray,
         [PROP_TYPES._shape]: validateShape,
+        [PROP_TYPES._any]: validatePrimitive,
     };
     const typeValidation = TYPE_VALIDATIONS[type];
     if (!typeValidation) {

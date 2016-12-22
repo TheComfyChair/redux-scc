@@ -18,6 +18,10 @@ describe('Validation functionality', () => {
         it('Boolean primitive should allow for string', () => {
             expect(validatePrimitive(Types.boolean(), true)).toBe(true);
         });
+        it('Any should allow for anything', () => {
+            const date = new Date();
+            expect(validatePrimitive(Types.any(), date)).toEqual(date);
+        })
     });
 
     describe('Arrays', () => {
