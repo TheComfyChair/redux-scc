@@ -1,6 +1,6 @@
 {
   "name": "redux-scc",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Redux store chunk creator",
   "main": "./lib/index.js",
   "scripts": {
@@ -26,10 +26,9 @@
       "/src"
     ]
   },
-  "repository" :
-  {
-    "type" : "git",
-    "url" : "https://github.com/npm/npm.git"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TheComfyChair/redux-scc"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
