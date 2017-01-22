@@ -71,6 +71,12 @@ describe('ObjectReducer', () => {
                 payload: { foo: 'toast'}
             })).toEqual({ foo: 'toast', bar: { baz: 5 }});
         });
+
+        it('do not trigger validation if not required', () => {
+          expect(reducer({ foo: 'foo', bar: { baz: 6 }}, {
+            type: 'string.reset',
+          })).toEqual({ foo: 'foo', bar: { baz: 5 }});
+        });
     });
 
 });

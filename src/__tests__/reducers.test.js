@@ -99,9 +99,14 @@ describe('reducers', () => {
                 'toast': {
                     reducer: 'foo',
                     action: 'bar',
+                    validate: true,
                 }
             }, 'location')).toEqual({
-                'location.toast': 'foo',
+                'location.toast': {
+                    reducer: 'foo',
+                    action: 'bar',
+                    validate: true,
+                },
             })
         });
     });

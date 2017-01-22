@@ -64,6 +64,33 @@ describe('arrayReducer', () => {
             });
         });
 
+        describe('push', () => {
+            const { push } = DEFAULT_ARRAY_BEHAVIORS;
+            it('should push the payload onto the end of the array', () => {
+                expect(push.reducer([1,2,3], 4)).toEqual([1,2,3,4]);
+            });
+        });
+
+        describe('pop', () => {
+            const { pop } = DEFAULT_ARRAY_BEHAVIORS;
+            it('should remove the last element from the array', () => {
+                expect(pop.reducer([1,2,3])).toEqual([1,2]);
+            });
+        });
+
+        describe('unshift', () => {
+            const { unshift } = DEFAULT_ARRAY_BEHAVIORS;
+            it('should add the payload to the beginning of the array', () => {
+                expect(unshift.reducer([1,2,3], 4)).toEqual([4,1,2,3]);
+            });
+        });
+
+        describe('shift', () => {
+            const { shift } = DEFAULT_ARRAY_BEHAVIORS;
+            it('should remove the first element of the array', () => {
+                expect(shift.reducer([1,2,3])).toEqual([2,3]);
+            });
+        });
     });
 
     describe('applyValidation', () => {
@@ -82,7 +109,7 @@ describe('arrayReducer', () => {
     });
 
     describe('createReducer', () => {
-        const arrayStructure = Types.arrayOf(Types.number());
+        const arrayStructure = Types.arrayOf(Types.number(), [1,2,3,4]);
         const reducer = createReducer(arrayStructure, createReducerBehaviors(DEFAULT_ARRAY_BEHAVIORS, 'string'));
 
         it('should call the correct behavior', () => {
@@ -91,6 +118,12 @@ describe('arrayReducer', () => {
                 payload: 4,
                 index: 0,
             })).toEqual([4,2,3]);
+        });
+
+        it('do not trigger validation if not required', () => {
+            expect(reducer([1,2], {
+              type: 'string.reset',
+            })).toEqual([1,2,3,4]);
         });
     });
 

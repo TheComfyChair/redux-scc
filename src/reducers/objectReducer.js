@@ -11,6 +11,7 @@ import type { StructureType } from '../structure';
 export type ShapeReducerAction = {
     type: string,
     payload: Object,
+    validate: boolean,
 };
 export type ShapeReducer = (state: Object, action: ShapeReducerAction) => Object;
 export type ShapeReducerBehavior = (state: {}, payload: Object | void, initialState: {}) => Object;
@@ -55,18 +56,21 @@ export const DEFAULT_SHAPE_BEHAVIORS: ShapeReducerBehaviorsConfig = {
         reducer(state, payload) {
             if (!isObject(payload)) return state;
             return { ...state, ...payload };
-        }
+        },
+        validate: true,
     },
     reset: {
         reducer(state, payload, initialState) {
             return initialState;
-        }
+        },
+        validate: false,
     },
     replace: {
         reducer(state, payload) {
             if (!payload) return state;
             return payload;
-        }
+        },
+        validate: true,
     }
 };
 
@@ -102,7 +106,11 @@ export function createReducer(objectStructure: StructureType, behaviors: ShapeRe
 
         //Sanitize the payload using the reducer shape, then apply the sanitized
         //payload to the state using the behavior linked to this action type.
-        return behaviors[type](state, validateShape(objectStructure, payload), initialState);
+        return behaviors[type].reducer(
+          state,
+          behaviors[type].validate ? validateShape(objectStructure, payload) : payload,
+          initialState
+        );
     }
 }
 

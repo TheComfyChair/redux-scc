@@ -97,7 +97,7 @@ export function createReducerBehaviors(behaviorsConfig: { [key: string]: { reduc
     //the location string/name combination, so will match up 1:1.
     return reduce(behaviorsConfig, (memo, behavior, name) => ({
         ...memo,
-        [`${locationString}.${name}`]: behavior.reducer,
+        [`${locationString}.${name}`]: behavior,
     }), {});
 }
 

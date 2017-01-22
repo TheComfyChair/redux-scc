@@ -18,6 +18,7 @@ export type ArrayReducerBehaviorsConfig = {
     [key: string]: {
         action?: (value: any) => any,
         reducer: ArrayReducerBehavior,
+        validate: boolean,
     }
 };
 export type ArrayReducerBehaviors = {
@@ -69,32 +70,61 @@ export const DEFAULT_ARRAY_BEHAVIORS: ArrayReducerBehaviorsConfig = {
             if (!checkIndex(index, payload, 'updateAtIndex')) return state;
             if (payload === undefined) return console.warn('Undefined was passed when updating index. Update not performed') || state;
             return updateAtIndex(state, payload, index);
-        }
+        },
+        validate: true,
     },
     resetAtIndex: {
         reducer(state, payload, initialState, index) {
             if (!checkIndex(index, payload, 'resetAtIndex')) return state;
             return updateAtIndex(state, initialState, index);
-        }
+        },
+        validate: false,
     },
     removeAtIndex: {
         reducer(state, payload, initialState, index) {
             if (!checkIndex(index, payload, 'removeAtIndex')) return state;
             return removeAtIndex(state, index);
-        }
+        },
+        validate: false,
     },
     //Whole array behaviors.
     replace: {
         reducer(state, payload) {
             if(!isArray(payload)) return console.warn('An array must be provided when replacing an array') || state;
             return payload;
-        }
+        },
+        validate: true,
     },
     reset: {
         reducer(state, payload, initialState) {
             return initialState;
-        }
+        },
+        validate: false,
     },
+    push: {
+        reducer(state, payload) {
+            return [...state, payload];
+        },
+        validate: true,
+    },
+    pop: {
+        reducer(state) {
+            return state.slice(0, -1);
+        },
+        validate: false,
+    },
+    unshift: {
+        reducer(state, payload) {
+            return [payload, ...state];
+        },
+        validate: true,
+    },
+    shift: {
+        reducer(state) {
+            return state.slice(1);
+        },
+        validate: false,
+    }
 };
 
 
@@ -123,7 +153,12 @@ export function createReducer(arrayTypeDescription: ArrayStructureType, behavior
         //Validating the payload of an array is more tricky, as we do not know ahead of time if the
         //payload should be an object, primitive, or an array. However, we can still validate here based on the
         //payload type passed.
-        return behaviors[type](state, applyValidation(arrayTypeDescription, payload), initialValue, index);
+        return behaviors[type].reducer(
+          state,
+          behaviors[type].validate ? applyValidation(arrayTypeDescription, payload) : payload,
+          initialValue,
+          index
+        );
     }
 }
 

@@ -17,6 +17,7 @@ export type PrimitiveReducerBehaviorsConfig = {
     [key: string]: {
         action?: (value: mixed) => mixed,
         reducer: PrimitiveReducerBehavior,
+        validate: boolean,
     }
 };
 export type PrimitiveReducerBehaviors = {
@@ -52,12 +53,14 @@ export const DEFAULT_PRIMITIVE_BEHAVIORS: PrimitiveReducerBehaviorsConfig = {
         reducer(state, payload) {
             if (payload === undefined) return state;
             return payload;
-        }
+        },
+        validate: true,
     },
     reset: {
         reducer(state, payload, initialState) {
             return initialState;
-        }
+        },
+        validate: false,
     },
 };
 
@@ -76,6 +79,7 @@ export function createPrimitiveReducer(primitiveType: PrimitiveType, {
 
 
 function createReducer(primitiveType: PrimitiveType, behaviors: PrimitiveReducerBehaviors): PrimitiveReducer {
+    //Calculate and validate the initial state of the reducer
     const initialState: mixed = validatePrimitive(primitiveType, primitiveType().defaultValue);
     return (state = initialState, { type, payload }: PrimitiveReducerAction) => {
         //If the action type does not match any of the specified behaviors, just return the current state.
@@ -83,7 +87,11 @@ function createReducer(primitiveType: PrimitiveType, behaviors: PrimitiveReducer
 
         //Sanitize the payload using the reducer shape, then apply the sanitized
         //payload to the state using the behavior linked to this action type.
-        return behaviors[type](state, validatePrimitive(primitiveType, payload), initialState);
+        return behaviors[type].reducer(
+          state,
+          behaviors[type].validate ? validatePrimitive(primitiveType, payload) : payload,
+          initialState
+        );
     }
 }
 
