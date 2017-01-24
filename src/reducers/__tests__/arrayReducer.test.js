@@ -40,7 +40,7 @@ describe('arrayReducer', () => {
         describe('removeAtIndex', () => {
             const { removeAtIndex } = DEFAULT_ARRAY_BEHAVIORS;
             it('should remove at index correctly', () => {
-                expect(removeAtIndex.reducer([1,2,3], undefined, undefined, 0)).toEqual([2,3]);
+                expect(removeAtIndex.reducer([1,2,3], 0)).toEqual([2,3]);
             });
             it('should return state if no index provided', () => {
                 expect(removeAtIndex.reducer([1,2,3])).toEqual([1,2,3]);
