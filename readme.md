@@ -64,6 +64,27 @@ Types.shape(structure)
 
 The types are roughly divided into two categories: simple types (which do not have any internal structure to deal with), and complex types (which do). The structure of complex types is built up using a combination of objects containing Types, or Types. Examples can be found below.
 
+#### Actions API
+##### Primitive/any
+- replace(value: any): Replaces the current reducer value with the value provided.
+- reset(): Resets the reducer value to the initial value.
+
+##### Shape
+- replace(value: Object): Replaces the current reducer value with the value provided.
+- reset(): Resets the reducer value to the initial value.
+- update(value: Object): Updates the object (in a shallow fashion), using the object provided.
+
+##### Array
+- replace(value: Array<any>): Replaces the array with the array provided.
+- reset(): Resets the reducer value to the initial value.
+- replaceAtIndex(value: any, index: number): Replace the value for the array element, at the specified index, with the value provided.
+- resetAtIndex(value: any, index: number): Reset the value for an array element, at the specified index, with the value provided.
+- removeAtIndex(index: number): Remove the element from the array at the specified index.
+- push(value: any): Add the value to the end of the array.
+- pop(): Remove the last element of the array.
+- shift(value: any): Add the value to the beginning of the array.
+- unshift(): Remove the first element of the array.
+
 #### Examples
 
 ##### Basic
