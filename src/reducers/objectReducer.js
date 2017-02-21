@@ -38,7 +38,8 @@ export type ShapeReducerOptions = {
 //==============================
 // JS imports
 //==============================
-import { reduce, isObject } from 'lodash';
+import reduce from 'lodash/reduce';
+import isObject from 'lodash/isObject';
 import { validateShape } from '../validatePayload';
 import { createReducerBehaviors } from '../reducers';
 import { PROP_TYPES } from '../structure';

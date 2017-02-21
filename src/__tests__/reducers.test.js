@@ -10,7 +10,8 @@ import {
     createReducerBehaviors,
     REDUCER_CREATOR_MAPPING,
 } from '../reducers';
-import { forEach, omit } from 'lodash';
+import forEach from 'lodash/forEach';
+import omit from 'lodash/omit';
 
 describe('reducers', () => {
 

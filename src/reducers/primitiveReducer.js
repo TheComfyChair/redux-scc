@@ -36,7 +36,7 @@ export type PrimitiveReducerOptions = {
 //==============================
 // JS imports
 //==============================
-import { reduce } from 'lodash';
+import reduce from 'lodash/reduce';
 import { validatePrimitive } from '../validatePayload';
 import { createReducerBehaviors } from '../reducers';
 

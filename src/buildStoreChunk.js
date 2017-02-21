@@ -9,7 +9,10 @@ import type { PartialStoreChunk } from './reducers';
 // JS imports
 //==============================
 import { combineReducers } from 'redux';
-import { reduce, find, omit, isFunction } from 'lodash';
+import reduce from 'lodash/reduce';
+import find from 'lodash/find';
+import omit from 'lodash/omit';
+import isFunction from 'lodash/isFunction';
 import { createReducer } from './reducers';
 import { PROP_TYPES } from './structure';
 

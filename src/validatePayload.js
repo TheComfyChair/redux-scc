@@ -9,7 +9,8 @@ type validationFunction = (structure: StructureType | PrimitiveType | ShapeStruc
 //==============================
 // JS imports
 //==============================
-import { reduce, isObject } from 'lodash';
+import reduce from 'lodash/reduce';
+import isObject from 'lodash/isObject';
 import { PROP_TYPES } from './structure';
 
 export function validateShape(objectStructure: any, value: mixed): Object {

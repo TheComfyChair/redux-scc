@@ -38,7 +38,9 @@ export type ArraySelector = (state: Object) => Array<any>;
 //==============================
 // JS imports
 //==============================
-import { reduce, isArray, isNumber } from 'lodash';
+import reduce from 'lodash/reduce';
+import isArray from 'lodash/isArray';
+import isNumber from 'lodash/isNumber';
 import { validateArray, validateShape, validatePrimitive } from '../validatePayload';
 import { createReducerBehaviors } from '../reducers';
 import { updateAtIndex, removeAtIndex } from '../utils/arrayUtils';
