@@ -49,7 +49,6 @@
   },
   "dependencies": {
     "lodash": "^4.17.2",
-    "ramda": "^0.22.1",
     "redux": "^3.6.0"
   }
 }

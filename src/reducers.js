@@ -36,8 +36,8 @@ type CallReducerInterface = {
 import {
     PROP_TYPES,
 } from './structure';
-import { compose } from 'ramda';
-import { reduce } from 'lodash';
+import reduce from 'lodash/reduce';
+import compose from 'lodash/fp/compose';
 import { createShapeReducer } from './reducers/objectReducer';
 import { createArrayReducer } from './reducers/arrayReducer';
 import { createPrimitiveReducer } from './reducers/primitiveReducer';
