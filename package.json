@@ -48,7 +48,11 @@
     "eslint-plugin-react": "^6.0.0"
   },
   "dependencies": {
-    "lodash": "^4.17.2",
+    "lodash.find": "^4.6.0",
+    "lodash.flowright": "^3.5.0",
+    "lodash.isfunction": "^3.0.8",
+    "lodash.isobject": "^3.0.2",
+    "lodash.omit": "^4.5.0",
     "redux": "^3.6.0"
   }
 }
