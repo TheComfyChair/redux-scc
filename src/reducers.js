@@ -37,7 +37,7 @@ import {
     PROP_TYPES,
 } from './structure';
 import reduce from 'lodash/reduce';
-import flowright from 'lodash/fp/flowright';
+import flowRight from 'lodash/fp/flowRight';
 import { createShapeReducer } from './reducers/objectReducer';
 import { createArrayReducer } from './reducers/arrayReducer';
 import { createPrimitiveReducer } from './reducers/primitiveReducer';
@@ -120,4 +120,4 @@ export function calculateDefaults(typeDescription: StructureType | PrimitiveType
 }
 
 
-export const createReducer = flowright(callReducer, determineReducerType);
+export const createReducer = flowRight(callReducer, determineReducerType);
