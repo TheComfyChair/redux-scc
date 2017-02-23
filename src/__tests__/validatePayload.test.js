@@ -3,7 +3,9 @@ import {
     validatePrimitive,
     validateShape,
     validateArray,
-    getTypeValidation
+    getTypeValidation,
+    hasWildcardKey,
+    getValueType,
 } from '../validatePayload';
 
 describe('Validation functionality', () => {
@@ -91,13 +93,90 @@ describe('Validation functionality', () => {
                 test1: {},
                 test2: 'bar',
             });
-        })
+        });
+
+
+        const testObjectStructure4 = Types.shape({
+            test2: Types.string(),
+            [Types.wildcardKey()]: Types.string(),
+        });
+        const testObjectStructure5 = Types.shape({
+            test2: Types.string(),
+            [Types.wildcardKey()]: Types.any(),
+        });
+        it('Should, if a key is not specified, see if the key matches the wildcard type, and apply if true', () => {
+            expect(validateShape(testObjectStructure4, { test1: 'foo', test2: 'bar' })).toEqual({
+                test1: 'foo',
+                test2: 'bar',
+            });
+
+            expect(validateShape(testObjectStructure5, { test1: 0, test2: 'bar' })).toEqual({
+                test1: 0,
+                test2: 'bar',
+            });
+        });
+
+        const testObjectStructure6 = Types.shape({
+            test2: Types.string(),
+            [Types.wildcardKey()]: Types.string(),
+        });
+        it('Should, if a key is not specified, and does not match the wildcardKey, strip it out', () => {
+            expect(validateShape(testObjectStructure6, { test1: 0, test2: 'bar' })).toEqual({
+                test2: 'bar',
+            });
+        });
     });
 
     describe('Non covered types', () => {
         it('A type with no associated validation should throw an error', () => {
             expect(() => getTypeValidation('toast')).toThrowError(/validation/);
         });
+    });
+
+    describe('Has wildcard value', () => {
+        const testObjectStructure = Types.shape({
+          test1: Types.string(),
+          test2: Types.number(),
+          [Types.wildcardKey()]: Types.any(),
+        });
+
+        const testObjectStructure2 = Types.shape({
+          test1: Types.string(),
+          test2: Types.number(),
+        });
+
+        it('should return true if the objectStructure passed in has a wildcard key', () => {
+             expect(hasWildcardKey(testObjectStructure)).toBe(true);
+        });
+
+        it('should return false if no wildcard key passed in', () => {
+             expect(hasWildcardKey(testObjectStructure2)).toBe(false);
+        });
+    });
+
+    describe('GetValueType', () => {
+      const testObjectStructure = Types.shape({
+          test1: Types.string(),
+          test2: Types.number(),
+          [Types.wildcardKey()]: Types.number(),
+      });
+
+      const testObjectStructure2 = Types.shape({
+          test1: Types.string(),
+          test2: Types.number(),
+      });
+
+      it('should return the correct type for a key that is present, if no wildcard present', () => {
+          expect(getValueType(testObjectStructure, 'test1', false)().type).toEqual(Types.string()().type);
+      });
+
+      it('should return the wildcard value if key not present and wildcard is', () => {
+          expect(getValueType(testObjectStructure, 'test3', true)().type).toEqual(Types.number()().type);
+      });
+
+      it('should return undefined if no wildcard or matching key', () => {
+          expect(getValueType(testObjectStructure, 'test3', false)).toEqual(undefined);
+      });
     });
 
 });

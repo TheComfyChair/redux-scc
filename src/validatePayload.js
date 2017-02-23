@@ -12,6 +12,18 @@ type validationFunction = (structure: StructureType | PrimitiveType | ShapeStruc
 import reduce from 'lodash/reduce';
 import isObject from 'lodash/isObject';
 import { PROP_TYPES } from './structure';
+const find = require('lodash/fp/find').convert({ cap: false });
+
+
+export const hasWildcardKey = (objectStructure: any) =>
+    !!find((prop, key) => key === PROP_TYPES._wildcardKey)(objectStructure().structure);
+
+
+export const getValueType = (objectStructure: any, key: string, wildcardKeyPresent: boolean) =>
+    wildcardKeyPresent
+      ? objectStructure().structure[key] || objectStructure().structure[PROP_TYPES._wildcardKey]
+      : objectStructure().structure[key];
+
 
 export function validateShape(objectStructure: any, value: mixed): Object {
     if (!isObject(value)) {
@@ -19,20 +31,23 @@ export function validateShape(objectStructure: any, value: mixed): Object {
         return {};
     }
 
+    const wildcardKeyPresent = hasWildcardKey(objectStructure);
+
     return reduce(value, (memo, value, name) => {
-        const valueType = objectStructure().structure[name];
-        //If the value type does not exist in the reducer structure, we don't want to include it in the payload.
+        const valueType = getValueType(objectStructure, name, wildcardKeyPresent);
+        //If the value type does not exist in the reducer structure, and there's no wildcard key, then
+        //we don't want to include it in the payload.
         //Display a console error for the developer, and skip the inclusion of this property in the payload.
         if (!valueType) {
             console.warn(`The property, ${name}, was not specified in the structure` +
-                ' and was stripped out of the payload. Structure: ',  objectStructure().structure);
+                ` and was stripped out of the payload. Structure: ${ objectStructure().structure }`);
             return memo;
         }
 
         const validatedValue = getTypeValidation(valueType().type)(valueType, value);
         if (validatedValue === undefined) {
             console.warn(`The property, ${name}, was populated with a type ${ typeof value } which does not` +
-                ' match that specified in the reducer configuration. It has been stripped from' +
+                ` match that specified in the reducer configuration ${ wildcardKeyPresent ? ', nor did it match a wildcardKey': ''}. It has been stripped from` +
                 ' the payload');
             return memo;
         }

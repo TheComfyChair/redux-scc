@@ -51,7 +51,7 @@ describe('reducers', () => {
 
     describe('determineReducerType', () => {
         it('should return the correct creator function for the default mapping', () => {
-            forEach(omit(Types, 'reducer'), structureType => {
+            forEach(omit(Types, 'reducer', 'wildcardKey'), structureType => {
                 const returnVal = determineReducerType(Types.reducer(structureType()), {
                     name: 'toast',
                     locationString: 'toasty',

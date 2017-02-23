@@ -43,6 +43,7 @@ export const PROP_TYPES = {
     _shape: '_shape',
     _array: '_array',
     _any: '_any',
+    _wildcardKey: '_wildcardKey',
 };
 
 //The types objects are used in order to build up the structure of a store chunk, and provide/accept
@@ -81,4 +82,5 @@ export const Types: TypesObject = {
         type: PROP_TYPES._shape,
         structure,
     }),
+    wildcardKey: () => PROP_TYPES._wildcardKey,
 };

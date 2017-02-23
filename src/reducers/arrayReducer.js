@@ -47,7 +47,7 @@ import { updateAtIndex, removeAtIndex } from '../utils/arrayUtils';
 import { PROP_TYPES } from '../structure';
 
 
-function checkIndex(index: ?number, payload: any = '', behaviorName: string = ''): boolean {
+function checkIndex(index: ?number, payload: any = '', behaviorName: string): boolean {
     if (!isNumber(index) || index === -1) {
         console.warn(`Index not passed to ${behaviorName} for payload ${payload}.`);
         return false;
