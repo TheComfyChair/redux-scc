@@ -40,6 +40,7 @@ export type ShapeReducerOptions = {
 //==============================
 import reduce from 'lodash/reduce';
 import isObject from 'lodash/isObject';
+import omit from 'lodash/omit';
 import { validateShape } from '../validatePayload';
 import { createReducerBehaviors } from '../reducers';
 import { PROP_TYPES } from '../structure';
@@ -90,7 +91,7 @@ export function createShapeReducer(reducerShape: StructureType, {
 
 
 export function calculateDefaults(reducerStructure: any) {
-    return reduce(reducerStructure, (memo, propValue, propName) => ({
+    return reduce(omit(reducerStructure, ['_wildcardKey']), (memo, propValue, propName) => ({
         ...memo,
         [propName]: propValue().type === PROP_TYPES._shape
             ? calculateDefaults(propValue().structure)
