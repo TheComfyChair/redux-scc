@@ -52,6 +52,9 @@ export const REDUCER_CREATOR_MAPPING: { [key: PropTypeKeys]: any } = {
 };
 
 
+export const createUniqueString = Math.random().toString(36).substring(7);
+
+
 export function determineReducerType(reducerDescriptor: ReducerType, {
     name,
     locationString,

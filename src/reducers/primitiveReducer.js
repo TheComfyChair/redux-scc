@@ -69,11 +69,12 @@ export function createPrimitiveReducer(primitiveType: PrimitiveType, {
     locationString,
     name,
 }: PrimitiveReducerOptions) {
+    const uniqueId = Math.random().toString(36).substring(5);
     return {
         reducers: {
-            [name]: createReducer(primitiveType, createReducerBehaviors(DEFAULT_PRIMITIVE_BEHAVIORS, locationString)),
+            [name]: createReducer(primitiveType, createReducerBehaviors(DEFAULT_PRIMITIVE_BEHAVIORS, `${uniqueId}-${locationString}`)),
         },
-        actions: createActions(DEFAULT_PRIMITIVE_BEHAVIORS, locationString),
+        actions: createActions(DEFAULT_PRIMITIVE_BEHAVIORS, `${uniqueId}-${locationString}`),
     };
 }
 

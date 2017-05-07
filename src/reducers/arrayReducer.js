@@ -134,11 +134,12 @@ export function createArrayReducer(arrayTypeDescription: ArrayStructureType, {
     locationString,
     name,
 }: ArrayReducerOptions) {
+    const uniqueId = Math.random().toString(36).substring(5);
     return {
         reducers: {
-            [name]: createReducer(arrayTypeDescription, createReducerBehaviors(DEFAULT_ARRAY_BEHAVIORS, locationString))
+            [name]: createReducer(arrayTypeDescription, createReducerBehaviors(DEFAULT_ARRAY_BEHAVIORS, `${uniqueId}-${locationString}`))
         },
-        actions: createActions(DEFAULT_ARRAY_BEHAVIORS, locationString, {}),
+        actions: createActions(DEFAULT_ARRAY_BEHAVIORS, `${uniqueId}-${locationString}`, {}),
     };
 }
 

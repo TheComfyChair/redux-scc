@@ -81,11 +81,12 @@ export function createShapeReducer(reducerShape: StructureType, {
     locationString,
     name,
 }: ShapeReducerOptions) {
+    const uniqueId = Math.random().toString(36).substring(5);
     return {
         reducers: {
-            [name]: createReducer(reducerShape, createReducerBehaviors(DEFAULT_SHAPE_BEHAVIORS, locationString)),
+            [name]: createReducer(reducerShape, createReducerBehaviors(DEFAULT_SHAPE_BEHAVIORS, `${uniqueId}-${locationString}`)),
         },
-        actions: createActions(DEFAULT_SHAPE_BEHAVIORS, locationString),
+        actions: createActions(DEFAULT_SHAPE_BEHAVIORS, `${uniqueId}-${locationString}`),
     };
 }
 

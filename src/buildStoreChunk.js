@@ -48,11 +48,6 @@ export function buildStoreChunk(name: string, structure: any, {
     //at the top level. If the structure is a function (i.e. not nested reducers) then return
     //the actions, and selectors as the top level of their respective objects.
     if (isFunction(structure)) {
-        console.log(111, processedStructure, {
-          reducers: processedStructure.reducers,
-          actions: processedStructure.actions[name],
-          selectors: processedStructure.selectors[name],
-        });
         return {
             reducers: processedStructure.reducers,
             actions: processedStructure.actions[name],
