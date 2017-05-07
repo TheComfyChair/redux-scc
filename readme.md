@@ -1,26 +1,22 @@
-###Redux store chunk creator (redux-scc)
+### Redux store chunk creator (redux-scc)
 
 Are you fed up of hand coding the same pattern over and over again? Fed up of conflicting action names causing your button presses to set off your ajax loading animation? Are you a fan of having a strictly defined structure for your redux store, down to the type level? Then redux-scc may be for you!
 
 #### What does it do?
 It takes a defined structure and uses a set of 'behaviors' (a small collection of ways that a reducer can
-be updated) to create a set of actions and reducer responses that are each linked by a unique string. A set of action
-generators, selectors, and reducers are then returned.
+be updated) to create a set of actions and reducer responses. A selector is also created for every reducer defined, and the set of action generators, selectors, and reducers are then returned.
 
-The behaviors are purposefully simple, and do much extend beyond basic 
-(including shallow merge for object reducers, and index based updates for arrays) 
-updating and resetting the store to the initial state.
+The behaviors are purposefully simple, and do not do much extend beyond basic updating and resetting the store to the initial state. There are a couple of helper actions to make your life easier (shallow update for object, pop/push for arrays), but the main goal of this library is to produce a simple, dependable, basis for you to build complex functionality on top of, rather than tackle such functionality itself. If you think of redux-scc reducers as a very crude database, with actions providing a limited set of ways to interact and selectors providing simple queries, then you'll be in a great place to start taking advantage of it!
  
 You can then simply put the reducer into the store and being to build your application on top of the action
 generators and selectors that have been returned.
 
-#### But these actions are super limited!
-That's the point! The actions provided are to be used as a way to send the data over to the reducer for
-updating the store (including returning to the initial state). They themselves do not contain business logic. 
-Instead, you can take advantage of middleware libraries such as redux-thunks and redux-sagas to perform the necessary logic you need before
-finally updating the store using the simple action generators returned.
+#### But these actions are super limited, how can I achieve 'X'?
+This boils down to how you intend to construct your application. Redux-scc is very opinionated on what functionality is in the domain of the reducer, and that functionality is purely the maintenance of the store shape over time. It has no interest in specific business logic, and instead relies on that logic occuring elsewhere. That logic will dispatch redux-scc actions as required in order to update the store whenever it is relevant to do so.
 
-There are no plans to allow for extensible action behaviors. 
+Where your business logic lives is entirely up to you, but my personal choice right now would be either redux-sagas or redux-thunks, as they make the most logical sense and make it trivial to dispatch actions to redux-scc as appropriate. RxJS is also another option if you're after a more functional way to handle your side effects.
+
+The advantage of this seperation is that the functionality you have to write is now focused entirely on that business logic - you can safely assume that the updating of the store has been taken care of and will 'just work'. That makes the functionality in question less complex, and much easier to test as a result. Plus, no more writing boilerplate reducer code!
 
 #### How to use it
 
@@ -39,13 +35,13 @@ The reducers property is simple! It is an object with the top level properties m
 
 The actions and selectors object follow the defined structure and will contain actions and selectors, respectively, at the leaves of the structure.
 
-The selectors will return the full state of the reducer being referred to. There is currently no way to use a selector to acquire data at a higher level.
+The selectors will return the full state of their specific reducer.
 
 The actions are accessed in a similar way, but the available actions are dependant of the type of reducer created:
 
 - primitive (boolean/string/number) reducer: replace, and reset
 - shape reducer: update, replace, and reset
-- array reducer: replaceAtIndex, resetAtIndex, removeAtIndex, replace, and reset
+- array reducer: replaceAtIndex, resetAtIndex, removeAtIndex, replace, reset, push, pop, shift, unshift
 
 ##### Types
 Types are the building blocks of the structure, and should be fairly familiar to you if you're used to using React's PropTypes. At the moment, redux-scc offers a cut down version of the various PropTypes:
@@ -105,30 +101,24 @@ This will return the following object:
 		example: [Function: combination]
 	},
 	actions: {
-		example: {
-			update: [Function: update] ,
-			reset: [Function: reset],
-			replace: [Function: replace],
-		}
+		update: [Function: update] ,
+		reset: [Function: reset],
+		replace: [Function: replace],
 	},
-	selectors: {
-		example: [Function]
-	}
+	selectors: [Function]
 }	
 
 ```
-
-> Note that this particular structure, where only one single reducer is being created in a chunk, is subject to change. The resulting object should avoid the unnecessary nesting in the selectors and actions (for object assign/spread reasons, the reducers object is necessary) in the future. 
+As we are not creating a nested reducer structure, the actions and selectors returned are not nested either - simply referring to the created reducer directly.
 
 ##### Combining reducers
-A more common pattern you may have come across is the idea of combining reducers to more easily manage a certain part of the store. As the individual reducers are independent, it is convenient to be able to update, say, some state of the current screen without any potential impact on the list of users you've grabbed from a server. Redux-scc is designed to handle this, and also any level of arbitrary nesting you'd like!
+A more common pattern you may have come across is the idea of combining reducers to more easily manage a certain chunk of the store. It allows you to operate on certain data structures without worrying about the impact on other parts of the store. Redux-scc is designed to handle this, up to any level of arbitrary nesting you'd like!
 
 ```
-	const exampleStoreChunk2 = buildStoreChunk('example2', {
-		screen: Types.reducer(Types.string()),
-		users: Types.reducer(Types.arrayOf(Types.string())),
-	});
-		
+const exampleStoreChunk2 = buildStoreChunk('example2', {
+	screen: Types.reducer(Types.string()),
+	users: Types.reducer(Types.arrayOf(Types.string())),
+});		
 ```
 
 This produces the following object:
@@ -150,6 +140,10 @@ This produces the following object:
 			removeAtIndex,
 			replace,
 			reset,
+			pop,
+			push,
+			shift,
+			unshift,
 		}
 	},
 	selectors: {
@@ -161,7 +155,7 @@ This produces the following object:
 ```
 
 ##### Even more nesting!
-Here's a quick example of what a nested reducer would look like:
+Above we saw how combined reducers would operate, here's a quick example of what a reducer nested inside another reducer would look like:
 
 ```
 	const exampleStoreChunk2 = buildStoreChunk('example2', {
@@ -195,6 +189,14 @@ Producing:
 }	
 
 ```
+
+
+### Roadmap
+
+Planned features:
+- oneOf() type - (for allowing a specific selection of types).
+- wildcardKey() - for use in the shape type in order to allow the use of a regex pattern to allow a property to be specified if it matches the given regex and the type specified.
+
 
 
 
