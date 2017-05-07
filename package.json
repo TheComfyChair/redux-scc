@@ -11,7 +11,7 @@
   "author": "Kai Moseley",
   "license": "ISC",
   "jest": {
-    "testPathDirs": [
+    "roots": [
       "<rootDir>/src"
     ],
     "moduleFileExtensions": [
