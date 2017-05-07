@@ -1,6 +1,5 @@
 import {
     buildStoreChunk,
-    processStructure,
 } from '../buildStoreChunk';
 import {
     Types,
@@ -9,6 +8,7 @@ import {
     createStore,
     combineReducers,
 } from 'redux';
+import isFunction from 'lodash/isFunction';
 
 describe('buildStoreChunk', () => {
     describe('buildStoreChunk', () => {
@@ -50,8 +50,8 @@ describe('buildStoreChunk', () => {
                 it('Selectors object has the correct top level structure for a nested chunk', () => {
                     expect(Object.keys(chunk.selectors)).toEqual(['nested1', 'nested2', 'nested3', 'nested4']);
                 });
-                it('Selectors object has the correct top level structure for a non nested chunk', () => {
-                    expect(Object.keys(nonNestedChunk.selectors)).toEqual(['example2']);
+                it('Selectors object is a function for a non-nested chunk', () => {
+                    expect(isFunction(nonNestedChunk.selectors)).toBe(true);
                 });
                 it('Nested selectors object has the correct structure for a defined reducer', () => {
                     expect(Object.keys(chunk.selectors.nested4)).toEqual(['innerNested1', 'innerNested2']);
@@ -69,7 +69,7 @@ describe('buildStoreChunk', () => {
                     expect(Object.keys(chunk.actions)).toEqual(['nested1', 'nested2', 'nested3', 'nested4']);
                 });
                 it('Actions object has the correct top level structure for a non nested chunk', () => {
-                    expect(Object.keys(nonNestedChunk.actions)).toEqual(['example2']);
+                    expect(Object.keys(nonNestedChunk.actions)).toEqual(['replace', 'reset']);
                 });
                 it('Nested actions object has the correct structure for a chunk', () => {
                     expect(Object.keys(chunk.actions.nested4)).toEqual(['innerNested1', 'innerNested2']);
@@ -103,19 +103,15 @@ describe('buildStoreChunk', () => {
                 }));
 
                 it('Dispatching an action should correctly update the store', () => {
-                    store.dispatch(nonNestedChunk.actions.example2.replace('bar'));
-                    expect(nonNestedChunk.selectors.example2(store.getState())).toEqual('bar');
+                    store.dispatch(nonNestedChunk.actions.replace('bar'));
+                    expect(nonNestedChunk.selectors(store.getState())).toEqual('bar');
 
-                    store.dispatch(nonNestedChunk.actions.example2.reset());
-                    expect(nonNestedChunk.selectors.example2(store.getState())).toEqual('foo');
+                    store.dispatch(nonNestedChunk.actions.reset());
+                    expect(nonNestedChunk.selectors(store.getState())).toEqual('foo');
                 });
             });
 
         });
-
-    });
-
-    describe('processStructure', () => {
 
     });
 });

@@ -20,7 +20,6 @@ import { PROP_TYPES } from './structure';
 // generated will specifically operate on the store chunk generated. Selectors will be
 // relative to the baseSelector provided or, if not specified, the root of the store, using
 // the name of the chunk as the base property.
-
 export function buildStoreChunk(name: string, structure: any, {
     baseSelector = state => state[name],
     locationString = name,
@@ -39,13 +38,35 @@ export function buildStoreChunk(name: string, structure: any, {
         locationString,
         name,
     };
+
     //Build up the reducers, actions, and selectors for this level. Due to recursion,
     //these objects will be assigned to a property in the parent object, or simply
     //returned to the call site for use in the rest of the application.
+    const processedStructure = determineStructureProcessing(structure, initialMemo, name);
 
-    //If the reducer's structure is a function (and, therefore, not nested reducers), we can skip the reduce.
-    if (isFunction(structure)) return combineStoreChunkReducers(processStructure(initialMemo, structure, name));
-    return combineStoreChunkReducers(reduce(structure, processStructure, initialMemo));
+    //If the location string is equal to the name passed to build store chunk, then we must be
+    //at the top level. If the structure is a function (i.e. not nested reducers) then return
+    //the actions, and selectors as the top level of their respective objects.
+    if (isFunction(structure)) {
+        console.log(111, processedStructure, {
+          reducers: processedStructure.reducers,
+          actions: processedStructure.actions[name],
+          selectors: processedStructure.selectors[name],
+        });
+        return {
+            reducers: processedStructure.reducers,
+            actions: processedStructure.actions[name],
+            selectors: processedStructure.selectors[name],
+        };
+    }
+
+    return processedStructure;
+}
+
+
+export function determineStructureProcessing(structure: any, initialMemo: PartialStoreChunk, name) {
+  if (isFunction(structure)) return combineStoreChunkReducers(processStructure(initialMemo, structure, name));
+  return combineStoreChunkReducers(reduce(structure, processStructure, initialMemo));
 }
 
 
