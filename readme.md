@@ -25,8 +25,8 @@ To use redux-scc you need to be aware of two things: The buildStoreChunk() funct
 ##### buildStoreChunk
 ```
 buildStoreChunk(name: string, structure: ReducerType | {}, options: {
-	baseSelector: Selector = state => state[name],
-	locationString: string = name
+  baseSelector: Selector = state => state[name],
+  locationString: string = name
 }
 ``` 
 buildStoreChunk takes a name and a structure (more on that later) and will return an object with the properties reducers, actions, and selectors.
@@ -88,8 +88,8 @@ Here, we're just going to create a very basic store chunk that is one, solitary,
 
 ```
 const exampleStoreChunk = buildStoreChunk('example', Types.reducer(Types.shape({
-	foo: Types.string(),
-	bar: Types.number(),
+  foo: Types.string(),
+  bar: Types.number(),
 })));
 ```
 
@@ -97,15 +97,15 @@ This will return the following object:
 
 ```
 {
-	reducers: { 
-		example: [Function: combination]
-	},
-	actions: {
-		update: [Function: update] ,
-		reset: [Function: reset],
-		replace: [Function: replace],
-	},
-	selectors: [Function]
+  reducers: { 
+    example: [Function: combination]
+  },
+  actions: {
+    update: [Function: update] ,
+    reset: [Function: reset],
+    replace: [Function: replace],
+  },
+  selectors: [Function]
 }	
 
 ```
@@ -125,31 +125,31 @@ This produces the following object:
 
 ```
 {
-	reducers: { 
-		screen,
-		users,
-	},
-	actions: {
-		screen: {
-			reset,
-			replace,
-		},
-		users: {
-			replaceAtIndex,
-			resetAtIndex,
-			removeAtIndex,
-			replace,
-			reset,
-			pop,
-			push,
-			shift,
-			unshift,
-		}
-	},
-	selectors: {
-		screen,
-		users,
-	}
+  reducers: { 
+    screen,
+    users,
+  },
+  actions: {
+    screen: {
+      reset,
+      replace,
+    },
+    users: {
+      replaceAtIndex,
+      resetAtIndex,
+      removeAtIndex,
+      replace,
+      reset,
+      pop,
+      push,
+      shift,
+      unshift,
+    }
+  },
+  selectors: {
+    screen,
+    users,
+  }
 }	
 
 ```
@@ -158,11 +158,11 @@ This produces the following object:
 Above we saw how combined reducers would operate, here's a quick example of what a reducer nested inside another reducer would look like:
 
 ```
-	const exampleStoreChunk2 = buildStoreChunk('example2', {
-		screen: Types.reducer({
-			someNestedReducer: Types.reducer(Types.string()),
-		}),
-	});
+const exampleStoreChunk2 = buildStoreChunk('example2', {
+  screen: Types.reducer({
+    someNestedReducer: Types.reducer(Types.string()),
+  }),
+});
 		
 ```
 
@@ -170,22 +170,22 @@ Producing:
 
 ```
 {
-	reducers: {
-		screen, //Contains the combination of all child reducers
-	},
-	actions: {
-		screen: {
-			someNestedReducer: {
-				reset,
-				replace,
-			}
-		}	
-	},
-	selectors: {
-		screen: {
-			someNestedReducer,
-		}
-	}
+  reducers: {
+    screen, //Contains the combination of all child reducers
+  },
+  actions: {
+    screen: {
+      someNestedReducer: {
+        reset,
+        replace,
+      }
+    }	
+  },
+  selectors: {
+    screen: {
+      someNestedReducer,
+    }
+  }
 }	
 
 ```
