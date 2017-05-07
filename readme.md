@@ -195,7 +195,7 @@ Producing:
 
 Planned features:
 - oneOf() type - (for allowing a specific selection of types).
-- wildcardKey() - for use in the shape type in order to allow the use of a regex pattern to allow a property to be specified if it matches the given regex and the type specified.
+- wildcardKey() - for use in the shape type in order to allow the use of a regex pattern to allow a property to be specified if it matches the given regex and the type specified. 
 
 
 
