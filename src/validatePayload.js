@@ -60,10 +60,17 @@ export function validateShape(objectStructure: any, value: mixed): Object {
 }
 
 
-export function validatePrimitive(primitive: any, value: any): mixed {
-    //Validate primitives using the typeofValue property of the primitive type definitions.
-    if (typeof value === primitive().typeofValue || primitive().typeofValue === 'any') return value;
-    return console.warn(`The value, ${value}, did not match the type specified (${primitive().type}).`);
+export function validateValue(primitive: any, value: any): mixed {
+    const evaluatedPrimitive = primitive();
+    //If this value is a custom value, then we should apply it's custom validator!
+    if (evaluatedPrimitive.type === PROP_TYPES._custom) {
+        if (evaluatedPrimitive.validator(value)) return value;
+        return console.warn(evaluatedPrimitive.validationErrorMessage(value));
+    }
+
+    //Otherwise we will use the standard, basic, typeof checks.
+    if (typeof value === evaluatedPrimitive.typeofValue || evaluatedPrimitive.typeofValue === 'any') return value;
+    return console.warn(`The value, ${value}, did not match the type specified (${evaluatedPrimitive.type}).`);
 }
 
 
@@ -82,12 +89,13 @@ export function validateArray(arrayStructure: any, value: Array<any>): Array<mix
 
 export function getTypeValidation(type: string): validationFunction {
     const TYPE_VALIDATIONS = {
-        [PROP_TYPES._string]: validatePrimitive,
-        [PROP_TYPES._number]: validatePrimitive,
-        [PROP_TYPES._boolean]: validatePrimitive,
+        [PROP_TYPES._string]: validateValue,
+        [PROP_TYPES._number]: validateValue,
+        [PROP_TYPES._boolean]: validateValue,
         [PROP_TYPES._array]: validateArray,
         [PROP_TYPES._shape]: validateShape,
-        [PROP_TYPES._any]: validatePrimitive,
+        [PROP_TYPES._any]: validateValue,
+        [PROP_TYPES._custom]: validateValue,
     };
     const typeValidation = TYPE_VALIDATIONS[type];
     if (!typeValidation) {

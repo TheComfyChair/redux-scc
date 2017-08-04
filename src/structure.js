@@ -44,6 +44,7 @@ export const PROP_TYPES = {
     _array: '_array',
     _any: '_any',
     _wildcardKey: '_wildcardKey',
+    _custom: '_custom',
 };
 
 //The types objects are used in order to build up the structure of a store chunk, and provide/accept
@@ -81,6 +82,18 @@ export const Types: TypesObject = {
     shape: (structure: ShapeStructure) => () => ({
         type: PROP_TYPES._shape,
         structure,
+    }),
+    custom: ({
+        validator = () => true,
+        validationErrorMessage = (value: any) => `${ value } failed custom type validation`,
+    }: {
+        validator: (value: any) => boolean,
+        validationErrorMessage: (value: any) => string,
+    } = {}) => (defaultValue: any) => () => ({
+        type: PROP_TYPES._custom,
+        defaultValue,
+        validator,
+        validationErrorMessage,
     }),
     wildcardKey: () => PROP_TYPES._wildcardKey,
 };

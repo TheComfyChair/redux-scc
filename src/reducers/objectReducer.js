@@ -38,13 +38,18 @@ export type ShapeReducerOptions = {
 //==============================
 // JS imports
 //==============================
-import reduce from 'lodash/reduce';
 import isObject from 'lodash/isObject';
 import omit from 'lodash/omit';
+import merge from 'lodash/fp/merge';
 import { validateShape } from '../validatePayload';
 import { createReducerBehaviors } from '../reducers';
 import { PROP_TYPES } from '../structure';
+import {
+  isBatchAction,
+  getApplicableBatchActions
+} from './batchUpdates';
 
+const reduce = require('lodash/fp/reduce').convert({ cap: false });
 
 //==============================
 // Shape behaviors
@@ -92,12 +97,12 @@ export function createShapeReducer(reducerShape: StructureType, {
 
 
 export function calculateDefaults(reducerStructure: any) {
-    return reduce(omit(reducerStructure, ['_wildcardKey']), (memo, propValue, propName) => ({
+    return reduce((memo, propValue, propName) => ({
         ...memo,
         [propName]: propValue().type === PROP_TYPES._shape
             ? calculateDefaults(propValue().structure)
             : propValue().defaultValue,
-    }), {});
+    }), {})(omit(reducerStructure, ['_wildcardKey']));
 }
 
 
@@ -105,28 +110,41 @@ export function createReducer(objectStructure: StructureType, behaviors: ShapeRe
     const initialState: Object = validateShape(objectStructure, calculateDefaults(objectStructure().structure));
     return (state = initialState, { type, payload }: ShapeReducerAction) => {
         //If the action type does not match any of the specified behaviors, just return the current state.
-        if (!behaviors[type]) return state;
+        const matchedBehaviors = behaviors[type]
+          ? [{ type, payload }]
+          : isBatchAction(type)
+            ? getApplicableBatchActions(behaviors)(payload)
+            : [];
 
-        //Sanitize the payload using the reducer shape, then apply the sanitized
-        //payload to the state using the behavior linked to this action type.
-        return behaviors[type].reducer(
-          state,
-          behaviors[type].validate ? validateShape(objectStructure, payload) : payload,
-          initialState
-        );
+        if (matchedBehaviors.length) {
+            //Sanitize the payload using the reducer shape, then apply the sanitized
+            //payload to the state using the behavior linked to this action type.
+            return reduce((interimState, matchedBehavior) => merge(
+                interimState,
+                behaviors[matchedBehavior.type].reducer(
+                  interimState,
+                  behaviors[matchedBehavior.type].validate
+                      ? validateShape(objectStructure, matchedBehavior.payload)
+                      : matchedBehavior.payload,
+                  initialState
+                )
+            ), state)(matchedBehaviors);
+        }
+
+        return state;
     }
 }
 
 
 function createActions(behaviorsConfig: ShapeReducerBehaviorsConfig, locationString: string): ShapeActions {
     //Take a reducer behavior config object, and create actions using the location string
-    return reduce(behaviorsConfig, (memo, behavior, name) => ({
+    return reduce((memo, behavior, name) => ({
         ...memo,
         [name]: (payload: Object) => ({
             type: `${locationString}.${name}`,
             payload: (behavior.action || (payload => payload))(payload),
         })
-    }), {});
+    }), {})(behaviorsConfig);
 }
 
 

@@ -38,13 +38,18 @@ export type ArraySelector = (state: Object) => Array<any>;
 //==============================
 // JS imports
 //==============================
-import reduce from 'lodash/reduce';
 import isArray from 'lodash/isArray';
 import isNumber from 'lodash/isNumber';
-import { validateArray, validateShape, validatePrimitive } from '../validatePayload';
+import { validateArray, validateShape, validateValue } from '../validatePayload';
 import { createReducerBehaviors } from '../reducers';
 import { updateAtIndex, removeAtIndex } from '../utils/arrayUtils';
 import { PROP_TYPES } from '../structure';
+import {
+  isBatchAction,
+  getApplicableBatchActions
+} from './batchUpdates';
+
+const reduce = require('lodash/fp/reduce').convert({ cap: false });
 
 
 function checkIndex(index: ?number, payload: any = '', behaviorName: string): boolean {
@@ -151,17 +156,29 @@ export function createReducer(arrayTypeDescription: ArrayStructureType, behavior
 
     //Return the array reducer.
     return (state: Array<any> = initialValue, { type, payload, index }: ArrayReducerAction) => {
-        //If the action type does not match any of the specified behaviors, just return the current state.
-        if (!behaviors[type]) return state;
-        //Validating the payload of an array is more tricky, as we do not know ahead of time if the
-        //payload should be an object, primitive, or an array. However, we can still validate here based on the
-        //payload type passed.
-        return behaviors[type].reducer(
-          state,
-          behaviors[type].validate ? applyValidation(arrayTypeDescription, payload) : payload,
+      const matchedBehaviors = behaviors[type]
+        ? [{ type, payload }]
+        : isBatchAction(type)
+          ? getApplicableBatchActions(behaviors)(payload)
+          : [];
+
+      if (matchedBehaviors.length) {
+        //Call every behaviour relevant to this reducer as part of this action call,
+        //and merge the result (later actions take priority).
+        //Sanitize the payload using the reducer shape, then apply the sanitized
+        //payload to the state using the behavior linked to this action type.
+        return reduce((interimState, matchedBehavior) => behaviors[matchedBehavior.type].reducer(
+          interimState,
+          behaviors[matchedBehavior.type].validate
+            ? applyValidation(arrayTypeDescription, matchedBehavior.payload)
+            : matchedBehavior.payload,
           initialValue,
-          index
-        );
+          index,
+        ), state)(matchedBehaviors);
+      }
+
+      //If the action type does not match any of the specified behaviors, just return the current state.
+      return state;
     }
 }
 
@@ -180,18 +197,18 @@ export function applyValidation(arrayTypeDescription: ArrayStructureType, payloa
     // to use, by checking the structure of the array.
     const { structure } = arrayTypeDescription();
     if (structure().type === PROP_TYPES._shape) return validateShape(structure, payload);
-    return validatePrimitive(structure, payload);
+    return validateValue(structure, payload);
 }
 
 
 function createActions(behaviorsConfig: ArrayReducerBehaviorsConfig, locationString: string): ArrayActions {
     //Take a reducer behavior config object, and create actions using the location string
-    return reduce(behaviorsConfig, (memo, behavior, name) => ({
+    return reduce((memo, behavior, name) => ({
         ...memo,
         [name]: (payload: Array<any>, index: ?number) => ({
             type: `${locationString}.${name}`,
             payload: (behavior.action || (payload => payload))(payload),
             index,
         })
-    }), {});
+    }), {})(behaviorsConfig);
 }

@@ -1,6 +1,6 @@
 import { Types } from '../structure';
 import {
-    validatePrimitive,
+    validateValue,
     validateShape,
     validateArray,
     getTypeValidation,
@@ -10,20 +10,31 @@ import {
 
 describe('Validation functionality', () => {
 
-    describe('Primitives', () => {
+    describe('Primitives/Custom', () => {
+        const customType = Types.custom({
+            validator: value => value === 3,
+            validationErrorMessage: value => `Oh noes! ${ value }`,
+        })();
+
         it('Number primitive should allow for numbers', () => {
-            expect(validatePrimitive(Types.number(), 3)).toBe(3);
+            expect(validateValue(Types.number(), 3)).toBe(3);
         });
         it('String primitive should allow for string', () => {
-            expect(validatePrimitive(Types.string(), 'toast')).toBe('toast');
+            expect(validateValue(Types.string(), 'toast')).toBe('toast');
         });
         it('Boolean primitive should allow for string', () => {
-            expect(validatePrimitive(Types.boolean(), true)).toBe(true);
+            expect(validateValue(Types.boolean(), true)).toBe(true);
         });
         it('Any should allow for anything', () => {
             const date = new Date();
-            expect(validatePrimitive(Types.any(), date)).toEqual(date);
-        })
+            expect(validateValue(Types.any(), date)).toEqual(date);
+        });
+        it('should validate custom values using the custom validator', () => {
+            expect(validateValue(customType, 3)).toBe(3);
+        });
+        it('should return undefined from custom validators which failed', () => {
+          expect(validateValue(customType, 4)).toBeUndefined();
+        });
     });
 
     describe('Arrays', () => {
@@ -45,11 +56,12 @@ describe('Validation functionality', () => {
                 .toEqual([{test1: 3},{test1: 4}]);
         });
         const testArrayStructure3 = Types.arrayOf(Types.shape({
-            test1: Types.arrayOf(Types.number())
+            test1: Types.arrayOf(Types.number()),
+            test2: Types.custom({ validator: value => value === 'foo' })(),
         }));
         it('Arrays should allow for complex objects - test 2', () => {
-            expect(validateArray(testArrayStructure3, [{test1: [3,4,5]}]))
-                .toEqual([{test1: [3,4,5]}]);
+            expect(validateArray(testArrayStructure3, [{test1: [3,4,5], test2: 'foo' }]))
+                .toEqual([{test1: [3,4,5], test2: 'foo' }]);
         });
         it('Array should return an empty array if a non-array is passed', () => {
             expect(validateArray('foo')).toEqual([]);
@@ -59,14 +71,15 @@ describe('Validation functionality', () => {
     describe('Objects', () => {
         const testObjectStructure = Types.shape({
             test1: Types.string(),
-            test2: Types.number()
+            test2: Types.number(),
+            test3: Types.custom({ validator: value => value !== 4 })(),
         });
         it('Object of primitives should allow all props present in the structure', () => {
-            expect(validateShape(testObjectStructure, { test1: 'toast', test2: 3 }))
-                .toEqual({ test1: 'toast', test2: 3 });
+            expect(validateShape(testObjectStructure, { test1: 'toast', test2: 3, test3: 1 }))
+                .toEqual({ test1: 'toast', test2: 3, test3: 1 });
         });
         it('Object of primitives should only allow for props with values which match their config', () => {
-            expect(validateShape(testObjectStructure, { test1: 5, test2: 3 }))
+            expect(validateShape(testObjectStructure, { test1: 5, test2: 3, test3: 4 }))
                 .toEqual({ test2: 3 });
         });
         it('Object of primitives should strip any properties not part of the config', () => {

@@ -11,13 +11,6 @@ The behaviors are purposefully simple, and do not do much extend beyond basic up
 You can then simply put the reducer into the store and being to build your application on top of the action
 generators and selectors that have been returned.
 
-#### But these actions are super limited, how can I achieve 'X'?
-This boils down to how you intend to construct your application. Redux-scc is very opinionated on what functionality is in the domain of the reducer, and that functionality is purely the maintenance of the store shape over time. It has no interest in specific business logic, and instead relies on that logic occuring elsewhere. That logic will dispatch redux-scc actions as required in order to update the store whenever it is relevant to do so.
-
-Where your business logic lives is entirely up to you, but my personal choice right now would be either redux-sagas or redux-thunks, as they make the most logical sense and make it trivial to dispatch actions to redux-scc as appropriate. RxJS is also another option if you're after a more functional way to handle your side effects.
-
-The advantage of this seperation is that the functionality you have to write is now focused entirely on that business logic - you can safely assume that the updating of the store has been taken care of and will 'just work'. That makes the functionality in question less complex, and much easier to test as a result. Plus, no more writing boilerplate reducer code!
-
 #### How to use it
 
 To use redux-scc you need to be aware of two things: The buildStoreChunk() function, and the Types object.
@@ -52,16 +45,43 @@ Types.string(defaultValue = '')
 Types.number(defaultValue = 0)
 Types.boolean(defaultValue = false)
 
+
 //Complex
 Types.arrayOf(structure, defaultValue = [])
 Types.reducer(structure)
 Types.shape(structure)
+
+//Custom types
+Types.custom({
+  validator, //(value: any) => boolean
+  validationErrorMessage, //(value: any) => string,
+})(defaultValue)
 ```
 
 The types are roughly divided into two categories: simple types (which do not have any internal structure to deal with), and complex types (which do). The structure of complex types is built up using a combination of objects containing Types, or Types. Examples can be found below.
+The custom type allows you to define arbitrary validation to be applied, which allows you do anything your heart desires! An example of this may
+be to define a type which only accepts objects that are an instance of moment:
+
+```
+const momentType = Types.custom({
+  validator: value => value instanceof moment,
+  validationErrorMessage: value => `${ value } is not an instance of moment!`,
+});
+```
+
+Or maybe you want to create a type with a maximum accepted value:
+
+```
+const maxValueType = (maxValue: number) => Types.custom({
+  validator: value => typeof value === 'number' && value < maxValue,
+  validationErrorMessage: value => `${ value } must be less than ${ maxValue }`,
+});
+```
+
+Like all other types, you can also use a custom type to create a reducer. 
 
 #### Actions API
-##### Primitive/any
+##### Primitive/any/custom
 - replace(value: any): Replaces the current reducer value with the value provided.
 - reset(): Resets the reducer value to the initial value.
 
@@ -80,6 +100,41 @@ The types are roughly divided into two categories: simple types (which do not ha
 - pop(): Remove the last element of the array.
 - shift(value: any): Add the value to the beginning of the array.
 - unshift(): Remove the first element of the array.
+
+#### Batch update
+Automatically generating these actions is a nice time saver, but an issue with them at the moment is that, if you want to update several parts of the store,
+these actions will need to be dispatched individually. This makes 'time travel' in Redux much more difficult, as the
+various updates occur individually and cannot easily be rolled back. Additionally, each update will result in redux informing subscribers of
+an update! Redux-scc avoids this by providing `batchUpdate`.
+
+batchUpdate takes a name (so you can easily identify the action in the redux dev tools), and an array of redux-scc actions. These
+actions will be performed as part of one redux update, thus avoiding the unfortunate side effects mentioned above.
+ 
+```
+const anExampleBatchUpdate = batchUpdate({
+  name: 'an example!',
+  actions: [
+    actions.someReduxSccReducer.reset(),
+    actions.anotherReduxSccReducer.replace('foo!'),
+  ],
+});
+```
+
+If a reducer is affected by the actions multiple times, the actions will play out sequentially.
+
+```
+//We start with the reducer (which is an array type reducer) having state: [4,5,6]
+
+const exampleBatchedUpdateHittingSameReducerMultipleTimes = batchUpdate({
+  name: 'multiple update funsies!',
+  actions: [
+    actions.removeAtIndex(1), //removes 5 - [4,6]
+    actions.replaceAtIndex(23, 1), //replaces 6 with 23 - [4, 23]
+    actions.push(43), //adds 43 to the end of the array - [4, 23, 43] 
+  ],
+});
+
+```
 
 #### Examples
 

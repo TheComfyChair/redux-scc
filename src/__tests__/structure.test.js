@@ -19,6 +19,7 @@ describe('Type descriptions', () => {
         expect(Types.number()().defaultValue).toBe(0);
         expect(Types.boolean()().defaultValue).toBe(false);
         expect(Types.arrayOf()().defaultValue).toEqual([]);
+        expect(Types.custom()()().defaultValue).toBeUndefined();
     });
 
     it('will return the default value provided (except for reducer and shape)', () => {
@@ -26,6 +27,7 @@ describe('Type descriptions', () => {
         expect(Types.number(5)().defaultValue).toBe(5);
         expect(Types.boolean(true)().defaultValue).toBe(true);
         expect(Types.arrayOf(Types.number(), [1, 2, 3])().defaultValue).toEqual([1, 2, 3]);
+        expect(Types.custom()('foo')().defaultValue).toBe('foo');
     });
 
     it('will return the correct typeofValue (for string, number, and boolean)', () => {
@@ -39,5 +41,24 @@ describe('Type descriptions', () => {
         expect(Types.shape(structureTest)().structure).toEqual(structureTest);
         expect(Types.arrayOf(structureTest)().structure).toEqual(structureTest);
         expect(Types.reducer(structureTest)().structure).toEqual(structureTest);
+    });
+
+    it('custom value correctly exposes the validator and validation error message properties', () => {
+        const customValidator = () => false;
+        const customErrorMessage = () => 'Hai!';
+        const customType = Types.custom({
+          validator: customValidator,
+          validationErrorMessage: customErrorMessage,
+        })()();
+
+        expect(customType.validator).toEqual(customValidator);
+        expect(customType.validationErrorMessage).toEqual(customErrorMessage);
+    });
+
+    it('custom value acts the same as any when no configuration provided', () => {
+       const unconfiguredCustom = Types.custom()()();
+       expect(unconfiguredCustom.validator('toasty')).toBe(true);
+       expect(unconfiguredCustom.validator()).toBe(true);
+       expect(unconfiguredCustom.validator(null)).toBe(true);
     });
 });

@@ -36,9 +36,14 @@ export type PrimitiveReducerOptions = {
 //==============================
 // JS imports
 //==============================
-import reduce from 'lodash/reduce';
-import { validatePrimitive } from '../validatePayload';
+import { validateValue } from '../validatePayload';
 import { createReducerBehaviors } from '../reducers';
+import {
+  isBatchAction,
+  getApplicableBatchActions
+} from './batchUpdates';
+
+const reduce = require('lodash/fp/reduce').convert({ cap: false });
 
 
 //==============================
@@ -81,31 +86,43 @@ export function createPrimitiveReducer(primitiveType: PrimitiveType, {
 
 function createReducer(primitiveType: PrimitiveType, behaviors: PrimitiveReducerBehaviors): PrimitiveReducer {
     //Calculate and validate the initial state of the reducer
-    const initialState: mixed = validatePrimitive(primitiveType, primitiveType().defaultValue);
+    const initialState: mixed = validateValue(primitiveType, primitiveType().defaultValue);
     return (state = initialState, { type, payload }: PrimitiveReducerAction) => {
         //If the action type does not match any of the specified behaviors, just return the current state.
-        if (!behaviors[type]) return state;
+        const matchedBehaviors = behaviors[type]
+            ? [{ type, payload }]
+            : isBatchAction(type)
+                ? getApplicableBatchActions(behaviors)(payload)
+                : [];
 
-        //Sanitize the payload using the reducer shape, then apply the sanitized
-        //payload to the state using the behavior linked to this action type.
-        return behaviors[type].reducer(
-          state,
-          behaviors[type].validate ? validatePrimitive(primitiveType, payload) : payload,
-          initialState
-        );
+        if (matchedBehaviors.length) {
+          //Call every behaviour relevant to this reducer as part of this action call,
+          //and merge the result (later actions take priority).
+          //Sanitize the payload using the reducer shape, then apply the sanitized
+          //payload to the state using the behavior linked to this action type.
+          return reduce((interimState, matchedBehavior) => behaviors[matchedBehavior.type].reducer(
+              interimState,
+              behaviors[matchedBehavior.type].validate
+                  ? validateValue(primitiveType, matchedBehavior.payload)
+                  : matchedBehavior.payload,
+              initialState
+          ), state)(matchedBehaviors);
+        }
+
+        return state;
     }
 }
 
 
 function createActions(behaviorsConfig: PrimitiveReducerBehaviorsConfig, locationString: string): PrimitiveActions {
     //Take a reducer behavior config object, and create actions using the location string
-    return reduce(behaviorsConfig, (memo, behavior, name) => ({
+    return reduce((memo, behavior, name) => ({
         ...memo,
         [name]: (payload: mixed) => ({
             type: `${locationString}.${name}`,
             payload: (behavior.action || (payload => payload))(payload),
         })
-    }), {});
+    }), {})(behaviorsConfig);
 }
 
 
