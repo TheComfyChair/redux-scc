@@ -3,7 +3,7 @@ import {
   getApplicableCombinedActions,
   createCombinedAction,
   isCombinedAction,
-  BATCH_UPDATE,
+  COMBINED_ACTION,
 } from '../batchUpdates';
 
 
@@ -28,7 +28,7 @@ describe('getApplicableCombinedActions', () => {
 
 describe('isCombinedAction', () => {
   it('should return true if action contains batch action string', () => {
-    expect(isCombinedAction(`Boop!${ BATCH_UPDATE }`)).toBe(true);
+    expect(isCombinedAction(`Boop!${ COMBINED_ACTION }`)).toBe(true);
   });
 
 
@@ -48,7 +48,7 @@ describe('createCombinedAction action', () => {
   it('should return an action with a type including the batch update string and name', () => {
     expect(createCombinedAction({
       name: 'boop!'
-    }).type).toMatch(new RegExp(`${ BATCH_UPDATE }`));
+    }).type).toMatch(new RegExp(`${ COMBINED_ACTION }`));
   });
 
 

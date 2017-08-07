@@ -3,7 +3,7 @@ import keys from 'lodash/fp/keys';
 import includes from 'lodash/fp/includes';
 import filter from 'lodash/fp/filter';
 
-export const BATCH_UPDATE = '(redux-scc-batch-action)';
+export const COMBINED_ACTION = '/@@redux-scc-combined-action';
 
 
 type BatchUpdateInterface = {
@@ -22,13 +22,13 @@ export const createCombinedAction = ({
   name = '',
   actions,
 }: BatchUpdateInterface) => ({
-  type: `${ name }${ BATCH_UPDATE }`,
+  type: `${ name }${ COMBINED_ACTION }`,
   payload: actions,
 });
 
 
 export const isCombinedAction = (actionType: string) => actionType
-  ? actionType.indexOf(BATCH_UPDATE) > -1
+  ? actionType.indexOf(COMBINED_ACTION) > -1
   : false;
 
 
