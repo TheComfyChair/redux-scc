@@ -45,8 +45,8 @@ import { createReducerBehaviors } from '../reducers';
 import { updateAtIndex, removeAtIndex } from '../utils/arrayUtils';
 import { PROP_TYPES } from '../structure';
 import {
-  isBatchAction,
-  getApplicableBatchActions
+  isCombinedAction,
+  getApplicableCombinedActions
 } from './batchUpdates';
 
 const reduce = require('lodash/fp/reduce').convert({ cap: false });
@@ -158,8 +158,8 @@ export function createReducer(arrayTypeDescription: ArrayStructureType, behavior
     return (state: Array<any> = initialValue, { type, payload, index }: ArrayReducerAction) => {
       const matchedBehaviors = behaviors[type]
         ? [{ type, payload }]
-        : isBatchAction(type)
-          ? getApplicableBatchActions(behaviors)(payload)
+        : isCombinedAction(type)
+          ? getApplicableCombinedActions(behaviors)(payload)
           : [];
 
       if (matchedBehaviors.length) {

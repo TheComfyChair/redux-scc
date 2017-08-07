@@ -39,8 +39,8 @@ export type PrimitiveReducerOptions = {
 import { validateValue } from '../validatePayload';
 import { createReducerBehaviors } from '../reducers';
 import {
-  isBatchAction,
-  getApplicableBatchActions
+  isCombinedAction,
+  getApplicableCombinedActions
 } from './batchUpdates';
 
 const reduce = require('lodash/fp/reduce').convert({ cap: false });
@@ -91,8 +91,8 @@ function createReducer(primitiveType: PrimitiveType, behaviors: PrimitiveReducer
         //If the action type does not match any of the specified behaviors, just return the current state.
         const matchedBehaviors = behaviors[type]
             ? [{ type, payload }]
-            : isBatchAction(type)
-                ? getApplicableBatchActions(behaviors)(payload)
+            : isCombinedAction(type)
+                ? getApplicableCombinedActions(behaviors)(payload)
                 : [];
 
         if (matchedBehaviors.length) {

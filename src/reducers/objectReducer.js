@@ -45,8 +45,8 @@ import { validateShape } from '../validatePayload';
 import { createReducerBehaviors } from '../reducers';
 import { PROP_TYPES } from '../structure';
 import {
-  isBatchAction,
-  getApplicableBatchActions
+  isCombinedAction,
+  getApplicableCombinedActions
 } from './batchUpdates';
 
 const reduce = require('lodash/fp/reduce').convert({ cap: false });
@@ -112,8 +112,8 @@ export function createReducer(objectStructure: StructureType, behaviors: ShapeRe
         //If the action type does not match any of the specified behaviors, just return the current state.
         const matchedBehaviors = behaviors[type]
           ? [{ type, payload }]
-          : isBatchAction(type)
-            ? getApplicableBatchActions(behaviors)(payload)
+          : isCombinedAction(type)
+            ? getApplicableCombinedActions(behaviors)(payload)
             : [];
 
         if (matchedBehaviors.length) {

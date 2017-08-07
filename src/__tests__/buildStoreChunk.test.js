@@ -5,7 +5,7 @@ import {
 Types,
 } from '../structure';
 import {
-batchUpdate,
+createCombinedAction,
 } from '../reducers/batchUpdates';
 import {
 createStore,
@@ -115,14 +115,14 @@ describe('buildStoreChunk', () => {
         });
 
 
-        describe('Batch updates', () => {
+        describe('Combined actions', () => {
             const store = createStore(combineReducers({
                 ...chunk.reducers,
                 ...nonNestedChunk.reducers,
             }));
 
-            it('Dispatching a batchUpdate updates the store correctly', () => {
-                store.dispatch(batchUpdate({
+            it('Dispatching a createCombinedAction updates the store correctly', () => {
+                store.dispatch(createCombinedAction({
                     name: 'batchUpdateFunsies',
                     actions: [
                         nonNestedChunk.actions.replace('bar'),

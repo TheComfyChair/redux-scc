@@ -18,7 +18,7 @@ type Behaviors = {
   };
 }
 
-export const batchUpdate = ({
+export const createCombinedAction = ({
   name = '',
   actions,
 }: BatchUpdateInterface) => ({
@@ -27,10 +27,10 @@ export const batchUpdate = ({
 });
 
 
-export const isBatchAction = (actionType: string) => actionType
+export const isCombinedAction = (actionType: string) => actionType
   ? actionType.indexOf(BATCH_UPDATE) > -1
   : false;
 
 
-export const getApplicableBatchActions = (behaviors: Behaviors) =>
+export const getApplicableCombinedActions = (behaviors: Behaviors) =>
   filter(({ type }) => includes(type)(keys(behaviors)));

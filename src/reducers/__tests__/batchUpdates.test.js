@@ -1,13 +1,13 @@
 //@flow
 import {
-  getApplicableBatchActions,
-  batchUpdate,
-  isBatchAction,
+  getApplicableCombinedActions,
+  createCombinedAction,
+  isCombinedAction,
   BATCH_UPDATE,
 } from '../batchUpdates';
 
 
-describe('getApplicableBatchActions', () => {
+describe('getApplicableCombinedActions', () => {
   const exampleBehaviors = {
     foo: {
       reducer: () => {},
@@ -19,34 +19,34 @@ describe('getApplicableBatchActions', () => {
   ];
 
   it('should return an array of all applicable batch actions', () => {
-    expect(getApplicableBatchActions(exampleBehaviors)(exampleBatchActions)).toEqual([
+    expect(getApplicableCombinedActions(exampleBehaviors)(exampleBatchActions)).toEqual([
       { type: 'foo', payload: 'boop' },
     ]);
   });
 });
 
 
-describe('isBatchAction', () => {
+describe('isCombinedAction', () => {
   it('should return true if action contains batch action string', () => {
-    expect(isBatchAction(`Boop!${ BATCH_UPDATE }`)).toBe(true);
+    expect(isCombinedAction(`Boop!${ BATCH_UPDATE }`)).toBe(true);
   });
 
 
   it('should return false if action does not contain batch action string', () => {
-    expect(isBatchAction('')).toBe(false);
+    expect(isCombinedAction('')).toBe(false);
   });
 
 
   it('should not crash if undefined or null is passed', () => {
-    expect(isBatchAction()).toBe(false);
-    expect(isBatchAction(null)).toBe(false);
+    expect(isCombinedAction()).toBe(false);
+    expect(isCombinedAction(null)).toBe(false);
   });
 });
 
 
-describe('batchUpdate action', () => {
+describe('createCombinedAction action', () => {
   it('should return an action with a type including the batch update string and name', () => {
-    expect(batchUpdate({
+    expect(createCombinedAction({
       name: 'boop!'
     }).type).toMatch(new RegExp(`${ BATCH_UPDATE }`));
   });
@@ -54,7 +54,7 @@ describe('batchUpdate action', () => {
 
   it('should return actions as the payload', () => {
     const example = [];
-    expect(batchUpdate({
+    expect(createCombinedAction({
       actions: example,
     }).payload).toBe(example);
   });
