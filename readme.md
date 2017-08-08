@@ -1,5 +1,8 @@
 ### Redux store chunk creator (redux-scc)
 
+[![Build Status](https://travis-ci.org/TheComfyChair/redux-scc.svg?branch=master)](https://travis-ci.org/TheComfyChair/redux-scc)
+[![Coverage Status](https://coveralls.io/repos/github/TheComfyChair/redux-scc/badge.svg?branch=master)](https://coveralls.io/github/TheComfyChair/redux-scc?branch=master)
+
 Are you fed up of hand coding the same pattern over and over again? Fed up of conflicting action names causing your button presses to set off your ajax loading animation? Are you a fan of having a strictly defined structure for your redux store, down to the type level? Then redux-scc may be for you!
 
 #### What does it do?
@@ -50,6 +53,7 @@ Types.boolean(defaultValue = false)
 Types.arrayOf(structure, defaultValue = [])
 Types.reducer(structure)
 Types.shape(structure)
+
 
 //Custom types
 Types.custom({
