@@ -42,6 +42,9 @@ describe('buildStoreChunk', () => {
                     innerNested3: Types.reducer(Types.string('baz')),
                 }),
             }),
+            nested5: Types.reducer(Types.shape({
+              arrayExample: Types.arrayOf(Types.string()),
+            })),
         });
         const nonNestedChunk = buildStoreChunk('example2', Types.reducer(Types.string('foo')));
 
@@ -51,7 +54,7 @@ describe('buildStoreChunk', () => {
             }));
 
             it('Selectors object has the correct top level structure for a nested chunk', () => {
-                expect(Object.keys(chunk.selectors)).toEqual(['nested1', 'nested2', 'nested3', 'nested4']);
+                expect(Object.keys(chunk.selectors)).toEqual(['nested1', 'nested2', 'nested3', 'nested4', 'nested5']);
             });
             it('Selectors object is a function for a non-nested chunk', () => {
                 expect(isFunction(nonNestedChunk.selectors)).toBe(true);
@@ -69,7 +72,7 @@ describe('buildStoreChunk', () => {
 
         describe('Actions', () => {
             it('Actions object has the correct top level structure for a nested chunk', () => {
-                expect(Object.keys(chunk.actions)).toEqual(['nested1', 'nested2', 'nested3', 'nested4']);
+                expect(Object.keys(chunk.actions)).toEqual(['nested1', 'nested2', 'nested3', 'nested4', 'nested5']);
             });
             it('Actions object has the correct top level structure for a non nested chunk', () => {
                 expect(Object.keys(nonNestedChunk.actions)).toEqual(['replace', 'reset']);
@@ -96,6 +99,14 @@ describe('buildStoreChunk', () => {
 
                 store.dispatch(chunk.actions.nested1.reset());
                 expect(chunk.selectors.nested1(store.getState())).toEqual('foo');
+            });
+
+            it('Dispatching an empty array property should replace existing array', () => {
+                store.dispatch(chunk.actions.nested5.replace({ arrayExample: ['2'] }));
+                store.dispatch(chunk.actions.nested5.update({ arrayExample: [] }));
+                expect(chunk.selectors.nested5(store.getState())).toEqual({
+                  arrayExample: [],
+                });
             });
         });
 

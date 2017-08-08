@@ -45,6 +45,7 @@ export function validateShape(objectStructure: any, value: mixed): Object {
         }
 
         const validatedValue = getTypeValidation(valueType().type)(valueType, value);
+
         if (validatedValue === undefined) {
             console.warn(`The property, ${name}, was populated with a type ${ typeof value } which does not` +
                 ` match that specified in the reducer configuration ${ wildcardKeyPresent ? ', nor did it match a wildcardKey': ''}. It has been stripped from` +

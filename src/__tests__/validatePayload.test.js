@@ -65,7 +65,10 @@ describe('Validation functionality', () => {
         });
         it('Array should return an empty array if a non-array is passed', () => {
             expect(validateArray('foo')).toEqual([]);
-        })
+        });
+        it('Array should allow an empty array', () => {
+            expect(validateArray([])).toEqual([]);
+        });
     });
 
     describe('Objects', () => {
@@ -138,6 +141,16 @@ describe('Validation functionality', () => {
                 test2: 'bar',
             });
         });
+
+        const testObjectStructure7 = Types.shape({
+            test1: Types.arrayOf(Types.string()),
+        });
+        it('Should allow an empty array to be passed for an array property', () => {
+            expect(validateShape(testObjectStructure7, { test1: [] })).toEqual({
+              test1: [],
+            });
+        });
+
     });
 
     describe('Non covered types', () => {

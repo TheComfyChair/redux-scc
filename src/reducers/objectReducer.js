@@ -40,7 +40,6 @@ export type ShapeReducerOptions = {
 //==============================
 import isObject from 'lodash/isObject';
 import omit from 'lodash/omit';
-import merge from 'lodash/fp/merge';
 import { validateShape } from '../validatePayload';
 import { createReducerBehaviors } from '../reducers';
 import { PROP_TYPES } from '../structure';
@@ -119,16 +118,16 @@ export function createReducer(objectStructure: StructureType, behaviors: ShapeRe
         if (matchedBehaviors.length) {
             //Sanitize the payload using the reducer shape, then apply the sanitized
             //payload to the state using the behavior linked to this action type.
-            return reduce((interimState, matchedBehavior) => merge(
+            return reduce((interimState, matchedBehavior) => ({
+              ...interimState,
+              ...behaviors[matchedBehavior.type].reducer(
                 interimState,
-                behaviors[matchedBehavior.type].reducer(
-                  interimState,
-                  behaviors[matchedBehavior.type].validate
-                      ? validateShape(objectStructure, matchedBehavior.payload)
-                      : matchedBehavior.payload,
-                  initialState
-                )
-            ), state)(matchedBehaviors);
+                behaviors[matchedBehavior.type].validate
+                  ? validateShape(objectStructure, matchedBehavior.payload)
+                  : matchedBehavior.payload,
+                initialState
+              )
+            }), state)(matchedBehaviors);
         }
 
         return state;
