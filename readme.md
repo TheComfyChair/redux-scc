@@ -105,17 +105,17 @@ Like all other types, you can also use a custom type to create a reducer.
 - shift(value: any): Add the value to the beginning of the array.
 - unshift(): Remove the first element of the array.
 
-#### Batch update
+#### Combined actions
 Automatically generating these actions is a nice time saver, but an issue with them at the moment is that, if you want to update several parts of the store,
 these actions will need to be dispatched individually. This makes 'time travel' in Redux much more difficult, as the
 various updates occur individually and cannot easily be rolled back. Additionally, each update will result in redux informing subscribers of
-an update! Redux-scc avoids this by providing `batchUpdate`.
+an update! Redux-scc avoids this by providing the `createCombinedAction` utility.
 
-batchUpdate takes a name (so you can easily identify the action in the redux dev tools), and an array of redux-scc actions. These
+`createCombinedAction` takes a name (so you can easily identify the action in the redux dev tools), and an array of redux-scc actions. These
 actions will be performed as part of one redux update, thus avoiding the unfortunate side effects mentioned above.
  
 ```
-const anExampleBatchUpdate = batchUpdate({
+const anExampleCombinedAction = createCombinedAction({
   name: 'an example!',
   actions: [
     actions.someReduxSccReducer.reset(),
@@ -129,7 +129,7 @@ If a reducer is affected by the actions multiple times, the actions will play ou
 ```
 //We start with the reducer (which is an array type reducer) having state: [4,5,6]
 
-const exampleBatchedUpdateHittingSameReducerMultipleTimes = batchUpdate({
+const exampleBatchedUpdateHittingSameReducerMultipleTimes = createCombinedAction({
   name: 'multiple update funsies!',
   actions: [
     actions.removeAtIndex(1), //removes 5 - [4,6]
