@@ -118,16 +118,13 @@ export function createReducer(objectStructure: StructureType, behaviors: ShapeRe
         if (matchedBehaviors.length) {
             //Sanitize the payload using the reducer shape, then apply the sanitized
             //payload to the state using the behavior linked to this action type.
-            return reduce((interimState, matchedBehavior) => ({
-              ...interimState,
-              ...behaviors[matchedBehavior.type].reducer(
+            return reduce((interimState, matchedBehavior) => behaviors[matchedBehavior.type].reducer(
                 interimState,
                 behaviors[matchedBehavior.type].validate
                   ? validateShape(objectStructure, matchedBehavior.payload)
                   : matchedBehavior.payload,
-                initialState
-              )
-            }), state)(matchedBehaviors);
+                initialState,
+            ), state)(matchedBehaviors);
         }
 
         return state;
