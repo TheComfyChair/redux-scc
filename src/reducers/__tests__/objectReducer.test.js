@@ -17,8 +17,8 @@ describe('ObjectReducer', () => {
             it('reducer should return the state if the payload is undefined', () => {
                 expect(replace.reducer({ foo: 1 }, undefined)).toEqual({ foo: 1 });
             });
-            it('reducer should return the new state', () => {
-                expect(replace.reducer({ foo: 1 }, { foo: 2 })).toEqual({ foo: 2 });
+            it('reducer should return the new state combined with the initial state', () => {
+                expect(replace.reducer({ foo: 1, bar: 3 }, { foo: 2 }, { foo: 1, bar: 5 })).toEqual({ foo: 2, bar: 5 });
             });
         });
 

@@ -73,9 +73,12 @@ export const DEFAULT_SHAPE_BEHAVIORS: ShapeReducerBehaviorsConfig = {
         validate: false,
     },
     replace: {
-        reducer(state, payload) {
+        reducer(state, payload, initialState) {
             if (!payload) return state;
-            return payload;
+            return {
+              ...initialState,
+              ...payload,
+            };
         },
         validate: true,
     }
