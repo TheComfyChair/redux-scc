@@ -27,6 +27,14 @@ describe('ObjectReducer', () => {
             it('reducer should return the initial state', () => {
                 expect(reset.reducer({ foo: 1 }, undefined, { foo: 2 })).toEqual({ foo: 2 });
             });
+
+            it('reducer should apply the payload (if an object) to the store over the default state', () => {
+               expect(reset.reducer({ foo: 23, bar: 4 }, { foo: 1 }, { foo: 4, bar: 5 })).toEqual({foo: 1, bar: 5});
+            });
+
+            it('reducer should return initial state if the payload is not an object', () => {
+               expect(reset.reducer({ foo: 23, bar: 4 }, 'nope!', { foo: 4, bar: 5 })).toEqual({foo: 4, bar: 5});
+            });
         });
 
         describe('update', () => {

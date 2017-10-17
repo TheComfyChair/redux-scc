@@ -67,7 +67,8 @@ export const DEFAULT_SHAPE_BEHAVIORS: ShapeReducerBehaviorsConfig = {
     },
     reset: {
         reducer(state, payload, initialState) {
-            return initialState;
+          if (!isObject(payload)) return initialState;
+          return { ...initialState, ...payload };
         },
         validate: false,
     },
