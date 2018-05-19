@@ -1,6 +1,6 @@
 {
   "name": "redux-scc",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Redux store chunk creator",
   "main": "./lib/index.js",
   "files": [
