@@ -1,6 +1,6 @@
 {
   "name": "redux-scc",
-  "version": "1.4.0",
+  "version": "1.3.3",
   "description": "Redux store chunk creator",
   "main": "./lib/index.js",
   "files": [
@@ -26,34 +26,32 @@
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
-    "babel-core": "^6.18.2",
-    "babel-eslint": "^6.1.2",
-    "babel-jest": "^17.0.2",
-    "babel-loader": "^6.2.5",
+    "babel-core": "6.26.3",
+    "babel-eslint": "^8.2.3",
+    "babel-jest": "^22.4.4",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-flow": "^6.23.0",
-    "babel-preset-react": "^6.11.1",
-    "eslint": "^3.2.2",
-    "eslint-loader": "^1.5.0",
-    "eslint-plugin-babel": "^3.3.0",
-    "eslint-plugin-flowtype": "^2.18.1",
-    "eslint-plugin-react": "^6.0.0",
-    "jest": "^20.0.4",
-    "regenerator-runtime": "^0.10.5",
-    "webpack": "^3.4.1"
+    "babel-preset-react": "^6.24.1",
+    "eslint": "^4.19.1",
+    "eslint-loader": "^2.0.0",
+    "eslint-plugin-babel": "^5.1.0",
+    "eslint-plugin-flowtype": "^2.46.3",
+    "eslint-plugin-react": "^7.8.2",
+    "jest": "^22.4.4",
+    "regenerator-runtime": "^0.11.1"
   },
   "dependencies": {
-    "coveralls": "^2.13.1",
+    "coveralls": "^3.0.1",
     "lodash.filter": "^4.6.0",
     "lodash.find": "^4.6.0",
     "lodash.flowright": "^3.5.0",
     "lodash.includes": "^4.3.0",
-    "lodash.isfunction": "^3.0.8",
+    "lodash.isfunction": "^3.0.9",
     "lodash.isobject": "^3.0.2",
     "lodash.keys": "^4.2.0",
     "lodash.map": "^4.6.0",
     "lodash.omit": "^4.5.0",
-    "redux": "^3.7.2"
+    "redux": "4.0.0"
   }
 }
