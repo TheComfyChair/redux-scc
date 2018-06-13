@@ -148,10 +148,12 @@ const exampleBatchedUpdateHittingSameReducerMultipleTimes = createCombinedAction
 ```
 
 #### resetAll
-The special `resetAll` action is available for nested reducers (i.e. those where more than just one reducer has been defined in the chunk). Calling this action allows you to reset all of the reducers in the chunk simultaneously.
+The special `resetAll` action is available for nested reducers (i.e. those where more than just one reducer has been defined in the chunk). Calling this action allows you to reset all of the reducers in the chunk simultaneously. It is exposed at the top level, rather
+than within the actions object, due to it being a breaking change when mapping over the actions object. In v2 it will be moved into the
+actions object!
 
 ```
-store.dispatch(actions.resetAll());
+store.dispatch(storeChunk.resetAll());
 ```
 
 #### Examples

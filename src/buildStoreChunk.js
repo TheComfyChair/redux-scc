@@ -105,10 +105,7 @@ export function buildStoreChunk(
   if (locationString === name) {
     return {
       ...processedStructure,
-      actions: {
-        ...processedStructure.actions,
-        resetAll: createResetAllAction(name, processedStructure.actions)
-      }
+      resetAll: createResetAllAction(name, processedStructure.actions)
     };
   }
 

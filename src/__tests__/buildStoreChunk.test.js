@@ -20,7 +20,7 @@ describe("buildStoreChunk", () => {
           example: Types.reducer(Types.string())
         })
       )
-    ).toEqual(["reducers", "actions", "selectors"]);
+    ).toEqual(["reducers", "actions", "selectors", "resetAll"]);
   });
 
   describe("Resulting chunk", () => {
@@ -92,8 +92,7 @@ describe("buildStoreChunk", () => {
           "nested2",
           "nested3",
           "nested4",
-          "nested5",
-          "resetAll"
+          "nested5"
         ]);
       });
       it("Actions object has the correct top level structure for a non nested chunk", () => {
@@ -219,7 +218,7 @@ describe("buildStoreChunk", () => {
             })
           );
 
-          store.dispatch(chunk.actions.resetAll());
+          store.dispatch(chunk.resetAll());
           expect(chunk.selectors.nested2(store.getState())).toEqual({
             foo: 0,
             bar: ""
