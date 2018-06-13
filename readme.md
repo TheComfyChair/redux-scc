@@ -5,6 +5,13 @@
 
 Are you fed up of hand coding the same pattern over and over again? Fed up of conflicting action names causing your button presses to set off your ajax loading animation? Are you a fan of having a strictly defined structure for your redux store, down to the type level? Then redux-scc may be for you!
 
+### Installing
+Install via yarn or npm:
+
+```
+yarn add redux-scc
+```
+
 #### What does it do?
 It takes a defined structure and uses a set of 'behaviors' (a small collection of ways that a reducer can
 be updated) to create a set of actions and reducer responses. A selector is also created for every reducer defined, and the set of action generators, selectors, and reducers are then returned.
@@ -138,6 +145,13 @@ const exampleBatchedUpdateHittingSameReducerMultipleTimes = createCombinedAction
   ],
 });
 
+```
+
+#### resetAll
+The special `resetAll` action is available for nested reducers (i.e. those where more than just one reducer has been defined in the chunk). Calling this action allows you to reset all of the reducers in the chunk simultaneously.
+
+```
+store.dispatch(actions.resetAll());
 ```
 
 #### Examples
