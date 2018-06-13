@@ -43,6 +43,7 @@
   },
   "dependencies": {
     "coveralls": "^3.0.1",
+    "lodash": "^4.17.10",
     "lodash.filter": "^4.6.0",
     "lodash.find": "^4.6.0",
     "lodash.flowright": "^3.5.0",

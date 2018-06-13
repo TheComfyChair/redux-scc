@@ -92,7 +92,8 @@ describe("buildStoreChunk", () => {
           "nested2",
           "nested3",
           "nested4",
-          "nested5"
+          "nested5",
+          "resetAll"
         ]);
       });
       it("Actions object has the correct top level structure for a non nested chunk", () => {
@@ -197,6 +198,37 @@ describe("buildStoreChunk", () => {
           bar: "boop!"
         });
         expect(chunk.selectors.nested3(store.getState())).toEqual([4, 6]);
+      });
+
+      describe("reset all action", () => {
+        it("Calling reset all will reset all store chunks", () => {
+          store.dispatch(
+            createCombinedAction({
+              name: "batchUpdateFunsies",
+              actions: [
+                chunk.actions.nested2.update({
+                  foo: 4
+                }),
+                chunk.actions.nested2.update({
+                  bar: "boop!"
+                }),
+                chunk.actions.nested3.replace([4, 5, 6]),
+                chunk.actions.nested3.removeAtIndex(1),
+                chunk.actions.nested4.innerNested1.replace("boop!")
+              ]
+            })
+          );
+
+          store.dispatch(chunk.actions.resetAll());
+          expect(chunk.selectors.nested2(store.getState())).toEqual({
+            foo: 0,
+            bar: ""
+          });
+          expect(chunk.selectors.nested3(store.getState())).toEqual([1, 2, 3]);
+          expect(chunk.selectors.nested4.innerNested1(store.getState())).toBe(
+            "bar"
+          );
+        });
       });
     });
   });

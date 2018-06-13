@@ -9,12 +9,48 @@ import type { PartialStoreChunk } from "./reducers";
 // JS imports
 //==============================
 import { combineReducers } from "redux";
-import reduce from "lodash/reduce";
 import find from "lodash/find";
 import omit from "lodash/omit";
 import isFunction from "lodash/isFunction";
+import { get, isObject } from "lodash/fp";
 import { createReducer } from "./reducers";
+import { createCombinedAction } from "./reducers/batchUpdates";
 import { PROP_TYPES } from "./structure";
+
+const reduce = require("lodash/fp/reduce").convert({ cap: false });
+const map = require("lodash/fp/map").convert({ cap: false });
+
+/* Iterate through our reducers in order to find all reset actions */
+type ReducerActions = {
+  reset: Function
+};
+/*prettier-ignore*/
+type Actions = {
+  [key: string]: ReducerActions | {
+      [key: string]: ReducerActions
+    }
+};
+/* Iterate through the reducers to find all reset actions, and create a combined reducer
+   which will call them all */
+const getResetAction = actions =>
+  get("reset")(actions)
+    ? [get("reset")(actions)]
+    : reduce(
+        (resetActions, actions) => [
+          ...resetActions,
+          ...getResetAction(actions)
+        ],
+        []
+      )(actions);
+
+export const createResetAllAction = (
+  storeChunkName: string,
+  chunkActions: Actions
+) => () =>
+  createCombinedAction({
+    name: `${storeChunkName}-reset-all`,
+    actions: map(action => action())(getResetAction(chunkActions))
+  });
 
 // Build a chunk of the eventual store. The selectors and actions
 // generated will specifically operate on the store chunk generated. Selectors will be
@@ -66,6 +102,16 @@ export function buildStoreChunk(
     };
   }
 
+  if (locationString === name) {
+    return {
+      ...processedStructure,
+      actions: {
+        ...processedStructure.actions,
+        resetAll: createResetAllAction(name, processedStructure.actions)
+      }
+    };
+  }
+
   return processedStructure;
 }
 
@@ -79,7 +125,7 @@ export function determineStructureProcessing(
       processStructure(initialMemo, structure, name)
     );
   return combineStoreChunkReducers(
-    reduce(structure, processStructure, initialMemo)
+    reduce(processStructure, initialMemo)(structure)
   );
 }
 
