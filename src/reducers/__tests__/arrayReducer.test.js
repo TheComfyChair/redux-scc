@@ -71,6 +71,16 @@ describe('arrayReducer', () => {
             });
         });
 
+        describe('pushOrRemove', () => {
+            const { pushOrRemove } = DEFAULT_ARRAY_BEHAVIORS;
+            it('should push the payload onto the end of the array', () => {
+                expect(pushOrRemove.reducer([1,2,3], 4)).toEqual([1,2,3,4]);
+            });
+            it('should remove the payload from the array', () => {
+                expect(pushOrRemove.reducer([1,2,3], 2)).toEqual([1,3]);
+            });
+        });
+
         describe('pop', () => {
             const { pop } = DEFAULT_ARRAY_BEHAVIORS;
             it('should remove the last element from the array', () => {

@@ -108,6 +108,7 @@ Like all other types, you can also use a custom type to create a reducer.
 - resetAtIndex(value: any, index: number): Reset the value for an array element, at the specified index, with the value provided.
 - removeAtIndex(index: number): Remove the element from the array at the specified index.
 - push(value: any): Add the value to the end of the array.
+- pushOrRemove(value: any): Push the value if it doesn't exist in the array or remove the element if it exists.
 - pop(): Remove the last element of the array.
 - shift(value: any): Add the value to the beginning of the array.
 - unshift(): Remove the first element of the array.

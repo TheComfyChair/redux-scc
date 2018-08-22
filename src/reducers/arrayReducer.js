@@ -136,6 +136,16 @@ export const DEFAULT_ARRAY_BEHAVIORS: ArrayReducerBehaviorsConfig = {
     },
     validate: true
   },
+  pushOrRemove: {
+    reducer(state, payload) {
+      let index = state.indexOf(payload);
+      if(index == -1) {
+        return [...state, payload];
+      }
+      return removeAtIndex(state, index);
+    },
+    validate: true
+  },
   pop: {
     reducer(state) {
       return state.slice(0, -1);
