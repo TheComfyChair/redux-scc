@@ -59,6 +59,7 @@ import { createReducerBehaviors } from "../reducers";
 import { updateAtIndex, removeAtIndex } from "../utils/arrayUtils";
 import { PROP_TYPES } from "../structure";
 import { isCombinedAction, getApplicableCombinedActions } from "./batchUpdates";
+import { findIndex, isEqual } from "lodash/fp";
 
 const reduce = require("lodash/fp/reduce").convert({ cap: false });
 
@@ -138,7 +139,7 @@ export const DEFAULT_ARRAY_BEHAVIORS: ArrayReducerBehaviorsConfig = {
   },
   pushOrRemove: {
     reducer(state, payload) {
-      let index = state.indexOf(payload);
+      let index = findIndex(isEqual(payload))(state);
       if(index == -1) {
         return [...state, payload];
       }

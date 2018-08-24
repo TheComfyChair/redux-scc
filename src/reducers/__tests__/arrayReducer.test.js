@@ -73,11 +73,35 @@ describe('arrayReducer', () => {
 
         describe('pushOrRemove', () => {
             const { pushOrRemove } = DEFAULT_ARRAY_BEHAVIORS;
-            it('should push the payload onto the end of the array', () => {
+            it('should push the primitive payload onto the end of the array', () => {
                 expect(pushOrRemove.reducer([1,2,3], 4)).toEqual([1,2,3,4]);
             });
-            it('should remove the payload from the array', () => {
+            it('should remove the primitive payload from the array', () => {
                 expect(pushOrRemove.reducer([1,2,3], 2)).toEqual([1,3]);
+            });
+            it('should push the object payload onto the end of the array', () => {
+                let users = [
+                    { 'user': 'barney',  'active': false },
+                    { 'user': 'fred',    'active': false }
+                ];
+                let expected_users = [
+                    { 'user': 'barney',  'active': false },
+                    { 'user': 'fred',    'active': false },
+                    { 'user': 'pebbles', 'active': true }
+                ];
+                expect(pushOrRemove.reducer(users, { 'user': 'pebbles', 'active': true })).toEqual(expected_users);
+            });
+            it('should remove the object payload from the array', () => {
+                let users = [
+                    { 'user': 'barney',  'active': false },
+                    { 'user': 'fred',    'active': false },
+                    { 'user': 'pebbles', 'active': true }
+                ];
+                let expected_users = [
+                    { 'user': 'barney',  'active': false },
+                    { 'user': 'pebbles', 'active': true }
+                ];
+                expect(pushOrRemove.reducer(users, { 'user': 'fred', 'active': false })).toEqual(expected_users);
             });
         });
 
