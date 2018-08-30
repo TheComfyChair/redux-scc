@@ -1,6 +1,6 @@
 {
   "name": "redux-scc",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "description": "Redux store chunk creator",
   "main": "./lib/index.js",
   "files": [
@@ -53,6 +53,8 @@
     "lodash.keys": "^4.2.0",
     "lodash.map": "^4.6.0",
     "lodash.omit": "^4.5.0",
+    "lodash.findindex": "^4.6.0",
+    "lodash.isequal": "^4.5.0",
     "redux": "4.0.0"
   }
 }
