@@ -1,7 +1,6 @@
 language: node_js
 node_js:
   - "node"
-  - "7"
-  - "6"
+  - "10"
 script: npm run test:coverage
 after_success: "npm run coveralls"
