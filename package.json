@@ -22,7 +22,8 @@
   "jest": {
     "roots": [
       "<rootDir>/src"
-    ]
+    ],
+    "testURL": "http://localhost"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
@@ -46,15 +47,15 @@
     "lodash": "^4.17.10",
     "lodash.filter": "^4.6.0",
     "lodash.find": "^4.6.0",
+    "lodash.findindex": "^4.6.0",
     "lodash.flowright": "^3.5.0",
     "lodash.includes": "^4.3.0",
+    "lodash.isequal": "^4.5.0",
     "lodash.isfunction": "^3.0.9",
     "lodash.isobject": "^3.0.2",
     "lodash.keys": "^4.2.0",
     "lodash.map": "^4.6.0",
     "lodash.omit": "^4.5.0",
-    "lodash.findindex": "^4.6.0",
-    "lodash.isequal": "^4.5.0",
-    "redux": "4.0.0"
+    "redux": "^4.0.4"
   }
 }
